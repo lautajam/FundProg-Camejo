@@ -7,6 +7,14 @@ const char ZANAHORIA = 'C';
 const char TOMATE    = 'D';
 const char INVIERNO  = 'I';
 const char VERANO    = 'V';
+const char INIT_CHAR = ' ';
+const int  INIT_INT  = 0;
+const int  PUNTAJE_LECHUGA    = 0;
+const int  PUNTAJE_BROCOLI    = 5;
+const int  PUNTAJE_ZANAHORIA  = 10;
+const int  PUNTAJE_TOMATE     = 15;
+const int  PUNTAJE_INVIERNO   = 0;
+const int  PUNTAJE_VERANO     = 10;
 const int  MIN_TIEMPO_CULTIVO = 40;
 const int  MAX_TIEMPO_CULTIVO = 120;
 const int  MIN_VALOR_ENOJO    = 0;
@@ -23,8 +31,8 @@ respuesta se le asignará un puntaje. Ese puntaje se devolverá por retorno.
 */
 int primer_pregunta_verduras(){
 
-  char opcion  = ' ';
-  int  puntaje = 0;
+  char opcion  = INIT_CHAR;
+  int  puntaje = INIT_INT;
 
   do
   {
@@ -33,13 +41,13 @@ int primer_pregunta_verduras(){
     scanf(" %c", &opcion);
 
     if (opcion == LECHUGA) {
-        puntaje = 0;
+        puntaje = PUNTAJE_LECHUGA;
     } else if (opcion == BROCOLI) {
-        puntaje = 5;
+        puntaje = PUNTAJE_BROCOLI;
     } else if (opcion == ZANAHORIA) {
-        puntaje = 10;
+        puntaje = PUNTAJE_ZANAHORIA;
     } else if (opcion == TOMATE) {
-        puntaje = 15;
+        puntaje = PUNTAJE_TOMATE;
     } else {
         printf("Error, no se ingresó una letra válida.");
     }
@@ -59,10 +67,10 @@ Tambien, modificará el valor del condicion_pregunta_3 por referencia.
   0: Invierno
   1: Verano
 */
-int segunda_pregunta_team(int* condicion_pregunta_3){
+int segunda_pregunta_team(char* condicion_pregunta_3){
 
-  char opcion  = ' ';
-  int  puntaje = 0;
+  char opcion  = INIT_CHAR;
+  int  puntaje = INIT_INT;
 
   do
   {
@@ -74,13 +82,11 @@ int segunda_pregunta_team(int* condicion_pregunta_3){
 
     if (opcion == INVIERNO)
     {
-      puntaje               += 0;
-      *condicion_pregunta_3  = 0;
+      puntaje += PUNTAJE_INVIERNO;
     }
     else if (opcion == VERANO)
     {
-      puntaje               += 10;
-      *condicion_pregunta_3  = 1;
+      puntaje += PUNTAJE_VERANO;
     }
     else
     {
@@ -88,11 +94,13 @@ int segunda_pregunta_team(int* condicion_pregunta_3){
     }
   } while (opcion != INVIERNO && opcion != VERANO);
   
+  *condicion_pregunta_3 = opcion;
+
   return puntaje;
 }
 
 /*
-Pre: -
+Pre: Se recibe una referencia a una variable de tipo char que va a contener la inicial del enanito.
 Post: Se le harán preguntas al usuario y en base a sus respuestas se le asignará un enanito. El
 enanito asignado será devuelto por referencia en el parámetro inicial_enanito que va a contenr
 su inicial.
@@ -103,8 +111,8 @@ su inicial.
 */
 void calcular_enanito(char* inicial_enanito){
   
-  int puntaje              = 0;
-  int condicion_pregunta_3 = 0;
+  int puntaje               = INIT_INT;
+  char condicion_pregunta_3 = INIT_CHAR;
 
   puntaje += primer_pregunta_verduras();
 
@@ -114,13 +122,15 @@ void calcular_enanito(char* inicial_enanito){
 
   printf("Puntaje hasta ahora: %i \n", puntaje);
 
-  printf("condicion_pregunta_3: %i \n", condicion_pregunta_3);
+  printf("condicion_pregunta_3: %c \n", condicion_pregunta_3);
+
+
 
 }
 
 int main(void) {
 
-  char inicial_enanito = ' ';
+  char inicial_enanito = INIT_CHAR;
 
   printf("Bienvenido al test para saber que enanito es compatible con vos!\n");
   printf("El test se basa en 4 preguntas para determinar cual de los enanitos es tu alma gemela!\n");
