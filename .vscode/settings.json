@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "calculo_enanito.h": "c",
+        "stdio.h": "c"
+    }
+}

@@ -24,7 +24,8 @@ int main(){
 	scanf(" %c", &epoca);
 	scanf(" %c", &paisaje);
 	
-    if ((epoca == ENERO && paisaje == MONTANIA) || (epoca == FEBRERO && paisaje == PLAYA))
+    if ((epoca == ENERO && paisaje == MONTANIA) || 
+        (epoca == FEBRERO && paisaje == PLAYA))
     {
         printf("Dale\n");
     }

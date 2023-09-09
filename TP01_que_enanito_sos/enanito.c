@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include "calculo_enanito.h"
 
+static const char INIT_CHAR = ' ';
+
 int main(void) {
 
-  char inicial_enanito = ' ';
+  char inicial_enanito = INIT_CHAR;
 
   printf("Bienvenido al test para saber que enanito es compatible con vos!\n");
   printf("El test se basa en 4 preguntas para determinar cual de los enanitos es tu alma gemela!\n");

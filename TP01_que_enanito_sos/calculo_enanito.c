@@ -2,13 +2,13 @@
 #include "calculo_enanito.h"
 
 // CONSTANTES GLOBALES
-const char   INIT_CHAR = ' ';
-const char   LECHUGA   = 'A';
-const char   BROCOLI   = 'B';
-const char   ZANAHORIA = 'C';
-const char   TOMATE    = 'D';
-const char   INVIERNO  = 'I';
-const char   VERANO    = 'V';
+static const char INIT_CHAR = ' ';
+const char   LECHUGA        = 'A';
+const char   BROCOLI        = 'B';
+const char   ZANAHORIA      = 'C';
+const char   TOMATE         = 'D';
+const char   INVIERNO       = 'I';
+const char   VERANO         = 'V';
 const int    INIT_INT           = 0;
 const int    PUNTAJE_LECHUGA    = 0;
 const int    PUNTAJE_BROCOLI    = 5;
