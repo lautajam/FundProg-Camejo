@@ -19,21 +19,27 @@ const int FRUTAS_INICIAL  = 0;
 
 void realizar_apuesta(int* reserva_bagheera, int* reserva_baloo, int frutas_mowgli) {
     
-    if (frutas_mowgli > FRUTAS_LIMITE) {
+    if (frutas_mowgli > FRUTAS_LIMITE && *reserva_baloo >= FRUTAS_APUESTA) {
         *reserva_baloo    -= FRUTAS_APUESTA;
         *reserva_bagheera += FRUTAS_APUESTA;
-    } else if (frutas_mowgli < FRUTAS_LIMITE) {
+    } else if (frutas_mowgli > FRUTAS_LIMITE && *reserva_baloo < FRUTAS_APUESTA){
+        *reserva_bagheera += *reserva_baloo;
+        *reserva_baloo    -= *reserva_baloo;
+    } else if (frutas_mowgli < FRUTAS_LIMITE && *reserva_bagheera >= FRUTAS_APUESTA) {
         *reserva_baloo    += FRUTAS_APUESTA;
         *reserva_bagheera -= FRUTAS_APUESTA;
+    } else if (frutas_mowgli < FRUTAS_LIMITE && *reserva_bagheera < FRUTAS_APUESTA){
+        *reserva_baloo    += *reserva_bagheera;
+        *reserva_bagheera -= *reserva_bagheera;
     } else {
-        // No pasa nada
+
     }
 }
 
 int main() {
     
-    int reserva_bagheera = RESERVA_INICIAL;
-    int reserva_baloo    = RESERVA_INICIAL;
+    int reserva_bagheera = 12;
+    int reserva_baloo    = 8;
     int frutas_mowgli    = FRUTAS_INICIAL;
     
     printf("Reserva de Bagheera: %d\n", reserva_bagheera);
