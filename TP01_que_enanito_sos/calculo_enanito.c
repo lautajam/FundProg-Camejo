@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "calculo_enanito.h"
 
-// CONSTANTES GLOBALES
+// CONSTANTES GLOBALES y ESTATICAS
 static const char INIT_CHAR = ' ';
 const char   LECHUGA        = 'A';
 const char   BROCOLI        = 'B';
