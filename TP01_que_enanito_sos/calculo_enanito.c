@@ -45,7 +45,7 @@ int primer_pregunta_verduras(){
 
   do
   {
-    printf("¿Cuál es tu verdura favorita?\n");
+    printf("\n¿Cuál es tu verdura favorita?\n");
     printf("(A) Lechuga, (B) Brócoli, (C) Zanahoria o (D) Tomate\n");
     scanf(" %c", &opcion_verdura);
 
@@ -58,11 +58,8 @@ int primer_pregunta_verduras(){
     } else if (opcion_verdura == TOMATE) {
         puntaje_verduras = PUNTAJE_TOMATE;
     } else {
-        printf("Error, no se ingresó una letra válida.\n");
+        printf("Error, no se ingresó una letra válida.");
     }
-
-    // Limpiar el búfer de entrada
-    while (getchar() != '\n');
 
   } while (opcion_verdura != LECHUGA && opcion_verdura != BROCOLI 
            && opcion_verdura!= ZANAHORIA && opcion_verdura != TOMATE);
@@ -87,7 +84,7 @@ int segunda_pregunta_team(char* condicion_pregunta_3){
 
   do
   {
-    printf("¿Sos team invierno o team verano?\n");
+    printf("\n¿Sos team invierno o team verano?\n");
     printf("(I) Invierno\n");
     printf("(V) Verano\n");
 
@@ -98,11 +95,8 @@ int segunda_pregunta_team(char* condicion_pregunta_3){
     } else if (opcion_team == VERANO){
       puntaje_team += PUNTAJE_VERANO;
     } else{
-      printf("Error, no se ingresó una letra válida.\n");
+      printf("Error, no se ingresó una letra válida.");
     }
-
-    // Limpiar el búfer de entrada
-    while (getchar() != '\n');
 
   } while (opcion_team != INVIERNO && opcion_team != VERANO);
   
@@ -127,7 +121,7 @@ int tercer_pregunta_enojo(char condicion_pregunta_3){
   do{
 
     if (condicion_pregunta_3 == VERANO){
-      printf("¿Cuánto te enojan los mosquitos?\n");
+      printf("\n¿Cuánto te enojan los mosquitos?\n");
       printf("Escala: Desde (0) para 'No me enojan', hasta (5) para 'Me enojan muchisimo'\n");
     } else{ 
       printf("¿Cuánto te enoja trabajar abajo de la lluvia?\n");
@@ -139,11 +133,8 @@ int tercer_pregunta_enojo(char condicion_pregunta_3){
     if (valor_enojo >= MIN_VALOR_ENOJO && valor_enojo <= MAX_VALOR_ENOJO){
       puntaje_enojo = valor_enojo;
     } else{
-      printf("Error, no se ingresó un valor válido.\n");
+      printf("Error, no se ingresó un valor válido.");
     }
-
-    // Limpiar el búfer de entrada
-    while (getchar() != '\n');
 
   } while (valor_enojo < MIN_VALOR_ENOJO || valor_enojo > MAX_VALOR_ENOJO);
 
@@ -164,19 +155,16 @@ int cuarta_pregunta_cultivos(){
   float tiempo_cultivo   = INIT_FLOAT;
 
   do{
-    printf("¿Cuánto tiempo te llevaría cosechar un cultivo de 10m²?\n");
+    printf("\n¿Cuánto tiempo te llevaría cosechar un cultivo de 10m²?\n");
     printf("El rango de minutos debe ser entre 40 y 120 en formato MM.mm (MM = Minutos y mm = Milesima de minuto)\n");
     scanf("%f", &tiempo_cultivo);
 
     if (tiempo_cultivo >= MIN_TIEMPO_CULTIVO && tiempo_cultivo <= MAX_TIEMPO_CULTIVO){
       puntaje_cultivos = (int)(tiempo_cultivo / DIVISOR_PUNTAJE);
     } else{
-      printf("Error, no se ingresó un valor válido.\n");
+      printf("Error, no se ingresó un valor válido.");
     }
 
-    // Limpiar el búfer de entrada
-    while (getchar() != '\n');
-    
   } while (tiempo_cultivo < MIN_TIEMPO_CULTIVO || tiempo_cultivo > MAX_TIEMPO_CULTIVO);
   
   return puntaje_cultivos;
