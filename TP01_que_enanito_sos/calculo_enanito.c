@@ -184,17 +184,12 @@ int cuarta_pregunta_cultivos(){
 }
 
 /*
-Pre: Se recibe una referencia a una variable de tipo char que va a contener la inicial del enanito.
-Post: Se le harán preguntas al usuario y en base a sus respuestas se le asignará un enanito. El
-enanito asignado será devuelto por referencia en el parámetro inicial_enanito que va a contener
-su inicial.
-  G: Gruñón
-  D: Dormilón
-  S: Sabio
-  F: Feliz
+Pre: -
+Post: Se le harán las preguntas al usuario y en base a sus respuestas se le asignará un puntaje. Ese
+puntaje se devolverá por retorno.
 */
-void calcular_enanito(char* inicial_enanito){
-  
+int puntaje_enanito(){
+
   int  puntaje              = INIT_INT;
   char condicion_pregunta_3 = INIT_CHAR;
 
@@ -215,6 +210,25 @@ void calcular_enanito(char* inicial_enanito){
   puntaje += cuarta_pregunta_cultivos();
 
   printf("Puntaje hasta ahora: %i \n", puntaje);
+
+  return puntaje;
+
+}
+
+/*
+Pre: Se recibe una referencia a una variable de tipo char que va a contener la inicial del enanito.
+Post: Se calculará la inicial del enanito en base al puntaje obtenido. Se modificará el valor de la variable 
+inicial_enanito por referencia.
+  G: Gruñón
+  D: Dormilón
+  S: Sabio
+  F: Feliz
+*/
+void calcular_enanito(char* inicial_enanito){
+  
+  int puntaje = INIT_INT;
+
+  puntaje = puntaje_enanito();
 
   if (puntaje <= MAX_VALOR_GRUÑON){
     *inicial_enanito = 'G';
