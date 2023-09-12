@@ -31,8 +31,7 @@ const float  DIVISOR_PUNTAJE_CULTIVO    = 8;
 
 /*
 Pre: -
-Post: En base a su respuesta se le asignará un puntaje. 
-      Ese puntaje se devolverá por retorno y podrá ser:
+Post: El puntaje que se devolverá por retorno podrá ser:
         00: Lechuga
         05: Brócoli
         10: Zanahoria
@@ -68,8 +67,7 @@ int pregunta_verdura_favorita(){
 
 /*
 Pre:  Recibe la referencia de team_estacion (team_invierno: I, team_verano: V).
-Post: En base a su respuesta se le asignará un puntaje. 
-      Ese puntaje se devolverá por retorno y podrá ser:
+Post: El puntaje que se devolverá por retorno podrá ser:
         00: Invierno
         10: Verano
       Tambien, modificará el valor del team_estacion por referencia:
@@ -104,9 +102,8 @@ int pregunta_team_estacion(char* team_estacion){
 }
 
 /*
-Pre:  Recibe el valor de team_estacion (team_invierno: I, team_verano: V), de eso depende la pregunta.
-Post: En base a su respuesta se le asignará un puntaje. 
-      Ese puntaje se devolverá por retorno y podrá ser:
+Pre:  Recibe el valor de team_estacion (team_invierno: I, team_verano: V).
+Post: El puntaje que se devolverá por retorno estará en el rango:
         Desde 0 para 'No me enoja'
         Hasta 5 para 'Me enoja muchisimo'
 */
@@ -140,15 +137,14 @@ int pregunta_enojo(char team_estacion){
 
 /*
 Pre:  -
-Post: En base a su respuesta se le asignará un puntaje. 
-      Ese puntaje se devolverá por retorno y podrá ser:
+Post: El puntaje que se devolverá por retorno estará en el rango:
         Desde 5 puntos para 40 minutos
         Hasta 15 puntos para 120 minutos
 */
 int pregunta_tiempo_cultivo(){
 
   int   puntaje_tiempo_cultivos = INIT_INT;
-  float tiempo_cultivo   = INIT_FLOAT;
+  float tiempo_cultivo          = INIT_FLOAT;
 
   do {
     printf("\n¿Cuánto tiempo te llevaría cosechar un cultivo de 10m²?\n");
@@ -169,9 +165,9 @@ int pregunta_tiempo_cultivo(){
 
 /*
 Pre:  -
-Post: En base a sus respuestas se le asignará un puntaje. 
-      Ese puntaje se devolverá por retorno y podrá ser:
-        Desde 0 puntos
+Post: Se calculará el puntaje obtenido en base a las respuestas de las preguntas. 
+      El puntaje que se devolverá por retorno estará en el rango:
+        Desde 00 puntos
         Hasta 40 puntos
 */
 int puntaje_enanito(){
@@ -181,21 +177,11 @@ int puntaje_enanito(){
 
   puntaje_enanito_total += pregunta_verdura_favorita();
 
-  printf("Puntaje hasta ahora: %i \n", puntaje_enanito_total);
-
   puntaje_enanito_total += pregunta_team_estacion(&estacion_team);
-
-  printf("Puntaje hasta ahora: %i \n", puntaje_enanito_total);
-
-  printf("team_estacion: %c \n", estacion_team);
 
   puntaje_enanito_total -= pregunta_enojo(estacion_team);
 
-  printf("Puntaje hasta ahora: %i \n", puntaje_enanito_total);
-
   puntaje_enanito_total += pregunta_tiempo_cultivo();
-
-  printf("Puntaje hasta ahora: %i \n", puntaje_enanito_total);
 
   return puntaje_enanito_total;
 
@@ -212,15 +198,15 @@ Post: Se calculará la inicial del enanito en base al puntaje obtenido.
 */
 void calcular_enanito(char* inicial_enanito){
   
-  int puntaje = INIT_INT;
+  int puntaje_obtenido = INIT_INT;
 
-  puntaje = puntaje_enanito();
+  puntaje_obtenido = puntaje_enanito();
 
-  if (puntaje <= MAX_VALOR_GRUÑON){
+  if (puntaje_obtenido <= MAX_VALOR_GRUÑON){
     *inicial_enanito = 'G';
-  } else if (puntaje >= MIN_VALOR_DORMILON && puntaje <= MAX_VALOR_DORMILON) {
+  } else if (puntaje_obtenido >= MIN_VALOR_DORMILON && puntaje_obtenido <= MAX_VALOR_DORMILON) {
     *inicial_enanito = 'D';
-  } else if (puntaje >= MIN_VALOR_SABIO && puntaje <= MAX_VALOR_SABIO) {
+  } else if (puntaje_obtenido >= MIN_VALOR_SABIO && puntaje_obtenido <= MAX_VALOR_SABIO) {
     *inicial_enanito = 'S';
   } else{
     *inicial_enanito = 'F';

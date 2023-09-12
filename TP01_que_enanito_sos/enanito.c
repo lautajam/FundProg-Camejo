@@ -16,16 +16,16 @@ int main(void) {
 
   switch (inicial_enanito){
   case 'G':
-    printf("\nEl enanito màs compatible con vos es: -GRUÑON-\n");
+    printf("\nEl enanito más compatible con vos es: -GRUÑON-\n");
     break;
   case 'D':
-    printf("\nEl enanito màs compatible con vos es: -DORMILON-\n");
+    printf("\nEl enanito más compatible con vos es: -DORMILON-\n");
     break;
   case 'S':
-    printf("\nEl enanito màs compatible con vos es: -SABIO-\n");
+    printf("\nEl enanito más compatible con vos es: -SABIO-\n");
     break;
   case 'F':
-    printf("\nEl enanito màs compatible con vos es: -FELIZ-\n");
+    printf("\nEl enanito más compatible con vos es: -FELIZ-\n");
     break;
   
   default:
