@@ -31,56 +31,56 @@ const float  DIVISOR_PUNTAJE    = 8;
 
 /*
 Pre: -
-Post: Se le hará una pregunta al usuario (cual es su verdura favorita) y en base a su 
-respuesta se le asignará un puntaje. Ese puntaje se devolverá por retorno.
-  0: Lechuga
-  5: Brócoli
-  10: Zanahoria
-  15: Tomate
+Post: En base a su respuesta se le asignará un puntaje. 
+      Ese puntaje se devolverá por retorno y podrá ser:
+        00: Lechuga
+        05: Brócoli
+        10: Zanahoria
+        15: Tomate
 */
-int primer_pregunta_verduras(){
+int pregunta_verdura_favorita(){
 
-  char opcion_verdura   = INIT_CHAR;
-  int  puntaje_verduras = INIT_INT;
+  char verdura_favorita   = INIT_CHAR;
+  int  puntaje_verdura_favorita    = INIT_INT;
 
   do
   {
     printf("\n¿Cuál es tu verdura favorita?\n");
     printf("(A) Lechuga, (B) Brócoli, (C) Zanahoria o (D) Tomate\n");
-    scanf(" %c", &opcion_verdura);
+    scanf(" %c", &verdura_favorita);
 
-    if (opcion_verdura == LECHUGA) {
-        puntaje_verduras = PUNTAJE_LECHUGA;
-    } else if (opcion_verdura == BROCOLI) {
-        puntaje_verduras = PUNTAJE_BROCOLI;
-    } else if (opcion_verdura == ZANAHORIA) {
-        puntaje_verduras = PUNTAJE_ZANAHORIA;
-    } else if (opcion_verdura == TOMATE) {
-        puntaje_verduras = PUNTAJE_TOMATE;
+    if (verdura_favorita == LECHUGA) {
+        puntaje_verdura_favorita = PUNTAJE_LECHUGA;
+    } else if (verdura_favorita == BROCOLI) {
+        puntaje_verdura_favorita = PUNTAJE_BROCOLI;
+    } else if (verdura_favorita == ZANAHORIA) {
+        puntaje_verdura_favorita = PUNTAJE_ZANAHORIA;
+    } else if (verdura_favorita == TOMATE) {
+        puntaje_verdura_favorita = PUNTAJE_TOMATE;
     } else {
         printf("Error, no se ingresó una letra válida.");
     }
 
-  } while (opcion_verdura != LECHUGA && opcion_verdura != BROCOLI 
-           && opcion_verdura!= ZANAHORIA && opcion_verdura != TOMATE);
+  } while (verdura_favorita != LECHUGA && verdura_favorita != BROCOLI 
+           && verdura_favorita!= ZANAHORIA && verdura_favorita != TOMATE);
   
-  return puntaje_verduras;
+  return puntaje_verdura_favorita;
 }
 
 /*
-Pre: Recibe una referencia a un entero que va a contener el valor del condicion_pregunta_3.
-Post: Se le hará una pregunta al usuario (si es team invierno o team verano) y en base a su
-respuesta se le asignará un puntaje. Ese puntaje se devolverá por retorno.
-  0: Invierno
-  10: Verano
-Tambien, modificará el valor del condicion_pregunta_3 por referencia.
-  I: Invierno
-  V: Verano
+Pre:  Recibe la referencia de team_estacion (team_invierno: I, team_verano: V).
+Post: En base a su respuesta se le asignará un puntaje. 
+      Ese puntaje se devolverá por retorno y podrá ser:
+        00: Invierno
+        10: Verano
+      Tambien, modificará el valor del team_estacion por referencia.
+        I: Invierno
+        V: Verano
 */
-int segunda_pregunta_team(char* condicion_pregunta_3){
+int pregunta_team_estacion(char* team_estacion){
 
-  char opcion_team  = INIT_CHAR;
-  int  puntaje_team = INIT_INT;
+  char opcion_team_estacion  = INIT_CHAR;
+  int  puntaje_team_estacion = INIT_INT;
 
   do
   {
@@ -88,39 +88,38 @@ int segunda_pregunta_team(char* condicion_pregunta_3){
     printf("(I) Invierno\n");
     printf("(V) Verano\n");
 
-    scanf(" %c", &opcion_team);
+    scanf(" %c", &opcion_team_estacion);
 
-    if (opcion_team == INVIERNO){
-      puntaje_team += PUNTAJE_INVIERNO;
-    } else if (opcion_team == VERANO){
-      puntaje_team += PUNTAJE_VERANO;
+    if (opcion_team_estacion == INVIERNO){
+      puntaje_team_estacion += PUNTAJE_INVIERNO;
+    } else if (opcion_team_estacion == VERANO){
+      puntaje_team_estacion += PUNTAJE_VERANO;
     } else{
       printf("Error, no se ingresó una letra válida.");
     }
 
-  } while (opcion_team != INVIERNO && opcion_team != VERANO);
+  } while (opcion_team_estacion != INVIERNO && opcion_team_estacion != VERANO);
   
-  *condicion_pregunta_3 = opcion_team;
+  *team_estacion = opcion_team_estacion;
 
-  return puntaje_team;
+  return puntaje_team_estacion;
 }
 
 /*
-  Pre: Recibe un char que contiene el valor de condicion_pregunta_3 (eleccion de team invierno o team verano).
-  Post: Se le hará una pregunta al usuario (cuanto le enojan los mosquitos o trabajar abajo de la lluvia) dependiendo
-  de la condicion_pregunta_3 (depende si es team verano o team invierno). En base a su respuesta numerica se le asignará
-  un puntaje. Ese puntaje se devolverá por retorno.
-    Desde 0 para 'No me enoja'
-    Hasta 5 para 'Me enoja muchisimo'
+Pre:  Recibe el valor de team_estacion (team_invierno: I, team_verano: V), de eso depende la pregunta.
+Post: En base a su respuesta se le asignará un puntaje. 
+      Ese puntaje se devolverá por retorno y podrá ser:
+        Desde 0 para 'No me enoja'
+        Hasta 5 para 'Me enoja muchisimo'
 */
-int tercer_pregunta_enojo(char condicion_pregunta_3){
+int pregunta_enojo(char team_estacion){
 
-  int puntaje_enojo = INIT_INT;
-  int valor_enojo   = INIT_INT;
+  int puntaje_enojo           = INIT_INT;
+  int valor_enojo_ingresado   = INIT_INT;
 
   do{
 
-    if (condicion_pregunta_3 == VERANO){
+    if (team_estacion == VERANO){
       printf("\n¿Cuánto te enojan los mosquitos?\n");
       printf("Escala: Desde (0) para 'No me enojan', hasta (5) para 'Me enojan muchisimo'\n");
     } else{ 
@@ -128,30 +127,29 @@ int tercer_pregunta_enojo(char condicion_pregunta_3){
       printf("Escala: Desde (0) para 'No me enoja', hasta (5) para 'Me enoja muchisimo'\n");
     }
 
-    scanf("%i", &valor_enojo);
+    scanf("%i", &valor_enojo_ingresado);
 
-    if (valor_enojo >= MIN_VALOR_ENOJO && valor_enojo <= MAX_VALOR_ENOJO){
-      puntaje_enojo = valor_enojo;
+    if (valor_enojo_ingresado >= MIN_VALOR_ENOJO && valor_enojo_ingresado <= MAX_VALOR_ENOJO){
+      puntaje_enojo = valor_enojo_ingresado;
     } else{
       printf("Error, no se ingresó un valor válido.");
     }
 
-  } while (valor_enojo < MIN_VALOR_ENOJO || valor_enojo > MAX_VALOR_ENOJO);
+  } while (valor_enojo_ingresado < MIN_VALOR_ENOJO || valor_enojo_ingresado > MAX_VALOR_ENOJO);
 
   return puntaje_enojo;
 }
 
 /*
-Pre: -
-Post: Pregunta al usuario cuanto tiempo le llevaría cosechar un cultivo de 10m² (en formato MM.SS MM = Minutos, SS = 
-segundos). En base a su respuesta se le asignará un puntaje. Ese puntaje se devolverá por retorno.
-  Desde 5 puntos para 40 minutos
-  Hasta 15 puntos para 120 minutos
-Esto se hace dividiendo el tiempo ingresado por 8.
+Pre:  -
+Post: En base a su respuesta se le asignará un puntaje. 
+      Ese puntaje se devolverá por retorno y podrá ser:
+        Desde 5 puntos para 40 minutos
+        Hasta 15 puntos para 120 minutos
 */
-int cuarta_pregunta_cultivos(){
+int pregunta_tiempo_cultivo(){
 
-  int   puntaje_cultivos = INIT_INT;
+  int   puntaje_tiempo_cultivos = INIT_INT;
   float tiempo_cultivo   = INIT_FLOAT;
 
   do{
@@ -160,57 +158,59 @@ int cuarta_pregunta_cultivos(){
     scanf("%f", &tiempo_cultivo);
 
     if (tiempo_cultivo >= MIN_TIEMPO_CULTIVO && tiempo_cultivo <= MAX_TIEMPO_CULTIVO){
-      puntaje_cultivos = (int)(tiempo_cultivo / DIVISOR_PUNTAJE);
+      puntaje_tiempo_cultivos = (int)(tiempo_cultivo / DIVISOR_PUNTAJE);
     } else{
       printf("Error, no se ingresó un valor válido.");
     }
 
   } while (tiempo_cultivo < MIN_TIEMPO_CULTIVO || tiempo_cultivo > MAX_TIEMPO_CULTIVO);
   
-  return puntaje_cultivos;
+  return puntaje_tiempo_cultivos;
 
 }
 
 /*
-Pre: -
-Post: Se le harán las preguntas al usuario y en base a sus respuestas se le asignará un puntaje. Ese
-puntaje se devolverá por retorno.
+Pre:  -
+Post: En base a su respuesta se le asignará un puntaje. 
+      Ese puntaje se devolverá por retorno y podrá ser:
+        Desde 0 puntos
+        Hasta 40 puntos
 */
 int puntaje_enanito(){
 
-  int  puntaje              = INIT_INT;
-  char condicion_pregunta_3 = INIT_CHAR;
+  int  puntaje_total = INIT_INT;
+  char estacion_team = INIT_CHAR;
 
-  puntaje += primer_pregunta_verduras();
+  puntaje_total += pregunta_verdura_favorita();
 
-  printf("Puntaje hasta ahora: %i \n", puntaje);
+  printf("Puntaje hasta ahora: %i \n", puntaje_total);
 
-  puntaje += segunda_pregunta_team(&condicion_pregunta_3);
+  puntaje_total += pregunta_team_estacion(&estacion_team);
 
-  printf("Puntaje hasta ahora: %i \n", puntaje);
+  printf("Puntaje hasta ahora: %i \n", puntaje_total);
 
-  printf("condicion_pregunta_3: %c \n", condicion_pregunta_3);
+  printf("team_estacion: %c \n", estacion_team);
 
-  puntaje -= tercer_pregunta_enojo(condicion_pregunta_3);
+  puntaje_total -= pregunta_enojo(estacion_team);
 
-  printf("Puntaje hasta ahora: %i \n", puntaje);
+  printf("Puntaje hasta ahora: %i \n", puntaje_total);
 
-  puntaje += cuarta_pregunta_cultivos();
+  puntaje_total += pregunta_tiempo_cultivo();
 
-  printf("Puntaje hasta ahora: %i \n", puntaje);
+  printf("Puntaje hasta ahora: %i \n", puntaje_total);
 
-  return puntaje;
+  return puntaje_total;
 
 }
 
 /*
-Pre: Se recibe una referencia a una variable de tipo char que va a contener la inicial del enanito.
-Post: Se calculará la inicial del enanito en base al puntaje obtenido. Se modificará el valor de la variable 
-inicial_enanito por referencia.
-  G: Gruñón
-  D: Dormilón
-  S: Sabio
-  F: Feliz
+Pre:  Se recibe una referencia a una variable de tipo char que va a contener la inicial del enanito.
+Post: Se calculará la inicial del enanito en base al puntaje obtenido. 
+      Se modificará el valor de la variable inicial_enanito por referencia.
+        G: Gruñón
+        D: Dormilón
+        S: Sabio
+        F: Feliz
 */
 void calcular_enanito(char* inicial_enanito){
   
