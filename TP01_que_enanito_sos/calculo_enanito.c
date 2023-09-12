@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "calculo_enanito.h"
 
-// CONSTANTES GLOBALES y ESTATICAS
+// CONSTANTES GLOBALES y GLOBALES ESTATICAS
 static const char INIT_CHAR = ' ';
 const char   LECHUGA        = 'A';
 const char   BROCOLI        = 'B';
@@ -40,7 +40,7 @@ Post: En base a su respuesta se le asignará un puntaje.
 */
 int pregunta_verdura_favorita(){
 
-  char verdura_favorita   = INIT_CHAR;
+  char verdura_favorita            = INIT_CHAR;
   int  puntaje_verdura_favorita    = INIT_INT;
 
   do {
@@ -115,7 +115,7 @@ int pregunta_enojo(char team_estacion){
   int puntaje_enojo           = INIT_INT;
   int valor_enojo_ingresado   = INIT_INT;
 
-  do{
+  do {
 
     if (team_estacion == VERANO){
       printf("\n¿Cuánto te enojan los mosquitos?\n");
