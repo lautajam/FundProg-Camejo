@@ -59,7 +59,6 @@ void mostar_pedidos(char pedidos_dalmatas[CANTIDAD_PEDIDOS], int tope_pedidos){
 
 }
 
-
 int main(){
 
     char pedidos_dalmatas[CANTIDAD_PEDIDOS];

@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include "calculo_enanito.h"
 
-// CONSTANTES GLOBALES ESTATICA
+#define GRUNION  'G'
+#define DORMILON 'D'
+#define SABIO    'S'
+#define FELIZ    'F'
 static const char INIT_CHAR = ' ';
 
 int main(void) {
@@ -15,16 +18,16 @@ int main(void) {
   calcular_enanito(&inicial_enanito);
 
   switch (inicial_enanito){
-  case 'G':
+  case GRUNION:
     printf("\nEl enanito más compatible con vos es: -GRUÑON-\n");
     break;
-  case 'D':
+  case DORMILON:
     printf("\nEl enanito más compatible con vos es: -DORMILON-\n");
     break;
-  case 'S':
+  case SABIO:
     printf("\nEl enanito más compatible con vos es: -SABIO-\n");
     break;
-  case 'F':
+  case FELIZ:
     printf("\nEl enanito más compatible con vos es: -FELIZ-\n");
     break;
   

@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include "calculo_enanito.h"
 
-// CONSTANTES GLOBALES y GLOBALES ESTATICAS
 static const char INIT_CHAR = ' ';
+static const char GRUNION   = 'G';
+static const char DORMILON  = 'D';
+static const char SABIO     = 'S';
+static const char FELIZ     = 'F';
 const char   LECHUGA        = 'A';
 const char   BROCOLI        = 'B';
 const char   ZANAHORIA      = 'C';
@@ -203,13 +206,13 @@ void calcular_enanito(char* inicial_enanito){
   puntaje_obtenido = puntaje_enanito();
 
   if (puntaje_obtenido <= MAX_VALOR_GRUÑON){
-    *inicial_enanito = 'G';
+    *inicial_enanito = GRUNION;
   } else if (puntaje_obtenido >= MIN_VALOR_DORMILON && puntaje_obtenido <= MAX_VALOR_DORMILON) {
-    *inicial_enanito = 'D';
+    *inicial_enanito = DORMILON;
   } else if (puntaje_obtenido >= MIN_VALOR_SABIO && puntaje_obtenido <= MAX_VALOR_SABIO) {
-    *inicial_enanito = 'S';
+    *inicial_enanito = SABIO;
   } else{
-    *inicial_enanito = 'F';
+    *inicial_enanito = FELIZ;
   }
 
 }
