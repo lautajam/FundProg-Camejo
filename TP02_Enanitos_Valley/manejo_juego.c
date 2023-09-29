@@ -17,12 +17,14 @@ const int MAX_MOVE_X = MAP_SIZE - 1;
 const int MIN_MOVE_Y = 0;
 const int MAX_MOVE_Y = MAP_SIZE - 1;
 
-static const int INIT_INT = 0;
+static const int  INIT_INT     = 0;
+//static const char INIT_CHAR    = ' ';
+const char        INIT_CANASTA = ' ';
 
-const int MONEDAS_GRUÑON = 150;
+const int MONEDAS_GRUÑON   = 150;
 const int MONEDAS_DORMILON = 200;
-const int MONEDAS_SABIO = 250;
-const int MONEDAS_FELIZ = 300;
+const int MONEDAS_SABIO    = 250;
+const int MONEDAS_FELIZ    = 300;
 
 const int INIT_INSECTICIDAS = 0;
 const int INIT_FERTILIZANTE = false;
@@ -67,6 +69,16 @@ int calcular_monedas_iniciales(char enanito){
 }
 
 /*
+    Pre: Recibe un puntero a char canasta
+    Post: Inicializa la canasta con el valor inicial de INIT_CANASTA
+*/
+void inicializar_canasta(char canasta[MAX_CANASTA]){
+    for (int i = 0; i < MAX_CANASTA; i++){
+        canasta[i] = INIT_CANASTA;
+    }
+}
+
+/*
     Pre: Recibe un puntero a personaje_t
     Post: Inicializa el personaje con una posicion aleatoria dentro del mapa,
           y con los valores iniciales de los atributos
@@ -92,4 +104,10 @@ void inicializar_personaje(personaje_t* personaje, char enanito){
     personaje->cant_insecticidas = INIT_INSECTICIDAS;
 
     personaje->cant_monedas = calcular_monedas_iniciales(enanito);
+
+    for (int i = 0; i < MAX_CANASTA; i++) {
+        personaje->canasta[i] = ' ';
+    }
+
+    personaje->tope_canasta = INIT_INT;
 }

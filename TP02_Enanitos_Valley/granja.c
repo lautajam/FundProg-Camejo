@@ -5,7 +5,8 @@
 #include "manejo_juego.h"
 
 /*
- * Inicializará el juego, cargando toda la información inicial de las huertas, los obstáculos, las herramientas y el personaje.
+ * Inicializará el juego, cargando toda la información inicial de las huertas, los obstáculos, las
+    herramientas y el personaje.
  * El enanito corresponde al enanito obtenido en el TP1.
  */
 void inicializar_juego(juego_t* juego, char enanito) {
