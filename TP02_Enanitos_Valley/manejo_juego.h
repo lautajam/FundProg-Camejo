@@ -9,11 +9,17 @@
 */
 void elegir_coordenada_inicial_personaje(coordenada_t* coordenadas_iniciales_personaje);
 
-/*
+/* V
     Pre: Recibe un puntero a personaje_t
     Post: Inicializa el personaje con una posicion aleatoria dentro del mapa,
           y con los valores iniciales de los atributos
 */
 void inicializar_personaje(personaje_t* personaje, char enanito);
+
+/* V
+    Pre: Recibe un puntero a un deposito
+    Post: Inicializa el deposito con una posicion aleatoria dentro del mapa
+*/
+void inicializar_deposito(coordenada_t* deposito);
 
 #endif /* MANEJO_JUEGO_H */

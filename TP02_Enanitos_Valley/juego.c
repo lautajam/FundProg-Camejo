@@ -19,7 +19,31 @@ void chequear_jugador(personaje_t* jugador){
     printf("Tope canasta pj: %d\n", (*jugador).tope_canasta);
 }
 
+void chequear_objetos(objeto_t* objetos){
+    for (int i = 0; i < MAX_OBJETOS; i++) {
+        printf("Objeto[%d] tipo: %c\n", i, (*objetos).tipo);
+        printf("Objeto[%d] posicion: (%d;%d)\n", i, (*objetos).posicion.fila, (*objetos).posicion.columna);
+    }
+}
 
+void chequear_huertas(huerta_t* huertas){
+    for (int i = 0; i < MAX_HUERTA; i++) {
+        printf("Huerta[%d] plagada: %d\n", i, (*huertas).plagado);
+        printf("Huerta[%d] mov plagado: %d\n", i, (*huertas).movimientos_plagado);
+        printf("Huerta[%d] tope cultivos: %d\n", i, (*huertas).tope_cultivos);
+
+        for (int j = 0; j < MAX_PLANTAS; j++) {
+            printf("Huerta[%d] cultivo[%d] mov plantado: %d\n", i, j, (*huertas).cultivos[j].movimiento_plantado);
+            printf("Huerta[%d] cultivo[%d] tipo: %c\n", i, j, (*huertas).cultivos[j].tipo);
+            printf("Huerta[%d] cultivo[%d] ocupado: %d\n", i, j, (*huertas).cultivos[j].ocupado);
+            printf("Huerta[%d] cultivo[%d] posicion: (%d;%d)\n", i, j, (*huertas).cultivos[j].posicion.fila, (*huertas).cultivos[j].posicion.columna);
+        }
+    }
+}
+
+void chequear_deposito(coordenada_t* deposito){
+    printf("Deposito posicion: (%d;%d)\n", (*deposito).fila, (*deposito).columna);
+}
 
 int main(void) {
 
@@ -37,9 +61,15 @@ int main(void) {
 
     inicializar_juego(&juego, inicial_enanito);
 
-    printf("Juego inicializado\n");
+    printf("Juego inicializado\n"); // mensaje de prueba
 
-    chequear_jugador(&juego.jugador);
+    /*chequear_jugador(&juego.jugador); // metodo de prueba
+
+    chequear_objetos(&juego.objetos[MAX_OBJETOS]); // metodo de prueba
+
+    chequear_huertas(&juego.huertas[MAX_HUERTA]); // metodo de prueba*/
+
+    chequear_deposito(&juego.deposito); // metodo de prueba
 
     return 0;
 }
