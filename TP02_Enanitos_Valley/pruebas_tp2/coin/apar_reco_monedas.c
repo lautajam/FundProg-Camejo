@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdlib.h> // Para usar rand
 #include <time.h>   // Para obtener una semilla desde el reloj
+#include <stdbool.h>
 
 // Constants, definitions, structs and matrices
 #define MAP_SIZE  20
@@ -21,7 +22,7 @@ const int MIN_MOVE_Y = 0;
 const int MAX_MOVE_Y = MAP_SIZE - 1;
 
 const int MAX_POINTS = 5;
-const int MOVES_NEW_OBSTACLE = 10;
+const int MOVES_NEW_COIN = 25;
 
 const int PLAYER_X_INIT = 0;
 const int PLAYER_Y_INIT = 0;
@@ -77,9 +78,10 @@ int random_number(int min, int max) {
     Pre: coin is valid coin, player is a valid player_t
     Post: x and y are filled with a valid position for an coin
 */
-void generate_position_coin(coin_t *coin, player_t player, int moveCount) {
-    if (moveCount % MOVES_NEW_OBSTACLE == 0 && moveCount != 0)
+void generate_position_coin(coin_t *coin, player_t player, int moveCount, bool* coin_collected) {
+    if (moveCount % MOVES_NEW_COIN == 0)
     {
+        *coin_collected = false; // Restablecer coin_collected a 0
         do {
             coin->x = random_number(MIN_MOVE_X, MAX_MOVE_X);
             coin->y = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
@@ -99,7 +101,7 @@ void draw_map(char map[MAP_SIZE][MAP_SIZE], player_t player, int moveCount, coin
             if (i == player.y && j == player.x) {
                 printf(" %c", player.body);
             }
-            else if (i == coin->y && j == coin->x && moveCount % MOVES_NEW_OBSTACLE == 0 && moveCount != 0) {
+            else if (i == coin->y && j == coin->x && moveCount % MOVES_NEW_COIN == 0 && moveCount != 0) {
                 printf(" %c", COIN);
             } else {
                 printf(" %c", map[i][j]);
@@ -113,12 +115,10 @@ void draw_map(char map[MAP_SIZE][MAP_SIZE], player_t player, int moveCount, coin
     Pre: player y coin son punteros a estructuras válidas, points es un puntero a int válido
     Post: Si player está en la misma posición que coin, points se incrementa en 1
 */
-void check_coin(player_t player, coin_t *coin, int *points) {
-    printf("Player: (%d, %d) | Coin: (%d, %d)", player.x, player.y, coin->x, coin->y);
-    if (player.x == coin->x && player.y == coin->y) {
+void check_coin(player_t player, coin_t *coin, int *points, int moveCount, bool* coin_collected) {
+    if (player.x == coin->x && player.y == coin->y && moveCount != 0 && *coin_collected == false) {
         (*points)++;
-        printf(" Points: %d\n", *points);
-        generate_position_coin(&coin, player, INIT_INT);
+        *coin_collected = true;
     }
 }
 
@@ -129,11 +129,13 @@ int main() {
     player_t player;
     player_constructor(&player, PLAYER_BODY_STYLE, PLAYER_X_INIT, PLAYER_Y_INIT);
 
-    coin_t coin;
+    char input          = INIT_CHAR;
+    int  moveCount      = INIT_INT;
+    int  points         = INIT_INT;
+    bool coin_collected = INIT_INT;
 
-    char input     = INIT_CHAR;
-    int  moveCount = INIT_INT;
-    int  points    = INIT_INT;
+    coin_t coin;
+    generate_position_coin(&coin, player, INIT_INT, &coin_collected);
 
     draw_map(map, player, moveCount, &coin);
     printf(" Moves: %d | Points: %d\n", moveCount, points);
@@ -141,9 +143,7 @@ int main() {
     // JUEGO
     while (input != EXIT) {
 
-        generate_position_coin(&coin, player, moveCount);
-
-        check_coin(player, &coin, &points);
+        generate_position_coin(&coin, player, moveCount, &coin_collected);
 
         scanf("%c", &input);
         system("clear");
@@ -172,10 +172,16 @@ int main() {
             } break;
         }
 
+        check_coin(player, &coin, &points, moveCount, &coin_collected);
+
+        if (player.x == coin.x && player.y == coin.y) {
+            generate_position_coin(&coin, player, moveCount, &coin_collected);
+        }
 
         draw_map(map, player, moveCount, &coin);
 
         printf(" Moves: %d | Points: %d\n", moveCount, points);
+        printf(" Player: (%d, %d) | Coin: (%d, %d)\n", player.x, player.y, coin.x, coin.y);
         if (input == 'x') printf(" Exit\n");
     }
 
