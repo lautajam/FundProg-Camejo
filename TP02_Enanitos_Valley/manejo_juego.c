@@ -27,8 +27,9 @@ const int MONEDAS_FELIZ    = 300;
 
 const int  INIT_INSECTICIDAS     = 0;
 const int  INIT_FERTILIZANTE     = false;
-const bool INIT__CULTIVO_OCUPADO = false;
 const char CULTIVO_VACIO         = 'C';
+const int  INIT_OBEJETO          = 0;
+const bool INIT__CULTIVO_OCUPADO = false;
 
 /* Mejorar comentario y traducir español
     Pre: min and max are valid int
@@ -44,7 +45,6 @@ int random_number(int min, int max) {
     Post: Devuelve una coordenada aleatoria dentro del mapa
 */
 void elegir_coordenada_inicial_personaje(coordenada_t* coordenadas_iniciales_personaje){
-    srand ((unsigned)time(NULL));
     coordenadas_iniciales_personaje->fila = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
     coordenadas_iniciales_personaje->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
 }
@@ -74,7 +74,7 @@ int calcular_monedas_iniciales(char enanito){
 */
 void inicializar_personaje(personaje_t* personaje, char enanito){
 
-    /* Data del jugador (personaje_t) BOORAR ANTES DE ENTREGAR *-COMPLETO-*
+    /* Data del personaje (personaje_t) BOORAR ANTES DE ENTREGAR *-COMPLETO-*
     typedef struct personaje {
     coordenada_t posicion;
     bool tiene_fertilizante;
@@ -107,29 +107,45 @@ void inicializar_personaje(personaje_t* personaje, char enanito){
     Post: Inicializa el deposito con una posicion aleatoria dentro del mapa
 */
 void inicializar_deposito(coordenada_t* deposito){
-    srand ((unsigned)time(NULL));
     deposito->fila = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
     deposito->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
 }
 
 
+/* hay que revisar todo esto
+
+void inicializar_objetos(objeto_t* objetos){
+
+    // Data de objeto_t:
+    //  typedef struct objeto {
+    //      coordenada_t posicion;
+    //      char tipo;
+    //  } objeto_t;
 
 
-// DE ACÁ PARA ABAJO HAY QUE REVISAR TODO
-/* Mejorar comentario
-    Pre: Recibe un puntero a un cultivo_t
-    Post: Inicializa el cultivo con los valores iniciales de los atributos
-*/
+    for (int i = 0; i < MAX_OBJETOS; i++) {
+        objeto_t objeto;
+        objeto.posicion.fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
+        objeto.posicion.columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
+        objeto.tipo             = INIT_OBEJETO;
+        objetos[i]              = objeto;
+    }
+}
+
+//    Mejorar comentario
+//    Pre: Recibe un puntero a un cultivo_t
+//    Post: Inicializa el cultivo con los valores iniciales de los atributos 
+
 void inicializar_cultivos(cultivo_t cultivos[MAX_PLANTAS]){
 
-    /* Data de cultivo_t
-    typedef struct cultivo {
-    int movimiento_plantado;
-    coordenada_t posicion;
-    char tipo;
-    bool ocupado;
-    } cultivo_t;
-    */
+    // Data de cultivo_t:
+    //  typedef struct cultivo {
+    //      int movimiento_plantado;
+    //      coordenada_t posicion;
+    //      char tipo;
+    //      bool ocupado;
+    //  } cultivo_t;
+
 
     for (int i = 0; i < MAX_PLANTAS; i++) {
         cultivo_t cultivo;
@@ -144,25 +160,22 @@ void inicializar_cultivos(cultivo_t cultivos[MAX_PLANTAS]){
     }
 }
 
-/* Mejorar comentario
-    Pre: Recibe un puntero a huerta_t
-    Post: Inicializa la huerta con los valores iniciales de los atributos
-*/
-void inicializar_huertas(huerta_t huertas[MAX_HUERTA]){
+//  Mejorar comentario
+//  Pre: Recibe un puntero a huerta_t
+//  Post: Inicializa la huerta con los valores iniciales de los atributos
 
-    /* Data de huerta_t
-    typedef struct huerta {
-    int movimientos_plagado;
-    bool plagado;
-    cultivo_t cultivos[MAX_PLANTAS];
-    int tope_cultivos;
-    } huerta_t;
-    */
+void inicializar_huerta(huerta_t* huerta){
 
-    for (int i = 0; i < MAX_HUERTA; i++) {
-        huerta_t huerta;
-        huerta.movimientos_plagado = INIT_INT;
-        huerta.plagado = false;
+    // Data de huerta_t:
+    //  typedef struct huerta {
+    //      int movimientos_plagado;
+    //      bool plagado;
+    //      cultivo_t cultivos[MAX_PLANTAS];
+    //      int tope_cultivos;
+    //  } huerta_t;
+
+    *huerta.movimientos_plagado = INIT_INT;
+    *huerta.plagado = false;
         
         cultivo_t cultivos[MAX_PLANTAS];
         inicializar_cultivos(cultivos);
@@ -175,3 +188,4 @@ void inicializar_huertas(huerta_t huertas[MAX_HUERTA]){
         huertas[i] = huerta;
     }
 }
+*/

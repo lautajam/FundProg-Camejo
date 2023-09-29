@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h> // Para usar rand
+#include <time.h>   // Para obtener una semilla desde el reloj
 #include <stdbool.h>
 #include "granja.h"
 #include "manejo_juego.h"
@@ -14,15 +15,17 @@
  */
 void inicializar_juego(juego_t* juego, char enanito) {
 
+    srand ((unsigned)time(NULL)); // genera la semilla que luego usará la funcion numero_random()
+
     /* Data de juego_t
-    typedef struct juego {
-    personaje_t jugador; V
-    int movimientos; V
-    objeto_t objetos[MAX_OBJETOS]; V
-    int tope_objetos; V
-    huerta_t huertas[MAX_HUERTA]; V
-    coordenada_t deposito;
-    } juego_t;
+        typedef struct juego {
+            personaje_t jugador; V
+            int movimientos; V
+            objeto_t objetos[MAX_OBJETOS]; V
+            int tope_objetos; V
+            huerta_t huertas[MAX_HUERTA]; V
+            coordenada_t deposito;
+        } juego_t;
     */
 
     personaje_t personaje;
@@ -33,7 +36,8 @@ void inicializar_juego(juego_t* juego, char enanito) {
     inicializar_deposito(&deposito);
     juego->deposito = deposito;
 
-    /* ESTO ESTÁ MAL
+
+    /* hay que revisar todo esto
     int movimientos = INIT_INT;
     objeto_t objetos[MAX_OBJETOS];
     inicializar_objetos(objetos);
@@ -43,10 +47,9 @@ void inicializar_juego(juego_t* juego, char enanito) {
 
     int tope_objetos = INIT_INT;
 
-    huerta_t huertas[MAX_HUERTA];
-    inicializar_huertas(huertas);    
+    huerta_t huertas[MAX_HUERTA];  
     for (int i = INIT_INT; i < MAX_HUERTA; i++) {
-        juego->huertas[i] = huertas[i];
+        juego->huertas[i] = inicializar_huerta(&huertas[i]);
     } */
 
 }
