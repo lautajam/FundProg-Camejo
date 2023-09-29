@@ -22,7 +22,7 @@ int main(void) {
     inicializar_juego(&juego, inicial_enanito);
 
     printf("Juego inicializado\n");
-    printf("Posicion iniicial pj %d %d\n", juego.jugador.posicion.fila, juego.jugador.posicion.columna);
-
+    printf("Posicion iniicial pj: (%d;%d)\n", juego.jugador.posicion.fila, juego.jugador.posicion.columna);
+    printf("Monedas iniciales pj: %d\n", juego.jugador.cant_monedas);
     return 0;
 }
