@@ -19,10 +19,10 @@ int main(void) {
 
   switch (inicial_enanito){
   case GRUNION:
-    printf("\nEl enanito más compatible con vos es: -GRUÑON-\n");
+    printf("\nEl enanito más compatible con vos es: -GRUÑÓN-\n");
     break;
   case DORMILON:
-    printf("\nEl enanito más compatible con vos es: -DORMILON-\n");
+    printf("\nEl enanito más compatible con vos es: -DORMILÓN-\n");
     break;
   case SABIO:
     printf("\nEl enanito más compatible con vos es: -SABIO-\n");
