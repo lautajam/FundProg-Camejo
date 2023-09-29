@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdlib.h> // Para usar rand
 #include <time.h>   // Para obtener una semilla desde el reloj
 

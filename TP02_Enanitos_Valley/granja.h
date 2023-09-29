@@ -54,13 +54,15 @@ typedef struct juego {
 } juego_t;
 
 /*
- * Inicializará el juego, cargando toda la información inicial de las huertas, los obstáculos, las herramientas y el personaje.
+ * Inicializará el juego, cargando toda la información inicial de las huertas, los obstáculos, 
+    las herramientas y el personaje.
  * El enanito corresponde al enanito obtenido en el TP1.
  */
-void inicializar_juego(juego_t* juego, char enanito);
+void inicializar_juego(juego_t* juego, char inicial_enanito);
 
 /*
- * Realizará la acción recibida por parámetro. Puede ser un movimiento, con todas sus consecuencias, o sembrar, poner insecticida o fertilizante.
+ * Realizará la acción recibida por parámetro. Puede ser un movimiento, con todas sus consecuencias, o sembrar, poner 
+    insecticida o fertilizante.
  * La acción recibida deberá ser válida.
  */
 void realizar_jugada(juego_t* juego, char accion);
