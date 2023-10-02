@@ -175,8 +175,8 @@ huerta_t inicializar_huerta(){
 
         huerta_t huerta;
 
-        //huerta.movimientos_plagado = INIT_MOV_PLAGADO;
-        //huerta.plagado             = INIT_PLAGADO;
+        huerta.movimientos_plagado = INIT_MOV_PLAGADO;
+        huerta.plagado             = INIT_PLAGADO;
 
 
         cultivo_t cultivos[MAX_PLANTAS];
@@ -190,7 +190,7 @@ huerta_t inicializar_huerta(){
         }
 
 
-        //huerta.tope_cultivos = INIT_INT;
+        huerta.tope_cultivos = INIT_INT;
 
         return huerta;
 }

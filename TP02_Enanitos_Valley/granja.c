@@ -68,7 +68,6 @@ void inicializar_juego(juego_t* juego, char enanito) {
     int tope_objetos = INIT_INT;
     */
    
-    huerta_t huertas[MAX_HUERTA];
     for (int i = INIT_INT; i < MAX_HUERTA; i++) {
         juego->huertas[i] = inicializar_huerta();
     }
