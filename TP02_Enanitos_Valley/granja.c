@@ -64,22 +64,22 @@ void realizar_jugada(juego_t* juego, char accion){
     switch (accion)
         {
         case ARRIBA:
-            if (juego->jugador.posicion.fila > MIN_MOVE_Y){
+            if (juego->jugador.posicion.fila > MIN_MOVE_Y) {
                 juego->jugador.posicion.fila--;
                 juego->movimientos++;
             } break;
         case IZQUIERDA:
-            if (juego->jugador.posicion.columna > MIN_MOVE_X){
+            if (juego->jugador.posicion.columna > MIN_MOVE_X) {
                 juego->jugador.posicion.columna--;
                 juego->movimientos++;
             } break;
         case ABAJO:
-            if (juego->jugador.posicion.fila < MAX_MOVE_Y){
+            if (juego->jugador.posicion.fila < MAX_MOVE_Y) {
                 juego->jugador.posicion.fila++;
                 juego->movimientos++;
             } break;
         case DERECHA:
-            if (juego->jugador.posicion.columna < MAX_MOVE_X){
+            if (juego->jugador.posicion.columna < MAX_MOVE_X) {
                 juego->jugador.posicion.columna++;
                 juego->movimientos++;
             } break;
@@ -95,6 +95,8 @@ void realizar_jugada(juego_t* juego, char accion){
         case LECHUGA:
             comprar_cultivo(juego, LECHUGA);
             break;
+        default:
+            break;
         }
 }
 
@@ -102,7 +104,6 @@ void realizar_jugada(juego_t* juego, char accion){
  * Imprime el juego por pantalla
  */
 void imprimir_terreno(juego_t juego){
-
     for (int i = 0; i < MAP_SIZE; i++) { // y
         for (int j = 0; j < MAP_SIZE; j++) { // x
             if (i == juego.jugador.posicion.fila && j == juego.jugador.posicion.columna) {

@@ -6,10 +6,10 @@
 #include "granja.h"
 
 // Letras de los enanitos
-#define GRUÑON 'G'
-#define FELIZ 'F'
+#define GRUÑON   'G'
+#define FELIZ    'F'
 #define DORMILON 'D'
-#define SABIO 'S'
+#define SABIO    'S'
 
 // Valores iniciales de los atributos
 static const int  INIT_INT         = 0;
@@ -35,8 +35,10 @@ const int MONEDAS_ZANAHORIA = 10;
 const int MONEDAS_BROCOLI   = 15;
 const int MONEDAS_LECHUGA   = 20;
 
-const bool CULTIVO_OCUPADO  = true;
+const bool CULTIVO_OCUPADO    = true;
 const bool CULTIVO_DESOCUPADO = false;
+const bool CENTRO_CULTIVO_NO_GENERADO     = false;
+const bool CENTRO_CULTIVO_GENERADO        = true;
 
 /* Mejorar comentario y traducir español
     Pre: min and max are valid int
@@ -125,16 +127,23 @@ void coordenadas_cultivo(coordenada_t* coordenadas_cultivo, coordenada_t posicio
     Pre: Recibe un puntero a un cultivo_t
     Post: Inicializa el cultivo con los valores iniciales de los atributos 
 */
-cultivo_t inicializar_cultivo(coordenada_t posicion_deposito){
+cultivo_t inicializar_cultivo(cultivo_t cultivos[MAX_PLANTAS], coordenada_t posicion_deposito){
 
     cultivo_t cultivo;
 
     cultivo.movimiento_plantado = INIT_MOV_PLAGADO;
 
-    coordenada_t coordenadas_iniciales_cultivo;
-    coordenadas_cultivo(&coordenadas_iniciales_cultivo, posicion_deposito);
+    coordenada_t coordenadas_cultivo_medio;
+    coordenadas_cultivo(&coordenadas_cultivo_medio, posicion_deposito);
 
-    cultivo.posicion = coordenadas_iniciales_cultivo;
+    int delta_filas[] = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+    int delta_columnas[] = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+
+    for (int i = 0; i < MAX_PLANTAS; i++) {
+        cultivo.posicion.fila = coordenadas_cultivo_medio.fila + delta_filas[i];
+        cultivo.posicion.columna = coordenadas_cultivo_medio.columna + delta_columnas[i];
+        printf("cultivo %d: %d %d\n", i, cultivo.posicion.fila, cultivo.posicion.columna);
+    }
 
     cultivo.tipo     = CULTIVO_VACIO;
 
@@ -155,11 +164,8 @@ huerta_t inicializar_huerta(coordenada_t posicion_deposito){
     huerta.plagado             = INIT_PLAGADO;
 
     cultivo_t cultivos[MAX_PLANTAS];
+    inicializar_cultivo(cultivos, posicion_deposito);
     
-    for (int i = INIT_INT; i < MAX_PLANTAS; i++) {
-        cultivos[i] = inicializar_cultivo(posicion_deposito);
-    }
-
     for (int i = INIT_INT; i < MAX_PLANTAS; i++) {
         huerta.cultivos[i] = cultivos[i];
     }
