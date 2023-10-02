@@ -103,9 +103,11 @@ void inicializar_personaje(personaje_t* personaje, char enanito){
     Pre:  Recibe un puntero a un deposito
     Post: Inicializa el deposito con una posicion aleatoria dentro del mapa
 */
-void inicializar_deposito(coordenada_t* deposito){
-    deposito->fila = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
-    deposito->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
+void inicializar_deposito(coordenada_t* deposito, coordenada_t posicion_personaje){
+    do{
+        deposito->fila = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
+        deposito->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
+    } while (deposito->fila == posicion_personaje.fila && deposito->columna == posicion_personaje.columna);
 }
 
 /* hay que revisar todo esto
@@ -132,7 +134,15 @@ void inicializar_objetos(objeto_t* objetos){
 //    Pre: Recibe un puntero a un cultivo_t
 //    Post: Inicializa el cultivo con los valores iniciales de los atributos 
 */
-cultivo_t inicializar_cultivo(){
+
+void coordenadas_cultivo(coordenada_t* coordenadas_cultivo, coordenada_t posicion_deposito){
+    do{
+        coordenadas_cultivo->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
+        coordenadas_cultivo->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
+    } while (coordenadas_cultivo->fila == posicion_deposito.fila && coordenadas_cultivo->columna == posicion_deposito.columna);
+}
+
+cultivo_t inicializar_cultivo(coordenada_t posicion_deposito){
 
     // Data de cultivo_t:
     //  typedef struct cultivo {
@@ -147,8 +157,7 @@ cultivo_t inicializar_cultivo(){
     cultivo.movimiento_plantado = INIT_MOV_PLAGADO;
 
     coordenada_t coordenadas_iniciales_cultivo;
-    coordenadas_iniciales_cultivo.fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
-    coordenadas_iniciales_cultivo.columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
+    coordenadas_cultivo(&coordenadas_iniciales_cultivo, posicion_deposito);
 
     cultivo.posicion = coordenadas_iniciales_cultivo;
 
@@ -163,7 +172,7 @@ cultivo_t inicializar_cultivo(){
 //  Pre: Recibe un puntero a huerta_t
 //  Post: Inicializa la huerta con los valores iniciales de los atributos
 
-huerta_t inicializar_huerta(){
+huerta_t inicializar_huerta(coordenada_t posicion_deposito){
 
     // Data de huerta_t:
     //  typedef struct huerta {
@@ -175,6 +184,7 @@ huerta_t inicializar_huerta(){
 
         huerta_t huerta;
 
+
         huerta.movimientos_plagado = INIT_MOV_PLAGADO;
         huerta.plagado             = INIT_PLAGADO;
 
@@ -182,7 +192,7 @@ huerta_t inicializar_huerta(){
         cultivo_t cultivos[MAX_PLANTAS];
         
         for (int i = 0; i < MAX_PLANTAS; i++) {
-            cultivos[i] = inicializar_cultivo();
+            cultivos[i] = inicializar_cultivo(posicion_deposito);
         }
 
         for (int i = 0; i < MAX_PLANTAS; i++) {

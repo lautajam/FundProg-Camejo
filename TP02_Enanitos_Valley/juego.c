@@ -11,17 +11,17 @@ const int GANADO = 1;
 int main(void) {
 
     juego_t juego;
-    char inicial_enanito = INIT_CHAR;
+    char inicial_enanito = 'G';
     char accion = INIT_CHAR;
 
     system("clear");
 
 
-    printf("\nBienvenido al juego Enanito Valley\n");
-    printf("Este es un juego sobre ayudar a blanca nieves a cultivar verduras\n");
-    printf("Para comenzar, vamos a hacerte un test.\n");
+    //printf("\nBienvenido al juego Enanito Valley\n");
+    //printf("Este es un juego sobre ayudar a blanca nieves a cultivar verduras\n");
+    //printf("Para comenzar, vamos a hacerte un test.\n");
 
-    calcular_enanito(&inicial_enanito);
+    //calcular_enanito(&inicial_enanito);
 
     inicializar_juego(&juego, inicial_enanito);
 

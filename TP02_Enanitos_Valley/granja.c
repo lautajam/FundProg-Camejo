@@ -53,7 +53,7 @@ void inicializar_juego(juego_t* juego, char enanito) {
     juego->jugador = personaje;
 
     coordenada_t deposito;
-    inicializar_deposito(&deposito);
+    inicializar_deposito(&deposito, juego->jugador.posicion);
     juego->deposito = deposito;
 
     juego->movimientos = INIT_INT;
@@ -69,7 +69,7 @@ void inicializar_juego(juego_t* juego, char enanito) {
     */
    
     for (int i = INIT_INT; i < MAX_HUERTA; i++) {
-        juego->huertas[i] = inicializar_huerta();
+        juego->huertas[i] = inicializar_huerta(juego->deposito);
     }
 
 }
