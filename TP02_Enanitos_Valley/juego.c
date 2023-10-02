@@ -6,7 +6,7 @@
 
 static const char INIT_CHAR = ' ';
 const int PERDIDO = -1;
-const int GANADO = 1;
+const int GANADO  = 1;
 
 int main(void) {
 

@@ -5,24 +5,11 @@
 #include "granja.h"
 #include "manejo_juego.h"
 
-// Tamaño del mapa
-#define MAP_SIZE 20
-
 // Letras de los movimientos
 #define ARRIBA    'w'
 #define IZQUIERDA 'a'
 #define ABAJO     's'
 #define DERECHA   'd'
-#define TOMATE    't'
-#define ZANAHORIA 'z'
-#define BROCOLI   'b'
-#define LECHUGA   'l'
-
-// Margenes de movimiento del personaje
-static const int MIN_MOVE_X = 0;
-static const int MAX_MOVE_X = MAP_SIZE - 1;
-static const int MIN_MOVE_Y = 0;
-static const int MAX_MOVE_Y = MAP_SIZE - 1;
 
 // Estilos de los objetos
 const char ESPACIOS_VACIOS    = '-';
@@ -96,6 +83,18 @@ void realizar_jugada(juego_t* juego, char accion){
                 juego->jugador.posicion.columna++;
                 juego->movimientos++;
             } break;
+        case TOMATE:
+            comprar_cultivo(juego, TOMATE);
+            break;
+        case ZANAHORIA:
+            comprar_cultivo(juego, ZANAHORIA);
+            break;
+        case BROCOLI:
+            comprar_cultivo(juego, BROCOLI);
+            break;
+        case LECHUGA:
+            comprar_cultivo(juego, LECHUGA);
+            break;
         }
 }
 

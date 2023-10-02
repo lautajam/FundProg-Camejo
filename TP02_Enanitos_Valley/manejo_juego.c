@@ -11,15 +11,6 @@
 #define DORMILON 'D'
 #define SABIO 'S'
 
-// Tamaño del mapa
-#define MAP_SIZE 20
-
-// Margenes de movimiento del personaje
-static const int MIN_MOVE_X = 0;
-static const int MAX_MOVE_X = MAP_SIZE - 1;
-static const int MIN_MOVE_Y = 0;
-static const int MAX_MOVE_Y = MAP_SIZE - 1;
-
 // Valores iniciales de los atributos
 static const int  INIT_INT         = 0;
 const int         INIT_MOV_PLAGADO = 10;
@@ -38,6 +29,14 @@ const int MONEDAS_DORMILON = 200;
 const int MONEDAS_SABIO    = 250;
 const int MONEDAS_FELIZ    = 300;
 
+// Valores de las monedas por cada cultivo
+const int MONEDAS_TOMATE    = 5;
+const int MONEDAS_ZANAHORIA = 10;
+const int MONEDAS_BROCOLI   = 15;
+const int MONEDAS_LECHUGA   = 20;
+
+const bool CULTIVO_OCUPADO  = true;
+const bool CULTIVO_DESOCUPADO = false;
 
 /* Mejorar comentario y traducir español
     Pre: min and max are valid int
@@ -157,15 +156,62 @@ huerta_t inicializar_huerta(coordenada_t posicion_deposito){
 
     cultivo_t cultivos[MAX_PLANTAS];
     
-    for (int i = 0; i < MAX_PLANTAS; i++) {
+    for (int i = INIT_INT; i < MAX_PLANTAS; i++) {
         cultivos[i] = inicializar_cultivo(posicion_deposito);
     }
 
-    for (int i = 0; i < MAX_PLANTAS; i++) {
+    for (int i = INIT_INT; i < MAX_PLANTAS; i++) {
         huerta.cultivos[i] = cultivos[i];
     }
 
     huerta.tope_cultivos = INIT_INT;
 
     return huerta;
+}
+
+/* Mejorar comentario
+    Pre: recibe el tipo de cultivo a comprar
+    Post: devuelve el costo del cultivo en int
+*/
+int calcular_costo_cultivo(char cultivo){
+    int costo_cultivo = INIT_INT;
+    switch (cultivo) {
+        case TOMATE:
+            costo_cultivo = MONEDAS_TOMATE;
+            break;
+        case ZANAHORIA:
+            costo_cultivo = MONEDAS_ZANAHORIA;
+            break;
+        case BROCOLI:
+            costo_cultivo = MONEDAS_BROCOLI;
+            break;
+        case LECHUGA:
+            costo_cultivo = MONEDAS_LECHUGA;
+            break;
+        default:
+            costo_cultivo = INIT_INT;
+            break;
+    }
+    return costo_cultivo;
+}
+
+/* Mejorar comentario
+    Pre: recibe el juego (puntero a juego_t) y el tipo de cultivo a comprar
+    Post: compra el cultivo, transforma el cultivo en ese tipo y resta el costo del mismo a las monedas del jugador
+*/
+void comprar_cultivo(juego_t* juego, char cultivo){
+    for (int i = INIT_INT; i < MAX_HUERTA; i++) {
+        for (int j = INIT_INT; j < MAX_PLANTAS; j++) {
+            if (juego->jugador.posicion.fila == juego->huertas[i].cultivos[j].posicion.fila && 
+                juego->jugador.posicion.columna == juego->huertas[i].cultivos[j].posicion.columna) {
+                if (juego->huertas[i].cultivos[j].ocupado == CULTIVO_DESOCUPADO) {
+                    if (juego->jugador.cant_monedas >= calcular_costo_cultivo(cultivo)){
+                        juego->jugador.cant_monedas -= calcular_costo_cultivo(cultivo);
+                        juego->huertas[i].cultivos[j].tipo = cultivo;
+                        juego->huertas[i].cultivos[j].ocupado = CULTIVO_OCUPADO;
+                    }  
+                } 
+            }
+        } 
+    }
 }
