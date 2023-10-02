@@ -35,7 +35,7 @@ int main(void) {
         realizar_jugada(&juego, accion);
 
         imprimir_terreno(juego);
-        printf(" Movimientos: %d\n", juego.movimientos);
+        printf(" Movimientos: %d | Monedas: %d\n", juego.movimientos, juego.jugador.cant_monedas);
 
 
     }

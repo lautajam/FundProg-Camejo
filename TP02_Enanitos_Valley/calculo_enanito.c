@@ -202,31 +202,6 @@ void explicar_test(){
 }
 
 /*
-  Pre:  Se recibe una referencia a una variable de tipo char que contiene la inicial del enanito.
-  Post: Se mostrará por pantalla el enanito más compatible con el usuario.
-*/
-void informar_enanito(char* inicial_enanito){
-  switch (*inicial_enanito){
-  case GRUNION:
-    printf("\nEl enanito más compatible con vos es: -GRUÑÓN-\n");
-    break;
-  case DORMILON:
-    printf("\nEl enanito más compatible con vos es: -DORMILÓN-\n");
-    break;
-  case SABIO:
-    printf("\nEl enanito más compatible con vos es: -SABIO-\n");
-    break;
-  case FELIZ:
-    printf("\nEl enanito más compatible con vos es: -FELIZ-\n");
-    break;
-  
-  default:
-    printf("\nHubo un error al realizar el test.\n");
-    break;
-  }
-}
-
-/*
 Pre:  Se recibe una referencia a una variable de tipo char que va a contener la inicial del enanito.
 Post: Se calculará la inicial del enanito en base al puntaje obtenido. 
       Se modificará el valor de la variable inicial_enanito por referencia.
@@ -252,7 +227,5 @@ void calcular_enanito(char* inicial_enanito){
   } else{
     *inicial_enanito = FELIZ;
   }
-
-  informar_enanito(inicial_enanito);
 
 }

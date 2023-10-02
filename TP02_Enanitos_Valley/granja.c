@@ -139,4 +139,3 @@ int estado_juego(juego_t juego){
     }
     return 0;
 }
-
