@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include <time.h> // Para obtener una semilla desde el reloj
+#include <time.h>   // Para obtener una semilla desde el reloj
 #include <stdlib.h> // Para usar rand
 #include "manejo_juego.h"
 #include "granja.h"
@@ -99,7 +99,7 @@ void inicializar_personaje(personaje_t* personaje, char enanito){
     personaje->tope_canasta = INIT_INT;
 }
 
-/* Mejorar comentario HAY QUE AGREGAR LAS CONDICIONES DE APARICIÓN
+/* Mejorar comentario
     Pre:  Recibe un puntero a un deposito
     Post: Inicializa el deposito con una posicion aleatoria dentro del mapa
 */
@@ -110,31 +110,11 @@ void inicializar_deposito(coordenada_t* deposito, coordenada_t posicion_personaj
     } while (deposito->fila == posicion_personaje.fila && deposito->columna == posicion_personaje.columna);
 }
 
-/* hay que revisar todo esto
-
-void inicializar_objetos(objeto_t* objetos){
-
-    // Data de objeto_t:
-    //  typedef struct objeto {
-    //      coordenada_t posicion;
-    //      char tipo;
-    //  } objeto_t;
-
-
-    for (int i = 0; i < MAX_OBJETOS; i++) {
-        objeto_t objeto;
-        objeto.posicion.fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
-        objeto.posicion.columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
-        objeto.tipo             = INIT_OBJETO;
-        objetos[i]              = objeto;
-    }
-}
-
-//    Mejorar comentario
-//    Pre: Recibe un puntero a un cultivo_t
-//    Post: Inicializa el cultivo con los valores iniciales de los atributos 
+/* Mejorar comentario
+    Pre: Recibe unas coordenadas de un cultivo y un deposito
+    Post: Setea las cooredenas del cultivo con valores aleatorios dentro del mapa
+            cuando estos no coinciden con las del deposito
 */
-
 void coordenadas_cultivo(coordenada_t* coordenadas_cultivo, coordenada_t posicion_deposito){
     do{
         coordenadas_cultivo->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
@@ -142,15 +122,11 @@ void coordenadas_cultivo(coordenada_t* coordenadas_cultivo, coordenada_t posicio
     } while (coordenadas_cultivo->fila == posicion_deposito.fila && coordenadas_cultivo->columna == posicion_deposito.columna);
 }
 
+/* Mejorar comentario
+    Pre: Recibe un puntero a un cultivo_t
+    Post: Inicializa el cultivo con los valores iniciales de los atributos 
+*/
 cultivo_t inicializar_cultivo(coordenada_t posicion_deposito){
-
-    // Data de cultivo_t:
-    //  typedef struct cultivo {
-    //      int movimiento_plantado;
-    //      coordenada_t posicion;
-    //      char tipo;
-    //      bool ocupado;
-    //  } cultivo_t;
 
     cultivo_t cultivo;
 
@@ -168,39 +144,28 @@ cultivo_t inicializar_cultivo(coordenada_t posicion_deposito){
     return cultivo;
 }
 
-//  Mejorar comentario
-//  Pre: Recibe un puntero a huerta_t
-//  Post: Inicializa la huerta con los valores iniciales de los atributos
-
+/* Mejorar comentario
+  Pre: Recibe un puntero a huerta_t
+  Post: Inicializa la huerta con los valores iniciales de los atributos
+*/
 huerta_t inicializar_huerta(coordenada_t posicion_deposito){
 
-    // Data de huerta_t:
-    //  typedef struct huerta {
-    //      int movimientos_plagado;
-    //      bool plagado;
-    //      cultivo_t cultivos[MAX_PLANTAS];
-    //      int tope_cultivos;
-    //  } huerta_t;
+    huerta_t huerta;
 
-        huerta_t huerta;
+    huerta.movimientos_plagado = INIT_MOV_PLAGADO;
+    huerta.plagado             = INIT_PLAGADO;
 
+    cultivo_t cultivos[MAX_PLANTAS];
+    
+    for (int i = 0; i < MAX_PLANTAS; i++) {
+        cultivos[i] = inicializar_cultivo(posicion_deposito);
+    }
 
-        huerta.movimientos_plagado = INIT_MOV_PLAGADO;
-        huerta.plagado             = INIT_PLAGADO;
+    for (int i = 0; i < MAX_PLANTAS; i++) {
+        huerta.cultivos[i] = cultivos[i];
+    }
 
+    huerta.tope_cultivos = INIT_INT;
 
-        cultivo_t cultivos[MAX_PLANTAS];
-        
-        for (int i = 0; i < MAX_PLANTAS; i++) {
-            cultivos[i] = inicializar_cultivo(posicion_deposito);
-        }
-
-        for (int i = 0; i < MAX_PLANTAS; i++) {
-            huerta.cultivos[i] = cultivos[i];
-        }
-
-
-        huerta.tope_cultivos = INIT_INT;
-
-        return huerta;
+    return huerta;
 }

@@ -5,7 +5,18 @@
 #include "granja.h"
 #include "manejo_juego.h"
 
+// Tamaño del mapa
 #define MAP_SIZE 20
+
+// Letras de los movimientos
+#define ARRIBA    'w'
+#define IZQUIERDA 'a'
+#define ABAJO     's'
+#define DERECHA   'd'
+#define TOMATE    't'
+#define ZANAHORIA 'z'
+#define BROCOLI   'b'
+#define LECHUGA   'l'
 
 // Margenes de movimiento del personaje
 static const int MIN_MOVE_X = 0;
@@ -13,18 +24,14 @@ static const int MAX_MOVE_X = MAP_SIZE - 1;
 static const int MIN_MOVE_Y = 0;
 static const int MAX_MOVE_Y = MAP_SIZE - 1;
 
-#define ARRIBA    'w'
-#define IZQUIERDA 'a'
-#define ABAJO     's'
-#define DERECHA   'd'
-
+// Estilos de los objetos
 const char ESPACIOS_VACIOS    = '-';
 const char ESTILO_JUGADOR     = 'S';
 const char ESTILO_DEPOSITO    = 'D';
 
+// Valores iniciales de los atributos
 const bool HUERTA_ENCONTRADA     = true;
 const bool HUERTA_NO_ENCONTRADA  = false;
-
 static const int  INIT_INT     = 0;
 //static const char INIT_OBJETOS = ' ';
 
@@ -39,12 +46,8 @@ void inicializar_juego(juego_t* juego, char enanito) {
 
     /* Data de juego_t
         typedef struct juego {
-            personaje_t jugador; V
-            int movimientos; V
-            objeto_t objetos[MAX_OBJETOS]; V
-            int tope_objetos; V
-            huerta_t huertas[MAX_HUERTA]; V
-            coordenada_t deposito;
+            objeto_t objetos[MAX_OBJETOS]; FALTA
+            int tope_objetos; FALTA
         } juego_t;
     */
 
@@ -57,16 +60,6 @@ void inicializar_juego(juego_t* juego, char enanito) {
     juego->deposito = deposito;
 
     juego->movimientos = INIT_INT;
-
-    /* hay que revisar todo esto
-    objeto_t objetos[MAX_OBJETOS];
-    inicializar_objetos(objetos);
-    for (int i = INIT_INT; i < MAX_OBJETOS; i++) {
-        juego->objetos[i] = objetos[i];
-    }
-
-    int tope_objetos = INIT_INT;
-    */
    
     for (int i = INIT_INT; i < MAX_HUERTA; i++) {
         juego->huertas[i] = inicializar_huerta(juego->deposito);

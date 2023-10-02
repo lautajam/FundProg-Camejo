@@ -11,32 +11,40 @@ const int GANADO = 1;
 int main(void) {
 
     juego_t juego;
-    char inicial_enanito = 'G';
+    char inicial_enanito = INIT_CHAR;
     char accion = INIT_CHAR;
 
     system("clear");
 
+    printf("\nBienvenido al juego Enanito Valley\n");
+    printf("Este es un juego sobre ayudar a blanca nieves a cultivar verduras\n");
+    printf("Para comenzar, vamos a hacerte un test.\n");
 
-    //printf("\nBienvenido al juego Enanito Valley\n");
-    //printf("Este es un juego sobre ayudar a blanca nieves a cultivar verduras\n");
-    //printf("Para comenzar, vamos a hacerte un test.\n");
-
-    //calcular_enanito(&inicial_enanito);
+    calcular_enanito(&inicial_enanito);
 
     inicializar_juego(&juego, inicial_enanito);
 
-    imprimir_terreno(juego);
-
     while (estado_juego(juego) != PERDIDO && estado_juego(juego) != GANADO) {
-
-        scanf("%c", &accion);
-        system("clear");
 
         realizar_jugada(&juego, accion);
 
         imprimir_terreno(juego);
-        printf(" Movimientos: %d | Monedas: %d\n", juego.movimientos, juego.jugador.cant_monedas);
 
+        printf(" Canasta:");
+        for (int i = 0; i < juego.jugador.tope_canasta; i++) {
+            printf(" %c ", juego.jugador.canasta[i]);
+        }
+        printf("\n");
+
+        printf(" Movimientos:  %d | Monedas: %d\n", juego.movimientos, juego.jugador.cant_monedas);
+        printf(" Insecticidas: %d | Fertilizantes: %d\n", juego.jugador.cant_insecticidas, 
+                                                          juego.jugador.tiene_fertilizante);
+        printf(" Tomate  (t):  5 monedas | Zanahoria (z): 10 monedas \n");
+        printf(" Brocilo (b): 15 monedas | Lechuga   (l): 20 monedas \n");
+        printf(" Accion w/a/s/d (moverse) o t/z/b/l (comprar): ");
+        scanf("%c", &accion);
+        printf("\n");
+        system("clear");
     }
     
     if (estado_juego(juego) == PERDIDO) {

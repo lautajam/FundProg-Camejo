@@ -1,19 +1,26 @@
 #include <stdio.h>
 #include "calculo_enanito.h"
 
+// Letras de los enanitos
 #define GRUNION  'G'
 #define DORMILON 'D'
 #define SABIO    'S'
 #define FELIZ    'F'
 
+// Valores iniciales de los atributos
 static const char INIT_CHAR = ' ';
+const int    INIT_INT       = 0;
+const float  INIT_FLOAT     = 0;
+
+// Letras de las opciones de las preguntas
 const char   LECHUGA        = 'A';
 const char   BROCOLI        = 'B';
 const char   ZANAHORIA      = 'C';
 const char   TOMATE         = 'D';
 const char   INVIERNO       = 'I';
 const char   VERANO         = 'V';
-const int    INIT_INT           = 0;
+
+// Puntajes de las opciones de las preguntas
 const int    PUNTAJE_LECHUGA    = 0;
 const int    PUNTAJE_BROCOLI    = 5;
 const int    PUNTAJE_ZANAHORIA  = 10;
@@ -24,13 +31,16 @@ const int    MIN_VALOR_ENOJO    = 0;
 const int    MAX_VALOR_ENOJO    = 5;
 const int    MIN_TIEMPO_CULTIVO = 40; 
 const int    MAX_TIEMPO_CULTIVO = 120;
+
+// Rangos de puntajes de las opciones de las preguntas
 const int    MAX_VALOR_GRUÑON   = 9;
 const int    MIN_VALOR_DORMILON = 10;
 const int    MAX_VALOR_DORMILON = 19;
 const int    MIN_VALOR_SABIO    = 20;
 const int    MAX_VALOR_SABIO    = 29;
 const int    MIN_VALOR_FELIZ    = 30;
-const float  INIT_FLOAT         = 0;
+
+// Divisores para calcular el puntaje de la pregunta del tiempo de cultivo
 const float  DIVISOR_PUNTAJE_CULTIVO    = 8;
 
 /*
