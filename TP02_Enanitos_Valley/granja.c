@@ -5,7 +5,24 @@
 #include "granja.h"
 #include "manejo_juego.h"
 
-//static const int  INIT_INT     = 0;
+#define MAP_SIZE 20
+
+// Margenes de movimiento del personaje
+static const int MIN_MOVE_X = 0;
+static const int MAX_MOVE_X = MAP_SIZE - 1;
+static const int MIN_MOVE_Y = 0;
+static const int MAX_MOVE_Y = MAP_SIZE - 1;
+
+#define ARRIBA    'w'
+#define IZQUIERDA 'a'
+#define ABAJO     's'
+#define DERECHA   'd'
+
+const char ESPACIOS_VACIOS    = '-';
+const char ESTILO_JUGADOR     = 'S';
+const char ESTILO_DEPOSITO    = 'D';
+
+static const int  INIT_INT     = 0;
 //static const char INIT_OBJETOS = ' ';
 
 /*
@@ -36,9 +53,9 @@ void inicializar_juego(juego_t* juego, char enanito) {
     inicializar_deposito(&deposito);
     juego->deposito = deposito;
 
+    juego->movimientos = INIT_INT;
 
     /* hay que revisar todo esto
-    int movimientos = INIT_INT;
     objeto_t objetos[MAX_OBJETOS];
     inicializar_objetos(objetos);
     for (int i = INIT_INT; i < MAX_OBJETOS; i++) {
@@ -46,10 +63,80 @@ void inicializar_juego(juego_t* juego, char enanito) {
     }
 
     int tope_objetos = INIT_INT;
-
-    huerta_t huertas[MAX_HUERTA];  
+    
+    huerta_t huertas[MAX_HUERTA];
     for (int i = INIT_INT; i < MAX_HUERTA; i++) {
-        juego->huertas[i] = inicializar_huerta(&huertas[i]);
-    } */
+        juego->huertas[i] = inicializar_huerta();
+    }*/
 
 }
+
+/*
+ * Realizará la acción recibida por parámetro. Puede ser un movimiento, con todas sus consecuencias, o sembrar, poner 
+    insecticida o fertilizante.
+ * La acción recibida deberá ser válida.
+ */
+void realizar_jugada(juego_t* juego, char accion){
+
+    switch (accion)
+        {
+        case ARRIBA:
+            if (juego->jugador.posicion.fila > MIN_MOVE_Y){
+                juego->jugador.posicion.fila--;
+                juego->movimientos++;
+            } break;
+        case IZQUIERDA:
+            if (juego->jugador.posicion.columna > MIN_MOVE_X){
+                juego->jugador.posicion.columna--;
+                juego->movimientos++;
+            } break;
+        case ABAJO:
+            if (juego->jugador.posicion.fila < MAX_MOVE_Y){
+                juego->jugador.posicion.fila++;
+                juego->movimientos++;
+            } break;
+        case DERECHA:
+            if (juego->jugador.posicion.columna < MAX_MOVE_X){
+                juego->jugador.posicion.columna++;
+                juego->movimientos++;
+            } break;
+        }
+}
+
+/*
+ * Imprime el juego por pantalla
+ */
+void imprimir_terreno(juego_t juego){
+
+    for (int i = 0; i < MAP_SIZE; i++) { // y
+        for (int j = 0; j < MAP_SIZE; j++) { // x
+            if (i == juego.jugador.posicion.fila && j == juego.jugador.posicion.columna) {
+                printf(" %c", ESTILO_JUGADOR);
+            } else if (i == juego.deposito.fila && j == juego.deposito.columna) {
+                printf(" %c", ESTILO_DEPOSITO);
+            } else {
+                printf(" %c", ESPACIOS_VACIOS);
+            }
+        }
+        printf("\n");
+    }
+
+}
+
+/*
+ * El juego se dará por ganado si se llega a 1000 monedas. Si Blancanieves se queda 
+ * sin monedas, se considerará perdido.
+ * Devuelve:
+ * --> 1 si es ganado
+ * --> -1 si es perdido
+ * --> 0 si se sigue jugando
+ */
+int estado_juego(juego_t juego){
+    if (juego.jugador.cant_monedas <= 0) {
+        return -1;
+    } else if (juego.jugador.cant_monedas >= 1000) {
+        return 1;
+    }
+    return 0;
+}
+
