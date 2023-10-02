@@ -25,6 +25,6 @@ void inicializar_objetos(objeto_t* objetos);
 
 //  Pre: Recibe un puntero a huerta_t
 //  Post: Inicializa las huertas con una posicion aleatoria dentro del mapa
-//huerta_t inicializar_huerta();
+huerta_t inicializar_huerta();
 
 #endif /* MANEJO_JUEGO_H */

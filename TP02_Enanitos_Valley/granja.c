@@ -22,6 +22,9 @@ const char ESPACIOS_VACIOS    = '-';
 const char ESTILO_JUGADOR     = 'S';
 const char ESTILO_DEPOSITO    = 'D';
 
+const bool HUERTA_ENCONTRADA     = true;
+const bool HUERTA_NO_ENCONTRADA  = false;
+
 static const int  INIT_INT     = 0;
 //static const char INIT_OBJETOS = ' ';
 
@@ -63,11 +66,12 @@ void inicializar_juego(juego_t* juego, char enanito) {
     }
 
     int tope_objetos = INIT_INT;
-    
+    */
+   
     huerta_t huertas[MAX_HUERTA];
     for (int i = INIT_INT; i < MAX_HUERTA; i++) {
         juego->huertas[i] = inicializar_huerta();
-    }*/
+    }
 
 }
 
@@ -115,7 +119,18 @@ void imprimir_terreno(juego_t juego){
             } else if (i == juego.deposito.fila && j == juego.deposito.columna) {
                 printf(" %c", ESTILO_DEPOSITO);
             } else {
-                printf(" %c", ESPACIOS_VACIOS);
+                bool encontro_huerta = HUERTA_NO_ENCONTRADA;
+                for (int k = 0; k < MAX_HUERTA; k++) {
+                    if (i == juego.huertas[k].cultivos->posicion.fila && j == juego.huertas[k].cultivos->posicion.columna) {
+                        printf(" %c", juego.huertas[k].cultivos->tipo);
+                        encontro_huerta = HUERTA_ENCONTRADA;
+                        k = MAX_HUERTA;
+                    }
+                }
+                if (!encontro_huerta) {
+                    printf(" %c", ESPACIOS_VACIOS);
+                }
+                
             }
         }
         printf("\n");

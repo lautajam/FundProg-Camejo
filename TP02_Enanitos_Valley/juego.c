@@ -37,7 +37,6 @@ int main(void) {
         imprimir_terreno(juego);
         printf(" Movimientos: %d | Monedas: %d\n", juego.movimientos, juego.jugador.cant_monedas);
 
-
     }
     
     if (estado_juego(juego) == PERDIDO) {

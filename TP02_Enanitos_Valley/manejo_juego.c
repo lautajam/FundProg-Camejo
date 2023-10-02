@@ -131,7 +131,7 @@ void inicializar_objetos(objeto_t* objetos){
 //    Mejorar comentario
 //    Pre: Recibe un puntero a un cultivo_t
 //    Post: Inicializa el cultivo con los valores iniciales de los atributos 
-
+*/
 cultivo_t inicializar_cultivo(){
 
     // Data de cultivo_t:
@@ -175,8 +175,8 @@ huerta_t inicializar_huerta(){
 
         huerta_t huerta;
 
-        huerta.movimientos_plagado = INIT_MOV_PLAGADO;
-        huerta.plagado             = INIT_PLAGADO;
+        //huerta.movimientos_plagado = INIT_MOV_PLAGADO;
+        //huerta.plagado             = INIT_PLAGADO;
 
 
         cultivo_t cultivos[MAX_PLANTAS];
@@ -185,8 +185,12 @@ huerta_t inicializar_huerta(){
             cultivos[i] = inicializar_cultivo();
         }
 
-        huerta.tope_cultivos = INIT_INT;
+        for (int i = 0; i < MAX_PLANTAS; i++) {
+            huerta.cultivos[i] = cultivos[i];
+        }
+
+
+        //huerta.tope_cultivos = INIT_INT;
 
         return huerta;
 }
-*/
