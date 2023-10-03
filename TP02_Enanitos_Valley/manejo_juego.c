@@ -17,7 +17,7 @@
 // Valores iniciales de los atributos
 static const int  INIT_INT         = 0;
 const int         INIT_MOV_PLAGADO = 10;
-const int  INIT_INSECTICIDAS       = 0;
+const int  INIT_INSECTICIDAS       = 3;
 const int  INIT_OBJETO             = 0;
 const int  MONEDAS_DEFAULT         = 0;
 const char INIT_CANASTA            = ' ';
@@ -38,11 +38,13 @@ const int MONEDAS_ZANAHORIA = 10;
 const int MONEDAS_BROCOLI   = 15;
 const int MONEDAS_LECHUGA   = 20;
 
+// Valores booleanos para los cultivos
 const bool CULTIVO_OCUPADO    = true;
 const bool CULTIVO_DESOCUPADO = false;
 const bool CENTRO_CULTIVO_NO_GENERADO     = false;
 const bool CENTRO_CULTIVO_GENERADO        = true;
 
+/* Funciones extras y necesarias */
 /*
     Pre:  Recibe dos valores, un valor mínimo y un valor máximo para el rango
     Post: Devuelve un número aleatorio dentro del rango
@@ -53,12 +55,12 @@ int random_number(int min, int max) {
 }
 
 /* 
-    Pre: Recibe la inicial del enanito conseguida en el test
+    Pre:  Recibe la inicial del enanito conseguida en el test
     Post: Devuelve la cantidad de monedas iniciales del personaje dependiendo de la inicial del enanito
-            Gruñoon:  150 monedas
-            Dormilon: 200 monedas
-            Sabio:    250 monedas
-            Feliz:    300 monedas
+            - Gruñoon:  150 monedas
+            - Dormilon: 200 monedas
+            - Sabio:    250 monedas
+            - Feliz:    300 monedas
 */
 int calcular_monedas_iniciales(char enanito){
     int monedas_iniciales = INIT_INT;
@@ -83,8 +85,8 @@ int calcular_monedas_iniciales(char enanito){
 }
 
 /*
-    Pre: recibe dos coordenadas para comparar
-    Post: devuelve true si las coordenadas son iguales, sino devuelve false
+    Pre:  Recibe dos coordenadas para comparar
+    Post: Devuelve true si las coordenadas son iguales, sino devuelve false
 */
 bool posicion_igual(coordenada_t posicion_1, coordenada_t posicion_2){
     return posicion_1.fila == posicion_2.fila && posicion_1.columna == posicion_2.columna;
@@ -109,23 +111,33 @@ bool posicion_valida_huertas(coordenada_t posicion_verificar, huerta_t huerta[MA
 }
 
 /* Inicializar personaje*/
-void coordenadas_iniciales_personaje(coordenada_t coordenadas_personaje, coordenada_t coordenadas_deposito, huerta_t huerta[MAX_HUERTA]){
+/* 
+    Pre:  Recibe las coordenadas del personaje (en forma de puntero para modificarlas), la lista de huertas y 
+          las coordenadas del deposito
+    Post: Inicializa el personaje con una posicion aleatoria dentro del mapa y chequea que las coordenadas del 
+          personaje no coincidan con las de algun cultivo, ni con el deposito en caso que coincidan, vuelve a 
+          generar la coordenadas
+*/
+void generar_coordenadas_iniciales_personaje(coordenada_t* coordenadas_personaje, huerta_t huerta[MAX_HUERTA], coordenada_t deposito){
     do{
-        coordenadas_personaje.fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
-        coordenadas_personaje.columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
-    } while (!posicion_valida_huertas(coordenadas_personaje, huerta) && !posicion_igual(coordenadas_personaje, coordenadas_deposito));
+        coordenadas_personaje->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
+        coordenadas_personaje->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
+    } while (posicion_valida_huertas(*coordenadas_personaje, huerta) && posicion_igual(*coordenadas_personaje, deposito));
 }
 
-/* Mejorar comentario
-    Pre: Recibe un puntero a personaje_t
-    Post: Inicializa el personaje con una posicion aleatoria dentro del mapa,
-          y con los valores iniciales de los atributos
+/*
+    Pre: Recibe un personaje (en forma de puntero para modificarlo) la inicial del enanito, la lista de huertas 
+         y las coordenadas del deposito
+    Post: Inicializa el personaje con una posicion aleatoria dentro del mapa (no pisando el deposito ni los cultivos)
+            - Calcula las monedas iniciales del personaje dependiendo de la inicial del enanito
+            - Inicia la canasta con valores vacios
+            - Inicia los insecticidas con INIT_INSECTICIDAS (es 3, valor pedido por la consigna)
+            - Inicia el fertilizante con INIT_FERTILIZANTE (es false, valor pedido por la consigna)
 */
 void inicializar_personaje(personaje_t* personaje, char enanito, huerta_t huerta[MAX_HUERTA], coordenada_t deposito){
 
     coordenada_t coordenadas_iniciales_personaje;
-    coordenadas_iniciales_personaje.fila = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
-    coordenadas_iniciales_personaje.columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
+    generar_coordenadas_iniciales_personaje(&coordenadas_iniciales_personaje, huerta, deposito);
     personaje->posicion = coordenadas_iniciales_personaje;
 
     personaje->tiene_fertilizante = INIT_FERTILIZANTE;
@@ -144,9 +156,8 @@ void inicializar_personaje(personaje_t* personaje, char enanito, huerta_t huerta
 /* Inicializar deposito*/
 /* 
     Pre:  Recibe las coordenadas del deposito (en forma de puntero para modificarlas) y la lista de huertas
-    Post: Inicializa el deposito con una posicion aleatoria dentro del mapa
-          y chequea que las coordenadas del deposito no coincidan con las de algun cultivo,
-          en caso que coincidan, vuelve a generar la coordenadas
+    Post: Inicializa el deposito con una posicion aleatoria dentro del mapa y chequea que las coordenadas del 
+          deposito no coincidan con las de algun cultivo, en caso que coincidan, vuelve a generar la coordenadas
 */
 void inicializar_deposito(coordenada_t* deposito, huerta_t huerta[MAX_HUERTA]){
     do{
@@ -156,21 +167,24 @@ void inicializar_deposito(coordenada_t* deposito, huerta_t huerta[MAX_HUERTA]){
 }
 
 /* Inicializar huertas y cultivos*/
-/* Mejorar comentario
-    Pre: Recibe unas coordenadas de un cultivo y un deposito
+/* 
+    Pre:  Recibe unas coordenadas de un cultivo (en forma de puntero para modificarlas)
     Post: Setea las cooredenas del cultivo con valores aleatorios dentro del mapa
-            cuando estos no coinciden con las del deposito
 */
-void coordenadas_cultivo(coordenada_t* coordenadas_cultivo, coordenada_t posicion_deposito){
+void coordenadas_cultivo(coordenada_t* coordenadas_cultivo){
     coordenadas_cultivo->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
     coordenadas_cultivo->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
 }
 
-/* Mejorar comentario
-    Pre: Recibe un puntero a un cultivo_t
-    Post: Inicializa el cultivo con los valores iniciales de los atributos 
+/* 
+    Pre:  Recibe un array de cultivos
+    Post: Inicializa los cultivos:
+            - Inicializa el movimiento_plantado con INIT_MOV_PLAGADO (es 10, valor pedido por la consigna)
+            - Inicializa el tipo con CULTIVO_VACIO (es 'C', valor pedido por la consigna)
+            - Inicializa el ocupado con INIT_CULTIVO_OCUPADO (es false, valor pedido por la consigna)
+            - Inicializa las coordenadas de los cultivos con coordenadas aleatorias dentro del mapa
 */
-void inicializar_cultivos(cultivo_t cultivos[MAX_PLANTAS], coordenada_t posicion_deposito){
+void inicializar_cultivos(cultivo_t cultivos[MAX_PLANTAS]){
 
     coordenada_t coordenadas_cultivo_medio;
 
@@ -179,7 +193,7 @@ void inicializar_cultivos(cultivo_t cultivos[MAX_PLANTAS], coordenada_t posicion
  
     for (int  j = INIT_INT; j < MAX_PLANTAS; j++) { // Genera 3 "semillaS" (coordenadas iniciales del cultivo)
 
-        coordenadas_cultivo(&coordenadas_cultivo_medio, posicion_deposito);
+        coordenadas_cultivo(&coordenadas_cultivo_medio);
 
         for (int i = INIT_INT; i < MAX_PLANTAS; i++) { // Genera 8 cultivos alrededor de la semilla
             cultivos[i].movimiento_plantado = INIT_MOV_PLAGADO;
@@ -193,11 +207,15 @@ void inicializar_cultivos(cultivo_t cultivos[MAX_PLANTAS], coordenada_t posicion
     
 }
 
-/* Mejorar comentario
-  Pre: Recibe un puntero a huerta_t
-  Post: Inicializa la huerta con los valores iniciales de los atributos
+/* 
+  Pre:  -
+  Post: Devuelve una huerta inicializada con los valores pedidos por la consigna
+            - Inicializa el movimiento_plantado con INIT_MOV_PLAGADO (es 10, valor pedido por la consigna)
+            - Inicializa el tipo con CULTIVO_VACIO (es 'C', valor pedido por la consigna)
+            - Inicializa el ocupado con INIT_CULTIVO_OCUPADO (es false, valor pedido por la consigna)
+            - Inicializa los cultivos con la funcion inicializar_cultivos()
 */
-huerta_t inicializar_huerta(coordenada_t posicion_deposito){
+huerta_t inicializar_huerta(){
 
     huerta_t huerta;
 
@@ -205,7 +223,7 @@ huerta_t inicializar_huerta(coordenada_t posicion_deposito){
     huerta.plagado             = INIT_PLAGADO;
     
     cultivo_t cultivos[MAX_PLANTAS];
-    inicializar_cultivos(cultivos, posicion_deposito);
+    inicializar_cultivos(cultivos);
 
     for (int i = INIT_INT; i < MAX_PLANTAS; i++) {
         huerta.cultivos[i] = cultivos[i];
@@ -218,8 +236,8 @@ huerta_t inicializar_huerta(coordenada_t posicion_deposito){
 
 /* Compra de cultivo */
 /*
-    Pre: recibe el tipo de cultivo a comprar
-    Post: devuelve el costo del cultivo en int, en caso de que el cultivo no exista devuelve INIT_INT (0)
+    Pre:  Recibe el tipo de cultivo a comprar
+    Post: Devuelve el costo del cultivo en int, en caso de que el cultivo no exista devuelve INIT_INT (0)
 */
 int calcular_costo_cultivo(char cultivo){
     int costo_cultivo = INIT_INT;
@@ -244,24 +262,26 @@ int calcular_costo_cultivo(char cultivo){
 }
 
 /* 
-    Pre: recibe un cultivo para chequear si esta ocupado
-    Post: devuelve true si el cultivo esta ocupado, sino devuelve false
+    Pre:  Recibe un cultivo para chequear si esta ocupado
+    Post: Devuelve true si el cultivo esta ocupado, sino devuelve false
 */
 bool cultivo_ocupado(cultivo_t cultivo){
     return cultivo.ocupado == CULTIVO_OCUPADO;
 }
 
 /*
-    Pre: recibe la cantidad de monedas del jugador y el costo del cultivo
-    Post: devuelve true si el jugador tiene las monedas suficientes para comprar el cultivo, sino devuelve false
+    Pre:  Recibe la cantidad de monedas del jugador y el costo del cultivo
+    Post: Devuelve true si el jugador tiene las monedas suficientes para comprar el cultivo, sino devuelve false
 */
 bool monedas_suficientes(int cant_monedas, int costo_cultivo){
     return cant_monedas >= costo_cultivo;
 }
 
 /*
-    Pre: recibe el juego (puntero a juego_t) y el tipo de cultivo a comprar
-    Post: compra el cultivo, transforma el cultivo en ese tipo y resta el costo del mismo a las monedas del jugador
+    Pre:  Recibe el juego (en forma de puntero a para modificarlo) y el tipo de cultivo a comprar
+    Post: Si el cultivo no esta ocupado, el jugador tiene las monedas suficientes para comprarlo y el cultivo
+          existe, compra el cultivo, transforma el cultivo en ese tipo y resta el costo del mismo a las monedas 
+          del jugador
 */
 void comprar_cultivo(juego_t* juego, char cultivo){
 

@@ -32,7 +32,7 @@ void inicializar_juego(juego_t* juego, char enanito) {
 
     srand ((unsigned)time(NULL)); // genera la semilla que luego usará la funcion numero_random()
 
-    /* Data de juego_t
+    /* Data de juego_t FALTA
         typedef struct juego {
             objeto_t objetos[MAX_OBJETOS]; FALTA
             int tope_objetos; FALTA

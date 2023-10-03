@@ -6,6 +6,7 @@ const char ESPACIOS_VACIOS    = '-';
 const char ESTILO_JUGADOR     = 'S';
 const char ESTILO_DEPOSITO    = 'D';
 
+// Constantes de inicializacion
 static const int INI_INT      = 0;
 
 /*
@@ -28,7 +29,6 @@ bool cultivo_fuera_de_rango(coordenada_t posicion_cultivo) {
     return (posicion_cultivo.fila < INI_INT || posicion_cultivo.fila >= TAMAÑO_TERRENO || 
             posicion_cultivo.columna < INI_INT || posicion_cultivo.columna >= TAMAÑO_TERRENO);
 }
-
 
 /*
     Pre: recibe una matriz (terreno de juego) de tamaño (TAMAÑO_TERRENO x TAMAÑO_TERRENO)
@@ -55,5 +55,4 @@ void cargar_terreno(char terreno[TAMAÑO_TERRENO][TAMAÑO_TERRENO], juego_t jueg
     }
 
     terreno[juego.jugador.posicion.fila][juego.jugador.posicion.columna] = ESTILO_JUGADOR;  
-
 }
