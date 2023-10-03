@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "granja.h"
 #include "manejo_juego.h"
+#include "terreno.h"
 
 // Letras de los movimientos
 #define ARRIBA    'w'
@@ -11,16 +12,16 @@
 #define ABAJO     's'
 #define DERECHA   'd'
 
-// Estilos de los objetos
-const char ESPACIOS_VACIOS    = '-';
-const char ESTILO_JUGADOR     = 'S';
-const char ESTILO_DEPOSITO    = 'D';
-
 // Valores iniciales de los atributos
-const bool HUERTA_ENCONTRADA     = true;
-const bool HUERTA_NO_ENCONTRADA  = false;
-static const int  INIT_INT     = 0;
+static const int  INIT_INT       = 0;
 //static const char INIT_OBJETOS = ' ';
+
+// Valores De ganar y perder
+const int MONEDAS_PARA_PERDER    = 0;
+const int MONEDAS_PARA_GANAR     = 1000;
+const int PERDISTE               = -1;
+const int GANASTE                = 1;
+const int CONTINUA_JUGANDO       = 0;
 
 /*
  * Inicializará el juego, cargando toda la información inicial de las huertas, los obstáculos, las
@@ -104,26 +105,14 @@ void realizar_jugada(juego_t* juego, char accion){
  * Imprime el juego por pantalla
  */
 void imprimir_terreno(juego_t juego){
-    for (int i = 0; i < MAP_SIZE; i++) { // y
-        for (int j = 0; j < MAP_SIZE; j++) { // x
-            if (i == juego.jugador.posicion.fila && j == juego.jugador.posicion.columna) {
-                printf(" %c", ESTILO_JUGADOR);
-            } else if (i == juego.deposito.fila && j == juego.deposito.columna) {
-                printf(" %c", ESTILO_DEPOSITO);
-            } else {
-                bool encontro_huerta = HUERTA_NO_ENCONTRADA;
-                for (int k = 0; k < MAX_HUERTA; k++) {
-                    if (i == juego.huertas[k].cultivos->posicion.fila && j == juego.huertas[k].cultivos->posicion.columna) {
-                        printf(" %c", juego.huertas[k].cultivos->tipo);
-                        encontro_huerta = HUERTA_ENCONTRADA;
-                        k = MAX_HUERTA;
-                    }
-                }
-                if (!encontro_huerta) {
-                    printf(" %c", ESPACIOS_VACIOS);
-                }
-                
-            }
+
+    char terreno[TAMAÑO_TERRENO][TAMAÑO_TERRENO];
+
+    cargar_terreno(terreno, juego);
+
+    for(int i = INIT_INT; i < TAMAÑO_TERRENO; i++){
+        for (int j = INIT_INT; j < TAMAÑO_TERRENO; j++) {
+            printf(" %c", terreno[i][j]);
         }
         printf("\n");
     }
@@ -139,10 +128,10 @@ void imprimir_terreno(juego_t juego){
  * --> 0 si se sigue jugando
  */
 int estado_juego(juego_t juego){
-    if (juego.jugador.cant_monedas <= 0) {
-        return -1;
-    } else if (juego.jugador.cant_monedas >= 1000) {
-        return 1;
+    if (juego.jugador.cant_monedas <= MONEDAS_PARA_PERDER) {
+        return PERDISTE;
+    } else if (juego.jugador.cant_monedas >= MONEDAS_PARA_GANAR) {
+        return GANASTE;
     }
-    return 0;
+    return CONTINUA_JUGANDO;
 }

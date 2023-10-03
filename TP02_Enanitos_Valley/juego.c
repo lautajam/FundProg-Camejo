@@ -9,12 +9,12 @@ const int PERDIDO = -1;
 const int GANADO  = 1;
 
 // Metodo de prueba
-void chequear_huerta(juego_t* juego){
+/*void chequear_huerta(juego_t* juego){
         for (int i = 0; i < MAX_HUERTA; i++) {
             printf(" %d\n ", juego->huertas[i].cultivos->posicion.fila);
             printf(" %d\n ", juego->huertas[i].cultivos->posicion.columna);
         }
-}
+}*/
 
 /*
     Pre: recibe el juego de donde va a extraer la información
@@ -28,7 +28,7 @@ void imprimir_interfaz(juego_t juego){
 
     printf(" Canasta:");
     for (int i = 0; i < juego.jugador.tope_canasta; i++) {
-        printf(" %c ", juego.jugador.canasta[i]);
+        printf(" %c -", juego.jugador.canasta[i]);
     }
     printf("\n");
 
@@ -44,7 +44,7 @@ int main(void) {
 
     juego_t juego;
     char inicial_enanito = INIT_CHAR;
-   // char accion = INIT_CHAR;
+    char accion = INIT_CHAR;
 
     system("clear");
 
@@ -55,10 +55,7 @@ int main(void) {
     calcular_enanito(&inicial_enanito);
 
     inicializar_juego(&juego, inicial_enanito);
- 
-    chequear_huerta(&juego); // Metodo de prueba
 
-/*
     while (estado_juego(juego) != PERDIDO && estado_juego(juego) != GANADO) {
 
         imprimir_terreno(juego);
@@ -78,6 +75,6 @@ int main(void) {
     } else {
         printf("\n ¡Ganaste! ¡Felicitaciones!\n");
     }
-*/
+
     return 0;
 }
