@@ -24,7 +24,7 @@ static const int MAX_MOVE_Y = MAP_SIZE - 1;
     Post: Inicializa el personaje con una posicion aleatoria dentro del mapa,
           y con los valores iniciales de los atributos
 */
-void inicializar_personaje(personaje_t* personaje, char enanito);
+void inicializar_personaje(personaje_t* personaje, char enanito, huerta_t huerta[MAX_HUERTA], coordenada_t posicion_deposito);
 
 /* Mejorar comentario
     Pre:  Recibe un puntero a un deposito

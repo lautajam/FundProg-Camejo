@@ -40,7 +40,7 @@ void inicializar_juego(juego_t* juego, char enanito) {
     */
 
     personaje_t personaje;
-    inicializar_personaje(&personaje, enanito);
+    inicializar_personaje(&personaje, enanito, juego->huertas, juego->deposito);
     juego->jugador = personaje;
 
     coordenada_t deposito;
