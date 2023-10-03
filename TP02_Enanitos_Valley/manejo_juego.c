@@ -103,15 +103,35 @@ void inicializar_personaje(personaje_t* personaje, char enanito){
     personaje->tope_canasta = INIT_INT;
 }
 
-/* Mejorar comentario
-    Pre:  Recibe un puntero a un deposito
-    Post: Inicializa el deposito con una posicion aleatoria dentro del mapa
+/*
+    Pre:  Recibe un las coordenadas del deposito y la lista de huertas
+    Post: Chequea si las coordenadas del deposito coinciden con las de algun cultivo
+          En caso que coincidan, devuelve false, sino devuelve true
 */
-void inicializar_deposito(coordenada_t* deposito, coordenada_t posicion_personaje){
+bool deposito_valido(coordenada_t deposito, huerta_t huerta[MAX_HUERTA]){
+
+    for (int i = INIT_INT; i < MAX_HUERTA; i++) {
+        for (int j = INIT_INT; j < MAX_PLANTAS; j++) {
+            if (deposito.fila    == huerta[i].cultivos[j].posicion.fila &&
+                deposito.columna == huerta[i].cultivos[j].posicion.columna) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+/* 
+    Pre:  Recibe las coordenadas del deposito (en forma de puntero para modificarlas) y la lista de huertas
+    Post: Inicializa el deposito con una posicion aleatoria dentro del mapa
+          y chequea que las coordenadas del deposito no coincidan con las de algun cultivo,
+          en caso que coincidan, vuelve a generar la coordenadas
+*/
+void inicializar_deposito(coordenada_t* deposito, huerta_t huerta[MAX_HUERTA]){
     do{
         deposito->fila = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
         deposito->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
-    } while (deposito->fila == posicion_personaje.fila && deposito->columna == posicion_personaje.columna);
+    } while (!deposito_valido(*deposito, huerta));
 }
 
 /* Mejorar comentario
@@ -120,10 +140,8 @@ void inicializar_deposito(coordenada_t* deposito, coordenada_t posicion_personaj
             cuando estos no coinciden con las del deposito
 */
 void coordenadas_cultivo(coordenada_t* coordenadas_cultivo, coordenada_t posicion_deposito){
-    do{
-        coordenadas_cultivo->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
-        coordenadas_cultivo->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
-    } while (coordenadas_cultivo->fila == posicion_deposito.fila || coordenadas_cultivo->columna == posicion_deposito.columna);
+    coordenadas_cultivo->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
+    coordenadas_cultivo->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
 }
 
 /* Mejorar comentario

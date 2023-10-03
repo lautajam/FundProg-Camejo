@@ -1,0 +1,7 @@
+
+· En manejo de juego se revisa que la coordenada central no sea igual a la del deposito ni la del pj, no se revisa
+    que ninguna de las otras 8 sea igual, lo que trae caos y confusion
+        -Voy a ver de generar antes los cultivos y despues el deposito, el pj, etc
+            cultivos -> deposito -> espinas -> insecticidas -> etc -> pj
+
+· El juego cuando se enciman los cultivos te cobra x2 o x3

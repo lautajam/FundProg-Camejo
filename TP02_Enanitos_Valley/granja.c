@@ -44,7 +44,7 @@ void inicializar_juego(juego_t* juego, char enanito) {
     juego->jugador = personaje;
 
     coordenada_t deposito;
-    inicializar_deposito(&deposito, juego->jugador.posicion);
+    inicializar_deposito(&deposito, juego->huertas);
     juego->deposito = deposito;
 
     juego->movimientos = INIT_INT;

@@ -30,7 +30,7 @@ void inicializar_personaje(personaje_t* personaje, char enanito);
     Pre:  Recibe un puntero a un deposito
     Post: Inicializa el deposito con una posicion aleatoria dentro del mapa
 */
-void inicializar_deposito(coordenada_t* deposito, coordenada_t posicion_personaje);
+void inicializar_deposito(coordenada_t* deposito, huerta_t huerta[MAX_HUERTA]);
 
 /* Mejorar comentario
   Pre: Recibe un puntero a huerta_t
