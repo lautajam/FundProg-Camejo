@@ -47,21 +47,24 @@ void imprimir_interfaz(juego_t juego){
 int main(void) {
 
     juego_t juego;
-    char inicial_enanito = INIT_CHAR;
+    // char inicial_enanito = INIT_CHAR; // Para el test
+    
+    char inicial_enanito = 'G';          // Para el test
+
     char accion = INIT_CHAR;
 
     system("clear");
+ 
+    //printf("\nBienvenido al juego Enanito Valley\n");                                 // Para el test
+    //printf("Este es un juego sobre ayudar a blanca nieves a cultivar verduras\n");    // Para el test
+    //printf("Para comenzar, vamos a hacerte un test.\n");                              // Para el test
 
-    printf("\nBienvenido al juego Enanito Valley\n");
-    printf("Este es un juego sobre ayudar a blanca nieves a cultivar verduras\n");
-    printf("Para comenzar, vamos a hacerte un test.\n");
-
-    calcular_enanito(&inicial_enanito);
+    //calcular_enanito(&inicial_enanito); // Para el test
 
     inicializar_juego(&juego, inicial_enanito);
 
-    printf("Coordenadas del jugador: (%d, %d)\n", juego.jugador.posicion.fila, juego.jugador.posicion.columna);
-    printf("Coordenadas del deposito: (%d, %d)\n", juego.deposito.fila, juego.deposito.columna);
+    //printf("Coordenadas del jugador: (%d, %d)\n", juego.jugador.posicion.fila, juego.jugador.posicion.columna);  //test
+    //printf("Coordenadas del deposito: (%d, %d)\n", juego.deposito.fila, juego.deposito.columna);   //test
     //chequear_huerta(&juego);
     while (estado_juego(juego) != PERDIDO && estado_juego(juego) != GANADO) {
 
