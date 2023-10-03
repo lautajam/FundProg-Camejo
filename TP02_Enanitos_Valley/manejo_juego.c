@@ -123,7 +123,7 @@ void coordenadas_cultivo(coordenada_t* coordenadas_cultivo, coordenada_t posicio
     do{
         coordenadas_cultivo->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
         coordenadas_cultivo->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
-    } while (coordenadas_cultivo->fila == posicion_deposito.fila && coordenadas_cultivo->columna == posicion_deposito.columna);
+    } while (coordenadas_cultivo->fila == posicion_deposito.fila || coordenadas_cultivo->columna == posicion_deposito.columna);
 }
 
 /* Mejorar comentario
@@ -131,55 +131,26 @@ void coordenadas_cultivo(coordenada_t* coordenadas_cultivo, coordenada_t posicio
     Post: Inicializa el cultivo con los valores iniciales de los atributos 
 */
 void inicializar_cultivos(cultivo_t cultivos[MAX_PLANTAS], coordenada_t posicion_deposito){
-    /*
-    typedef struct cultivo {
-        int movimiento_plantado;
-        coordenada_t posicion;
-        char tipo;
-        bool ocupado;
-    } cultivo_t;
 
-    */
-    for (int i = INIT_INT; i < MAX_PLANTAS; i++) {
-        cultivos[i].movimiento_plantado = INIT_MOV_PLAGADO;
-        cultivos[i].tipo                = CULTIVO_VACIO;
-        cultivos[i].ocupado             = INIT_CULTIVO_OCUPADO;
+    coordenada_t coordenadas_cultivo_medio;
 
-        coordenada_t coordenadas_cultivo_medio;
+    int delta_columnas[] = {-1,  0,  1, -1, 0, 1, -1, 0, 1};
+    int delta_filas[]    = {-1, -1, -1,  0, 0, 0,  1, 1, 1};
+ 
+    for (int  j = INIT_INT; j < MAX_PLANTAS; j++) { // Genera 3 "semillaS" (coordenadas iniciales del cultivo)
+
         coordenadas_cultivo(&coordenadas_cultivo_medio, posicion_deposito);
 
-        int delta_filas[] = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
-        int delta_columnas[] = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+        for (int i = INIT_INT; i < MAX_PLANTAS; i++) { // Genera 8 cultivos alrededor de la semilla
+            cultivos[i].movimiento_plantado = INIT_MOV_PLAGADO;
+            cultivos[i].tipo                = CULTIVO_VACIO;
+            cultivos[i].ocupado             = INIT_CULTIVO_OCUPADO;
 
-        for (int j = 0; j < MAX_PLANTAS; j++) {
-            cultivos[i].posicion.fila = coordenadas_cultivo_medio.fila + delta_filas[j];
-            cultivos[i].posicion.columna = coordenadas_cultivo_medio.columna + delta_columnas[j];        
-
+            cultivos[i].posicion.columna = coordenadas_cultivo_medio.columna + delta_columnas[i];
+            cultivos[i].posicion.fila    = coordenadas_cultivo_medio.fila    + delta_filas[i];
         }
     }
     
-/*
-    cultivo_t cultivo;
-
-    cultivo.movimiento_plantado = INIT_MOV_PLAGADO;
-
-    coordenada_t coordenadas_cultivo_medio;
-    coordenadas_cultivo(&coordenadas_cultivo_medio, posicion_deposito);
-
-    int delta_filas[] = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
-    int delta_columnas[] = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
-
-    for (int i = 0; i < MAX_PLANTAS; i++) {
-        cultivo.posicion.fila = coordenadas_cultivo_medio.fila + delta_filas[i];
-        cultivo.posicion.columna = coordenadas_cultivo_medio.columna + delta_columnas[i];        
-
-    }
-
-    cultivo.tipo     = CULTIVO_VACIO;
-
-    cultivo.ocupado  = INIT_CULTIVO_OCUPADO;
-
-    return cultivo;*/
 }
 
 /* Mejorar comentario

@@ -81,7 +81,7 @@ int main(void) {
         printf("\n ¡Perdiste! ¡Suerte para la próxima!\n");
     } else {
         printf("\n ¡Ganaste! ¡Felicitaciones!\n");
-    }
+   }
 
     return 0;
 }

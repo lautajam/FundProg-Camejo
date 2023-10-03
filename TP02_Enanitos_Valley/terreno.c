@@ -51,8 +51,9 @@ void cargar_terreno(char terreno[TAMAÑO_TERRENO][TAMAÑO_TERRENO], juego_t jueg
                 terreno[posicion_cultivo.fila][posicion_cultivo.columna] = juego.huertas[i].cultivos[j].tipo;
             }
         }
-    }*/
 
+    }*/
+    terreno[juego.huertas[0].cultivos[0].posicion.fila][juego.huertas[0].cultivos[0].posicion.columna] = juego.huertas[0].cultivos[0].tipo;
     terreno[juego.huertas[0].cultivos[1].posicion.fila][juego.huertas[0].cultivos[1].posicion.columna] = juego.huertas[0].cultivos[1].tipo;
     terreno[juego.huertas[0].cultivos[2].posicion.fila][juego.huertas[0].cultivos[2].posicion.columna] = juego.huertas[0].cultivos[2].tipo;
     terreno[juego.huertas[0].cultivos[3].posicion.fila][juego.huertas[0].cultivos[3].posicion.columna] = juego.huertas[0].cultivos[3].tipo;
