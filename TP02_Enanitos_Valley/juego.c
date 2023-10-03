@@ -9,12 +9,16 @@ const int PERDIDO = -1;
 const int GANADO  = 1;
 
 // Metodo de prueba
-/*void chequear_huerta(juego_t* juego){
+void chequear_huerta(juego_t* juego){
         for (int i = 0; i < MAX_HUERTA; i++) {
-            printf(" %d\n ", juego->huertas[i].cultivos->posicion.fila);
-            printf(" %d\n ", juego->huertas[i].cultivos->posicion.columna);
+            for (int j = 0; j < MAX_PLANTAS; j++) {
+                printf(" (%d,  ", juego->huertas[i].cultivos[j].posicion.fila);
+                printf(" %d) | ", juego->huertas[i].cultivos[j].posicion.columna);
+                printf(" %c \n", juego->huertas[i].cultivos[j].tipo);
+            }
+            printf("\n");
         }
-}*/
+}
 
 /*
     Pre: recibe el juego de donde va a extraer la información
@@ -56,6 +60,9 @@ int main(void) {
 
     inicializar_juego(&juego, inicial_enanito);
 
+    printf("Coordenadas del jugador: (%d, %d)\n", juego.jugador.posicion.fila, juego.jugador.posicion.columna);
+    printf("Coordenadas del deposito: (%d, %d)\n", juego.deposito.fila, juego.deposito.columna);
+    //chequear_huerta(&juego);
     while (estado_juego(juego) != PERDIDO && estado_juego(juego) != GANADO) {
 
         imprimir_terreno(juego);

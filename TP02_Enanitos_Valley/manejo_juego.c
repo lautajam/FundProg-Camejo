@@ -5,6 +5,9 @@
 #include "manejo_juego.h"
 #include "granja.h"
 
+// Tamaño del mapa
+#define TAMAÑO_TERRENO 20
+
 // Letras de los enanitos
 #define GRUÑON   'G'
 #define FELIZ    'F'
@@ -127,8 +130,35 @@ void coordenadas_cultivo(coordenada_t* coordenadas_cultivo, coordenada_t posicio
     Pre: Recibe un puntero a un cultivo_t
     Post: Inicializa el cultivo con los valores iniciales de los atributos 
 */
-cultivo_t inicializar_cultivo(cultivo_t cultivos[MAX_PLANTAS], coordenada_t posicion_deposito){
+void inicializar_cultivos(cultivo_t cultivos[MAX_PLANTAS], coordenada_t posicion_deposito){
+    /*
+    typedef struct cultivo {
+        int movimiento_plantado;
+        coordenada_t posicion;
+        char tipo;
+        bool ocupado;
+    } cultivo_t;
 
+    */
+    for (int i = INIT_INT; i < MAX_PLANTAS; i++) {
+        cultivos[i].movimiento_plantado = INIT_MOV_PLAGADO;
+        cultivos[i].tipo                = CULTIVO_VACIO;
+        cultivos[i].ocupado             = INIT_CULTIVO_OCUPADO;
+
+        coordenada_t coordenadas_cultivo_medio;
+        coordenadas_cultivo(&coordenadas_cultivo_medio, posicion_deposito);
+
+        int delta_filas[] = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+        int delta_columnas[] = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+
+        for (int j = 0; j < MAX_PLANTAS; j++) {
+            cultivos[i].posicion.fila = coordenadas_cultivo_medio.fila + delta_filas[j];
+            cultivos[i].posicion.columna = coordenadas_cultivo_medio.columna + delta_columnas[j];        
+
+        }
+    }
+    
+/*
     cultivo_t cultivo;
 
     cultivo.movimiento_plantado = INIT_MOV_PLAGADO;
@@ -141,15 +171,15 @@ cultivo_t inicializar_cultivo(cultivo_t cultivos[MAX_PLANTAS], coordenada_t posi
 
     for (int i = 0; i < MAX_PLANTAS; i++) {
         cultivo.posicion.fila = coordenadas_cultivo_medio.fila + delta_filas[i];
-        cultivo.posicion.columna = coordenadas_cultivo_medio.columna + delta_columnas[i];
-        printf("cultivo %d: %d %d\n", i, cultivo.posicion.fila, cultivo.posicion.columna);
+        cultivo.posicion.columna = coordenadas_cultivo_medio.columna + delta_columnas[i];        
+
     }
 
     cultivo.tipo     = CULTIVO_VACIO;
 
     cultivo.ocupado  = INIT_CULTIVO_OCUPADO;
 
-    return cultivo;
+    return cultivo;*/
 }
 
 /* Mejorar comentario
@@ -162,10 +192,10 @@ huerta_t inicializar_huerta(coordenada_t posicion_deposito){
 
     huerta.movimientos_plagado = INIT_MOV_PLAGADO;
     huerta.plagado             = INIT_PLAGADO;
-
-    cultivo_t cultivos[MAX_PLANTAS];
-    inicializar_cultivo(cultivos, posicion_deposito);
     
+    cultivo_t cultivos[MAX_PLANTAS];
+    inicializar_cultivos(cultivos, posicion_deposito);
+
     for (int i = INIT_INT; i < MAX_PLANTAS; i++) {
         huerta.cultivos[i] = cultivos[i];
     }

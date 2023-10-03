@@ -116,7 +116,6 @@ void imprimir_terreno(juego_t juego){
         }
         printf("\n");
     }
-
 }
 
 /*
