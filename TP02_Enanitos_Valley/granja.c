@@ -15,6 +15,7 @@
 // Valores iniciales de los atributos
 static const int  INIT_INT       = 0;
 //static const char INIT_OBJETOS = ' ';
+const char ESPINAS = 'E';
 
 // Valores De ganar y perder
 const int MONEDAS_PARA_PERDER    = 0;
@@ -22,6 +23,7 @@ const int MONEDAS_PARA_GANAR     = 1000;
 const int PERDISTE               = -1;
 const int GANASTE                = 1;
 const int CONTINUA_JUGANDO       = 0;
+const int MONEDAS_ESPINAS        = 5;
 
 /*
  * Inicializará el juego, cargando toda la información inicial de las huertas, los obstáculos, las
@@ -64,13 +66,25 @@ void inicializar_juego(juego_t* juego, char enanito) {
 
 }
 
-/*
- * Realizará la acción recibida por parámetro. Puede ser un movimiento, con todas sus consecuencias, o sembrar, poner 
-    insecticida o fertilizante.
- * La acción recibida deberá ser válida.
- */
-void realizar_jugada(juego_t* juego, char accion){
+/* mejorar comentario
+    Pre: recibe la poscicion del jugador y la lista de objetos
+    Post: devuelve true si el jugador esta en una posicion de espinas
+*/
+bool jugador_en_espinas(coordenada_t posicion_jugador, objeto_t objetos[MAX_OBJETOS]){
+    for (int i = INIT_INT; i < MAX_OBJETOS; i++) {
+        if (objetos[i].tipo == ESPINAS && posicion_igual(posicion_jugador, objetos[i].posicion)) {
+            return true;
+        }
+    }
+    return false;
+}
 
+/* mejorar comentario
+    Pre:  recibe el juego (en forma de puntero para modificarlo) y la accion a realizar (movimiento del jugador)
+    Post: valida que el movimiento sea posible y lo realiza, tambien chequea si el jugador esta en una posicion de espinas
+            en caso de estarlo le resta monedas (segun la constante MONEDAS_ESPINAS) al jugador
+*/
+void movimiento_jugador(juego_t* juego, char accion){
     switch (accion)
         {
         case ARRIBA:
@@ -93,6 +107,30 @@ void realizar_jugada(juego_t* juego, char accion){
                 juego->jugador.posicion.columna++;
                 juego->movimientos++;
             } break;
+        default:
+            break;
+        }
+
+        if (jugador_en_espinas(juego->jugador.posicion, juego->objetos)){
+            juego->jugador.cant_monedas -= MONEDAS_ESPINAS;
+        }
+}
+
+/*
+ * Realizará la acción recibida por parámetro. Puede ser un movimiento, con todas sus consecuencias, o sembrar, poner 
+    insecticida o fertilizante.
+ * La acción recibida deberá ser válida.
+ */
+void realizar_jugada(juego_t* juego, char accion){
+
+    switch (accion)
+        {
+        case ARRIBA:
+        case IZQUIERDA:
+        case ABAJO:
+        case DERECHA:
+            movimiento_jugador(juego, accion);
+            break;
         case TOMATE:
             comprar_cultivo(juego, TOMATE);
             break;

@@ -56,4 +56,10 @@ void comprar_cultivo(juego_t* juego, char cultivo);
 
 void inicializar_objetos(objeto_t objetos[MAX_OBJETOS], int* tope_objetos, huerta_t huerta[MAX_HUERTA], coordenada_t deposito);
 
+/*
+    Pre:  Recibe dos coordenadas para comparar
+    Post: Devuelve true si las coordenadas son iguales, sino devuelve false
+*/
+bool posicion_igual(coordenada_t posicion_1, coordenada_t posicion_2);
+
 #endif /* MANEJO_JUEGO_H */
