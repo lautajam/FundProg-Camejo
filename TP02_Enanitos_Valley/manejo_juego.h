@@ -37,14 +37,14 @@ void inicializar_personaje(personaje_t* personaje, char enanito, huerta_t huerta
 void inicializar_deposito(coordenada_t* deposito, huerta_t huerta[MAX_HUERTA]);
 
 /* 
-  Pre:  -
+  Pre:  Recibe el juego (para leerlo)
   Post: Devuelve una huerta inicializada con los valores pedidos por la consigna
             - Inicializa el movimiento_plantado con INIT_MOV_PLAGADO (es 10, valor pedido por la consigna)
             - Inicializa el tipo con CULTIVO_VACIO (es 'C', valor pedido por la consigna)
             - Inicializa el ocupado con INIT_CULTIVO_OCUPADO (es false, valor pedido por la consigna)
             - Inicializa los cultivos con la funcion inicializar_cultivos()
 */
-huerta_t inicializar_huerta();
+huerta_t inicializar_huerta(juego_t juego);
 
 /*
     Pre:  Recibe el juego (en forma de puntero a para modificarlo) y el tipo de cultivo a comprar

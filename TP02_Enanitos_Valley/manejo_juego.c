@@ -122,8 +122,9 @@ void generar_coordenadas_iniciales_personaje(coordenada_t* coordenadas_personaje
     do{
         coordenadas_personaje->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
         coordenadas_personaje->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
-    } while (posicion_valida_huertas(*coordenadas_personaje, huerta) && posicion_igual(*coordenadas_personaje, deposito));
+    } while (!posicion_valida_huertas(*coordenadas_personaje, huerta) || posicion_igual(*coordenadas_personaje, deposito));
 }
+
 
 /*
     Pre: Recibe un personaje (en forma de puntero para modificarlo) la inicial del enanito, la lista de huertas 
@@ -171,9 +172,15 @@ void inicializar_deposito(coordenada_t* deposito, huerta_t huerta[MAX_HUERTA]){
     Pre:  Recibe unas coordenadas de un cultivo (en forma de puntero para modificarlas)
     Post: Setea las cooredenas del cultivo con valores aleatorios dentro del mapa
 */
-void coordenadas_cultivo(coordenada_t* coordenadas_cultivo){
+void coordenadas_cultivo(coordenada_t* coordenadas_cultivo, juego_t juego){
+
     coordenadas_cultivo->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
     coordenadas_cultivo->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
+
+    while (!posicion_valida_huertas(*coordenadas_cultivo, juego.huertas)) {
+        coordenadas_cultivo->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
+        coordenadas_cultivo->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
+    }
 }
 
 /* 
@@ -184,11 +191,11 @@ void coordenadas_cultivo(coordenada_t* coordenadas_cultivo){
             - Inicializa el ocupado con INIT_CULTIVO_OCUPADO (es false, valor pedido por la consigna)
             - Inicializa las coordenadas de los cultivos con coordenadas aleatorias dentro del mapa
 */
-void inicializar_cultivos(cultivo_t cultivos[MAX_PLANTAS]){
+void inicializar_cultivos(cultivo_t cultivos[MAX_PLANTAS], juego_t juego){
 
     coordenada_t coordenadas_cultivo_medio;
 
-    coordenadas_cultivo(&coordenadas_cultivo_medio);
+    coordenadas_cultivo(&coordenadas_cultivo_medio, juego);
 
     int index_cultivos = INIT_INT;
     int fila_inicial = coordenadas_cultivo_medio.fila - 1, fila_final = coordenadas_cultivo_medio.fila + 1;
@@ -210,17 +217,15 @@ void inicializar_cultivos(cultivo_t cultivos[MAX_PLANTAS]){
     }
 }
 
-
-
 /* 
-  Pre:  -
+  Pre:  Recibe el juego (para leerlo)
   Post: Devuelve una huerta inicializada con los valores pedidos por la consigna
             - Inicializa el movimiento_plantado con INIT_MOV_PLAGADO (es 10, valor pedido por la consigna)
             - Inicializa el tipo con CULTIVO_VACIO (es 'C', valor pedido por la consigna)
             - Inicializa el ocupado con INIT_CULTIVO_OCUPADO (es false, valor pedido por la consigna)
             - Inicializa los cultivos con la funcion inicializar_cultivos()
 */
-huerta_t inicializar_huerta(){
+huerta_t inicializar_huerta(juego_t juego){
 
     huerta_t huerta;
 
@@ -228,7 +233,7 @@ huerta_t inicializar_huerta(){
     huerta.plagado             = INIT_PLAGADO;
     
     cultivo_t cultivos[MAX_PLANTAS];
-    inicializar_cultivos(cultivos);
+    inicializar_cultivos(cultivos, juego);
 
     for (int i = INIT_INT; i < MAX_PLANTAS; i++) {
         huerta.cultivos[i] = cultivos[i];

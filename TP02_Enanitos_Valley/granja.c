@@ -39,19 +39,21 @@ void inicializar_juego(juego_t* juego, char enanito) {
         } juego_t;
     */
 
-    personaje_t personaje;
-    inicializar_personaje(&personaje, enanito, juego->huertas, juego->deposito);
-    juego->jugador = personaje;
-
+    for (int i = INIT_INT; i < MAX_HUERTA; i++) {
+        juego->huertas[i] = inicializar_huerta(*juego);
+    }
+    
     coordenada_t deposito;
     inicializar_deposito(&deposito, juego->huertas);
     juego->deposito = deposito;
 
     juego->movimientos = INIT_INT;
+
+    personaje_t personaje;
+    inicializar_personaje(&personaje, enanito, juego->huertas, juego->deposito);
+    juego->jugador = personaje;
+
    
-    for (int i = INIT_INT; i < MAX_HUERTA; i++) {
-        juego->huertas[i] = inicializar_huerta(juego->deposito);
-    }
 
 }
 
