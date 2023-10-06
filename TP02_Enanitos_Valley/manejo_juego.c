@@ -7,6 +7,7 @@
 
 // Tamaño del mapa
 #define TAMAÑO_TERRENO 20
+const int CENTRO_BORDE_HUERTO = 1;
 
 // Letras de los enanitos
 #define GRUÑON   'G'
@@ -125,7 +126,6 @@ void generar_coordenadas_iniciales_personaje(coordenada_t* coordenadas_personaje
     } while (!posicion_valida_huertas(*coordenadas_personaje, huerta) || posicion_igual(*coordenadas_personaje, deposito));
 }
 
-
 /*
     Pre: Recibe un personaje (en forma de puntero para modificarlo) la inicial del enanito, la lista de huertas 
          y las coordenadas del deposito
@@ -147,7 +147,7 @@ void inicializar_personaje(personaje_t* personaje, char enanito, huerta_t huerta
 
     personaje->cant_monedas = calcular_monedas_iniciales(enanito);
 
-    for (int i = 0; i < MAX_CANASTA; i++) {
+    for (int i = INIT_INT; i < MAX_CANASTA; i++) {
         personaje->canasta[i] = INIT_CANASTA;
     }
 
@@ -173,14 +173,31 @@ void inicializar_deposito(coordenada_t* deposito, huerta_t huerta[MAX_HUERTA]){
     Post: Setea las cooredenas del cultivo con valores aleatorios dentro del mapa
 */
 void coordenadas_cultivo(coordenada_t* coordenadas_cultivo, juego_t juego){
-
-    coordenadas_cultivo->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
-    coordenadas_cultivo->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
-
-    while (!posicion_valida_huertas(*coordenadas_cultivo, juego.huertas)) {
+    int contador_cultivos;
+    
+    do{
+        contador_cultivos = INIT_INT;
         coordenadas_cultivo->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
         coordenadas_cultivo->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
-    }
+
+        int fila_inicial    = coordenadas_cultivo->fila - CENTRO_BORDE_HUERTO;
+        int fila_final      = coordenadas_cultivo->fila + CENTRO_BORDE_HUERTO;
+        int columna_inicial = coordenadas_cultivo->columna - CENTRO_BORDE_HUERTO;
+        int columna_final   = coordenadas_cultivo->columna + CENTRO_BORDE_HUERTO;
+
+        for (int fila = fila_inicial; fila <= fila_final; fila++) {
+            for (int columna = columna_inicial; columna <= columna_final; columna++) {
+
+                coordenada_t coordenadas_cultivo_test;
+                coordenadas_cultivo_test.fila    = fila;
+                coordenadas_cultivo_test.columna = columna;
+
+                if (posicion_valida_huertas(coordenadas_cultivo_test, juego.huertas)) {
+                    contador_cultivos++;
+                }
+            }
+        }
+    }while(contador_cultivos < MAX_PLANTAS);
 }
 
 /* 
@@ -198,8 +215,10 @@ void inicializar_cultivos(cultivo_t cultivos[MAX_PLANTAS], juego_t juego){
     coordenadas_cultivo(&coordenadas_cultivo_medio, juego);
 
     int index_cultivos = INIT_INT;
-    int fila_inicial = coordenadas_cultivo_medio.fila - 1, fila_final = coordenadas_cultivo_medio.fila + 1;
-    int columna_inicial = coordenadas_cultivo_medio.columna - 1, columna_final = coordenadas_cultivo_medio.columna + 1;
+    int fila_inicial = coordenadas_cultivo_medio.fila - CENTRO_BORDE_HUERTO;
+    int fila_final = coordenadas_cultivo_medio.fila + CENTRO_BORDE_HUERTO;
+    int columna_inicial = coordenadas_cultivo_medio.columna - CENTRO_BORDE_HUERTO;
+    int columna_final = coordenadas_cultivo_medio.columna + CENTRO_BORDE_HUERTO;
 
     for (int fila = fila_inicial; fila <= fila_final; fila++) {
         for (int columna = columna_inicial; columna <= columna_final; columna++) {
