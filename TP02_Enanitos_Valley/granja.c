@@ -49,11 +49,18 @@ void inicializar_juego(juego_t* juego, char enanito) {
 
     juego->movimientos = INIT_INT;
 
+    objeto_t objetos[MAX_OBJETOS];
+    juego->tope_objetos = INIT_INT;
+
+    inicializar_objetos(objetos, &juego->tope_objetos, juego->huertas, juego->deposito);
+
+    for (int i = INIT_INT; i < juego->tope_objetos; i++) {
+        juego->objetos[i] = objetos[i];
+    }
+
     personaje_t personaje;
     inicializar_personaje(&personaje, enanito, juego->huertas, juego->deposito);
     juego->jugador = personaje;
-
-   
 
 }
 

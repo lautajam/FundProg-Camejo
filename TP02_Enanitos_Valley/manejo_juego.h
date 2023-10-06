@@ -54,4 +54,6 @@ huerta_t inicializar_huerta(juego_t juego);
 */
 void comprar_cultivo(juego_t* juego, char cultivo);
 
+void inicializar_objetos(objeto_t objetos[MAX_OBJETOS], int* tope_objetos, huerta_t huerta[MAX_HUERTA], coordenada_t deposito);
+
 #endif /* MANEJO_JUEGO_H */

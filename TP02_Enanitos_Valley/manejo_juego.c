@@ -20,9 +20,11 @@ static const int  INIT_INT         = 0;
 const int         INIT_MOV_PLAGADO = 10;
 const int  INIT_INSECTICIDAS       = 3;
 const int  INIT_OBJETO             = 0;
+const int  MAX_ESPINAS             = 5;
 const int  MONEDAS_DEFAULT         = 0;
 const char INIT_CANASTA            = ' ';
 const char CULTIVO_VACIO           = 'C';
+static const char ESPINA           = 'E';
 const int  INIT_FERTILIZANTE       = false;
 const bool INIT_CULTIVO_OCUPADO    = false;
 const bool INIT_PLAGADO            = false;
@@ -262,6 +264,35 @@ huerta_t inicializar_huerta(juego_t juego){
 
     return huerta;
 }
+
+/* Inicializar objetos*/
+/* 
+    Pre:  Recibe un array de objetos (en forma de puntero para modificarlo), el tope de objetos (en forma de puntero 
+          para modificarlo), la lista de huertas y las coordenadas del deposito
+    Post: Inicializa los objetos:
+            - Inicializa el tipo con 'E' (es el tipo de objeto que corresponde a los obstaculos espinas)
+*/
+void inicializar_objetos(objeto_t objetos[MAX_OBJETOS], int* tope_objetos, huerta_t huerta[MAX_HUERTA], coordenada_t deposito){
+
+    // genera 5 coordenadas aleatorias para las espinas, verifica que no haya nada en esa posicion
+
+    while (*tope_objetos < MAX_ESPINAS) {
+        coordenada_t coordenadas_objeto;
+        coordenadas_objeto.fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
+        coordenadas_objeto.columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
+
+        if (posicion_valida_huertas(coordenadas_objeto, huerta) && !posicion_igual(coordenadas_objeto, deposito)) {
+            objetos[*tope_objetos].tipo = ESPINA;
+            objetos[*tope_objetos].posicion = coordenadas_objeto;
+
+            //printf("Coordenadas de las espinas: %i, %i\n", coordenadas_objeto.fila, coordenadas_objeto.columna); //test
+            //printf("Tipo de objeto: %c\n", objetos[*tope_objetos].tipo);      //test
+
+            (*tope_objetos)++;
+        }
+    }
+}
+
 
 /* Compra de cultivo */
 /*
