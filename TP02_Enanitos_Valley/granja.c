@@ -5,12 +5,19 @@
 #include "granja.h"
 #include "manejo_juego.h"
 #include "terreno.h"
+#include <ctype.h>
 
 // Letras de los movimientos
 #define ARRIBA    'w'
 #define IZQUIERDA 'a'
 #define ABAJO     's'
 #define DERECHA   'd'
+
+// Verduras crecidas
+#define TOMATE_CRECIDO    'T'
+#define ZANAHORIA_CRECIDA 'Z'
+#define BROCOLI_CRECIDO   'B'
+#define LECHUGA_CRECIDA   'L'
 
 // Valores iniciales de los atributos
 static const int  INIT_INT       = 0;
@@ -24,6 +31,8 @@ const int PERDISTE               = -1;
 const int GANASTE                = 1;
 const int CONTINUA_JUGANDO       = 0;
 const int MONEDAS_ESPINAS        = 5;
+const int JUEGO_RECIEN_INICIADO  = 0;
+
 
 /*
  * Inicializará el juego, cargando toda la información inicial de las huertas, los obstáculos, las
@@ -79,6 +88,66 @@ bool jugador_en_espinas(coordenada_t posicion_jugador, objeto_t objetos[MAX_OBJE
     return false;
 }
 
+/* MEJORAR
+    Pre:  recibe el juego (en forma de puntero para modificarlo)
+    Post: si los movimientos del jugador son multiplos de 10, 15 o 20, crece los cultivos correspondientes
+            (está mal, tiene que ser 10, 15 y 20 movimientos DESPUES de plantado)
+*/
+void crecer_cultivos(juego_t* juego){
+
+        int movimientos = juego->movimientos;
+
+        if(movimientos % 20 == 0)
+            for (int i = INIT_INT; i < MAX_HUERTA; i++) {
+                for (int j = INIT_INT; j < MAX_PLANTAS; j++) {
+                    if( juego->huertas[i].cultivos[j].tipo == TOMATE)
+                        juego->huertas[i].cultivos[j].tipo = TOMATE_CRECIDO;
+                }
+                
+            }
+            
+        if(movimientos % 15 == 0)
+            for (int i = INIT_INT; i < MAX_HUERTA; i++) {
+                for (int j = 0; j < MAX_PLANTAS; j++) {
+                    if( juego->huertas[i].cultivos[j].tipo == ZANAHORIA)
+                        juego->huertas[i].cultivos[j].tipo = ZANAHORIA_CRECIDA;
+                }
+                
+            }
+
+        if(movimientos % 10 == 0){
+            for (int i = INIT_INT; i < MAX_HUERTA; i++) {
+                for (int j = INIT_INT; j < MAX_PLANTAS; j++) {
+                    if( juego->huertas[i].cultivos[j].tipo == BROCOLI)
+                        juego->huertas[i].cultivos[j].tipo = BROCOLI_CRECIDO; 
+
+                    if(juego->huertas[i].cultivos[j].tipo == LECHUGA)
+                        juego->huertas[i].cultivos[j].tipo = LECHUGA_CRECIDA;
+                }
+                
+            }
+        }
+    }
+
+/* MEJORAR
+    Pre:  recibe el juego (en forma de puntero para modificarlo)
+    Post: acutaliza el terreno de juego, si están para crecer los cultivos, crecen, 
+            si están para pudrirse, se pudren, etc
+*/
+ void actualizar_juego (juego_t* juego){
+
+        crecer_cultivos(juego);
+
+        /*if(se_pudre(juego))
+            pudrir_cultivos(juego);
+
+        if (hay_que_plagar(juego))
+            plagar_cultivos(juego);
+
+        if(hay_fertilizante(juego))
+            generar_fertilizante(juego);*/
+}
+
 /* mejorar comentario
     Pre:  recibe el juego (en forma de puntero para modificarlo) y la accion a realizar (movimiento del jugador)
     Post: valida que el movimiento sea posible y lo realiza, tambien chequea si el jugador esta en una posicion de espinas
@@ -111,9 +180,12 @@ void movimiento_jugador(juego_t* juego, char accion){
             break;
         }
 
-        if (jugador_en_espinas(juego->jugador.posicion, juego->objetos)){
+        if (jugador_en_espinas(juego->jugador.posicion, juego->objetos))
             juego->jugador.cant_monedas -= MONEDAS_ESPINAS;
-        }
+        
+        if(juego->movimientos != JUEGO_RECIEN_INICIADO)
+            actualizar_juego(juego);
+         
 }
 
 /*
@@ -121,16 +193,9 @@ void movimiento_jugador(juego_t* juego, char accion){
     insecticida o fertilizante.
  * La acción recibida deberá ser válida.
  */
-void realizar_jugada(juego_t* juego, char accion){
-
+void realizar_jugada(juego_t* juego, char accion){    
     switch (accion)
         {
-        case ARRIBA:
-        case IZQUIERDA:
-        case ABAJO:
-        case DERECHA:
-            movimiento_jugador(juego, accion);
-            break;
         case TOMATE:
             comprar_cultivo(juego, TOMATE);
             break;
@@ -144,6 +209,12 @@ void realizar_jugada(juego_t* juego, char accion){
             comprar_cultivo(juego, LECHUGA);
             break;
         default:
+            break;
+        case ARRIBA:
+        case IZQUIERDA:
+        case ABAJO:
+        case DERECHA:
+            movimiento_jugador(juego, accion);
             break;
         }
 }
