@@ -27,7 +27,7 @@ static const int MAX_MOVE_Y = MAP_SIZE - 1;
             - Inicia los insecticidas con INIT_INSECTICIDAS (es 3, valor pedido por la consigna)
             - Inicia el fertilizante con INIT_FERTILIZANTE (es false, valor pedido por la consigna)
 */
-void inicializar_personaje(personaje_t* personaje, char enanito, huerta_t huerta[MAX_HUERTA], coordenada_t posicion_deposito);
+void inicializar_personaje(personaje_t* personaje, char enanito, juego_t juego);
 
 /* 
     Pre:  Recibe las coordenadas del deposito (en forma de puntero para modificarlas) y la lista de huertas

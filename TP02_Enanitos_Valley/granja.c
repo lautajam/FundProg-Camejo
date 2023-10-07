@@ -61,7 +61,7 @@ void inicializar_juego(juego_t* juego, char enanito) {
     }
 
     personaje_t personaje;
-    inicializar_personaje(&personaje, enanito, juego->huertas, juego->deposito);
+    inicializar_personaje(&personaje, enanito, *juego);
     juego->jugador = personaje;
 
 }

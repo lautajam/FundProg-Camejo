@@ -113,7 +113,39 @@ bool posicion_valida_huertas(coordenada_t posicion_verificar, huerta_t huerta[MA
     return true;
 }
 
+/*
+    Pre:  Recibe un las coordenadas a verificar y la lista de objetos
+    Post: Chequea si las coordenadas a chequear coinciden con las de algun objeto
+          En caso que coincidan, devuelve true, sino devuelve false
+*/
+bool hay_objeto( coordenada_t posicion_verificar, objeto_t objetos[MAX_OBJETOS]){
+
+    for (int i = INIT_INT; i < MAX_OBJETOS; i++) {
+        if (posicion_verificar.fila    == objetos[i].posicion.fila &&
+            posicion_verificar.columna == objetos[i].posicion.columna) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /* Inicializar personaje*/
+/*
+    Pre:  Recibe un las coordenadas a verificar y el juego para leer
+    Post: Chequea si las coordenadas a chequear coinciden con las d algo en el mapa
+          En caso que coincidan, devuelve true, sino devuelve false
+*/
+bool posicion_valida_personaje(coordenada_t posicion_verificar, juego_t juego){
+    if (posicion_valida_huertas(posicion_verificar, juego.huertas)){
+        if (!posicion_igual(posicion_verificar, juego.deposito)){ // chequea el deposito
+            if (!hay_objeto(posicion_verificar, juego.objetos)){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 /* 
     Pre:  Recibe las coordenadas del personaje (en forma de puntero para modificarlas), la lista de huertas y 
           las coordenadas del deposito
@@ -121,11 +153,11 @@ bool posicion_valida_huertas(coordenada_t posicion_verificar, huerta_t huerta[MA
           personaje no coincidan con las de algun cultivo, ni con el deposito en caso que coincidan, vuelve a 
           generar la coordenadas
 */
-void generar_coordenadas_iniciales_personaje(coordenada_t* coordenadas_personaje, huerta_t huerta[MAX_HUERTA], coordenada_t deposito){
+void generar_coordenadas_iniciales_personaje(coordenada_t* coordenadas_personaje, juego_t juego){
     do{
         coordenadas_personaje->fila    = random_number(MIN_MOVE_Y, MAX_MOVE_Y);
         coordenadas_personaje->columna = random_number(MIN_MOVE_X, MAX_MOVE_X);
-    } while (!posicion_valida_huertas(*coordenadas_personaje, huerta) || posicion_igual(*coordenadas_personaje, deposito));
+    } while (!posicion_valida_personaje(*coordenadas_personaje, juego));
 }
 
 /*
@@ -137,10 +169,10 @@ void generar_coordenadas_iniciales_personaje(coordenada_t* coordenadas_personaje
             - Inicia los insecticidas con INIT_INSECTICIDAS (es 3, valor pedido por la consigna)
             - Inicia el fertilizante con INIT_FERTILIZANTE (es false, valor pedido por la consigna)
 */
-void inicializar_personaje(personaje_t* personaje, char enanito, huerta_t huerta[MAX_HUERTA], coordenada_t deposito){
+void inicializar_personaje(personaje_t* personaje, char enanito, juego_t juego){
 
     coordenada_t coordenadas_iniciales_personaje;
-    generar_coordenadas_iniciales_personaje(&coordenadas_iniciales_personaje, huerta, deposito);
+    generar_coordenadas_iniciales_personaje(&coordenadas_iniciales_personaje, juego);
     personaje->posicion = coordenadas_iniciales_personaje;
 
     personaje->tiene_fertilizante = INIT_FERTILIZANTE;
@@ -292,7 +324,6 @@ void inicializar_objetos(objeto_t objetos[MAX_OBJETOS], int* tope_objetos, huert
         }
     }
 }
-
 
 /* Compra de cultivo */
 /*

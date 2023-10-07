@@ -64,8 +64,8 @@ void cargar_terreno(char terreno[TAMAÑO_TERRENO][TAMAÑO_TERRENO], juego_t jueg
 
     cargar_huertas(terreno, juego);
 
-    for (int i = INI_INT; i < juego.tope_objetos; i++) {
-        if (juego.objetos[i].tipo == ESPINA) {
+    for (int i = INI_INT; i < juego.tope_objetos; i++) { // refactorizar esto para modularizarlo en una funcion
+        if (juego.objetos[i].tipo == ESPINA) {           // cargar_objetos
             terreno[juego.objetos[i].posicion.fila][juego.objetos[i].posicion.columna] = ESPINA;
         }
     }
