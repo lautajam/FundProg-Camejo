@@ -42,8 +42,8 @@ const int MONEDAS_BROCOLI   = 15;
 const int MONEDAS_LECHUGA   = 20;
 
 // Valores booleanos para los cultivos
-const bool CULTIVO_OCUPADO    = true;
-const bool CULTIVO_DESOCUPADO = false;
+static const bool CULTIVO_OCUPADO    = true;
+//static const bool CULTIVO_DESOCUPADO = false;
 const bool CENTRO_CULTIVO_NO_GENERADO     = false;
 const bool CENTRO_CULTIVO_GENERADO        = true;
 
@@ -389,7 +389,9 @@ void comprar_cultivo(juego_t* juego, char cultivo){
 
                         juego->huertas[i].cultivos[j].tipo = cultivo;
                         juego->huertas[i].cultivos[j].ocupado = CULTIVO_OCUPADO;
-                    }  
+                        juego->huertas[i].cultivos[j].movimiento_plantado = INIT_INT;
+
+                   }  
                 } 
             }
         } 

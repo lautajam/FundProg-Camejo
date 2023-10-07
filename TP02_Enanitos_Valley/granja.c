@@ -19,6 +19,11 @@
 #define BROCOLI_CRECIDO   'B'
 #define LECHUGA_CRECIDA   'L'
 
+const int MOVIMIENTOS_TOMATE    = 20;
+const int MOVIMIENTOS_ZANAHORIA = 15;
+const int MOVIMIENTOS_BROCOLI   = 10;
+const int MOVIMIENTOS_LECHUGA   = 10;
+
 // Valores iniciales de los atributos
 static const int  INIT_INT       = 0;
 //static const char INIT_OBJETOS = ' ';
@@ -33,6 +38,8 @@ const int CONTINUA_JUGANDO       = 0;
 const int MONEDAS_ESPINAS        = 5;
 const int JUEGO_RECIEN_INICIADO  = 0;
 
+//static const bool CULTIVO_OCUPADO    = true;
+//static const bool CULTIVO_DESOCUPADO = false;
 
 /*
  * Inicializará el juego, cargando toda la información inicial de las huertas, los obstáculos, las
@@ -95,39 +102,46 @@ bool jugador_en_espinas(coordenada_t posicion_jugador, objeto_t objetos[MAX_OBJE
 */
 void crecer_cultivos(juego_t* juego){
 
-        int movimientos = juego->movimientos;
+    for (int i = INIT_INT; i < MAX_HUERTA; i++) {
+        for (int j = INIT_INT; j < MAX_PLANTAS; j++) {
 
-        if(movimientos % 20 == 0)
-            for (int i = INIT_INT; i < MAX_HUERTA; i++) {
-                for (int j = INIT_INT; j < MAX_PLANTAS; j++) {
-                    if( juego->huertas[i].cultivos[j].tipo == TOMATE)
-                        juego->huertas[i].cultivos[j].tipo = TOMATE_CRECIDO;
+            if (juego->huertas[i].cultivos[j].movimiento_plantado != INIT_INT) {
+
+                if(juego->huertas[i].cultivos[j].movimiento_plantado % MOVIMIENTOS_TOMATE == INIT_INT){
+                    if (juego->huertas[i].cultivos[j].tipo == TOMATE)  {
+                            juego->huertas[i].cultivos[j].tipo = TOMATE_CRECIDO;
+                            juego->huertas[i].cultivos[j].movimiento_plantado = INIT_INT;
+                    }
+                }
+
+                if(juego->huertas[i].cultivos[j].movimiento_plantado % MOVIMIENTOS_ZANAHORIA == INIT_INT){
+                    if (juego->huertas[i].cultivos[j].tipo == ZANAHORIA)  {
+                            juego->huertas[i].cultivos[j].tipo = ZANAHORIA_CRECIDA;
+                            juego->huertas[i].cultivos[j].movimiento_plantado = INIT_INT;
+                    }
+                }
+
+                if(juego->huertas[i].cultivos[j].movimiento_plantado % MOVIMIENTOS_BROCOLI == INIT_INT){
+                    if(juego->huertas[i].cultivos[j].tipo == BROCOLI){
+                        juego->huertas[i].cultivos[j].tipo = BROCOLI_CRECIDO; 
+                        juego->huertas[i].cultivos[j].movimiento_plantado = INIT_INT;
+                    }
                 }
                 
+                if(juego->huertas[i].cultivos[j].movimiento_plantado % MOVIMIENTOS_LECHUGA == INIT_INT){
+                    if(juego->huertas[i].cultivos[j].tipo == LECHUGA){
+                        juego->huertas[i].cultivos[j].tipo = LECHUGA_CRECIDA;
+                        juego->huertas[i].cultivos[j].movimiento_plantado = INIT_INT;
+                    }
+                }
+
             }
             
-        if(movimientos % 15 == 0)
-            for (int i = INIT_INT; i < MAX_HUERTA; i++) {
-                for (int j = 0; j < MAX_PLANTAS; j++) {
-                    if( juego->huertas[i].cultivos[j].tipo == ZANAHORIA)
-                        juego->huertas[i].cultivos[j].tipo = ZANAHORIA_CRECIDA;
-                }
-                
-            }
-
-        if(movimientos % 10 == 0){
-            for (int i = INIT_INT; i < MAX_HUERTA; i++) {
-                for (int j = INIT_INT; j < MAX_PLANTAS; j++) {
-                    if( juego->huertas[i].cultivos[j].tipo == BROCOLI)
-                        juego->huertas[i].cultivos[j].tipo = BROCOLI_CRECIDO; 
-
-                    if(juego->huertas[i].cultivos[j].tipo == LECHUGA)
-                        juego->huertas[i].cultivos[j].tipo = LECHUGA_CRECIDA;
-                }
-                
-            }
-        }
+            juego->huertas[i].cultivos[j].movimiento_plantado++;  
+        }    
+        
     }
+}
 
 /* MEJORAR
     Pre:  recibe el juego (en forma de puntero para modificarlo)
@@ -159,22 +173,18 @@ void movimiento_jugador(juego_t* juego, char accion){
         case ARRIBA:
             if (juego->jugador.posicion.fila > MIN_MOVE_Y) {
                 juego->jugador.posicion.fila--;
-                juego->movimientos++;
             } break;
         case IZQUIERDA:
             if (juego->jugador.posicion.columna > MIN_MOVE_X) {
                 juego->jugador.posicion.columna--;
-                juego->movimientos++;
             } break;
         case ABAJO:
             if (juego->jugador.posicion.fila < MAX_MOVE_Y) {
                 juego->jugador.posicion.fila++;
-                juego->movimientos++;
             } break;
         case DERECHA:
             if (juego->jugador.posicion.columna < MAX_MOVE_X) {
                 juego->jugador.posicion.columna++;
-                juego->movimientos++;
             } break;
         default:
             break;
@@ -198,26 +208,32 @@ void realizar_jugada(juego_t* juego, char accion){
         {
         case TOMATE:
             comprar_cultivo(juego, TOMATE);
+            juego->movimientos++;
             break;
         case ZANAHORIA:
             comprar_cultivo(juego, ZANAHORIA);
+            juego->movimientos++;
             break;
         case BROCOLI:
             comprar_cultivo(juego, BROCOLI);
+            juego->movimientos++;
             break;
         case LECHUGA:
-            comprar_cultivo(juego, LECHUGA);
-            break;
-        default:
+            comprar_cultivo(juego, LECHUGA); 
+            juego->movimientos++;
             break;
         case ARRIBA:
         case IZQUIERDA:
         case ABAJO:
         case DERECHA:
             movimiento_jugador(juego, accion);
+            juego->movimientos++;
+            break;
+        default:
             break;
         }
 }
+
 
 /*
  * Imprime el juego por pantalla
