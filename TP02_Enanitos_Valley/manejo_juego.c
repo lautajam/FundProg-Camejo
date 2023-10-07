@@ -28,6 +28,7 @@ static const char ESPINA           = 'E';
 const int  INIT_FERTILIZANTE       = false;
 const bool INIT_CULTIVO_OCUPADO    = false;
 const bool INIT_PLAGADO            = false;
+static const int INIT_CONTADOR_CULTIVOS = 1; 
 
 // Valores de las monedas de cada enanito
 const int MONEDAS_GRUÑON   = 150;
@@ -389,7 +390,7 @@ void comprar_cultivo(juego_t* juego, char cultivo){
 
                         juego->huertas[i].cultivos[j].tipo = cultivo;
                         juego->huertas[i].cultivos[j].ocupado = CULTIVO_OCUPADO;
-                        juego->huertas[i].cultivos[j].movimiento_plantado = INIT_INT;
+                        juego->huertas[i].cultivos[j].movimiento_plantado = INIT_CONTADOR_CULTIVOS;
 
                    }  
                 } 

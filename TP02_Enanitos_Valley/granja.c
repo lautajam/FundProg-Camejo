@@ -25,7 +25,8 @@ const int MOVIMIENTOS_BROCOLI   = 10;
 const int MOVIMIENTOS_LECHUGA   = 10;
 
 // Valores iniciales de los atributos
-static const int  INIT_INT       = 0;
+static const int INIT_INT               = 0;
+static const int INIT_CONTADOR_CULTIVOS = 1;
 //static const char INIT_OBJETOS = ' ';
 const char ESPINAS = 'E';
 
@@ -95,6 +96,7 @@ bool jugador_en_espinas(coordenada_t posicion_jugador, objeto_t objetos[MAX_OBJE
     return false;
 }
 
+
 /* MEJORAR
     Pre:  recibe el juego (en forma de puntero para modificarlo)
     Post: si los movimientos del jugador son multiplos de 10, 15 o 20, crece los cultivos correspondientes
@@ -110,33 +112,33 @@ void crecer_cultivos(juego_t* juego){
                 if(juego->huertas[i].cultivos[j].movimiento_plantado % MOVIMIENTOS_TOMATE == INIT_INT){
                     if (juego->huertas[i].cultivos[j].tipo == TOMATE)  {
                             juego->huertas[i].cultivos[j].tipo = TOMATE_CRECIDO;
-                            juego->huertas[i].cultivos[j].movimiento_plantado = INIT_INT;
+                            juego->huertas[i].cultivos[j].movimiento_plantado = INIT_CONTADOR_CULTIVOS;
                     }
                 }
 
                 if(juego->huertas[i].cultivos[j].movimiento_plantado % MOVIMIENTOS_ZANAHORIA == INIT_INT){
                     if (juego->huertas[i].cultivos[j].tipo == ZANAHORIA)  {
                             juego->huertas[i].cultivos[j].tipo = ZANAHORIA_CRECIDA;
-                            juego->huertas[i].cultivos[j].movimiento_plantado = INIT_INT;
+                            juego->huertas[i].cultivos[j].movimiento_plantado = INIT_CONTADOR_CULTIVOS;
                     }
                 }
 
                 if(juego->huertas[i].cultivos[j].movimiento_plantado % MOVIMIENTOS_BROCOLI == INIT_INT){
                     if(juego->huertas[i].cultivos[j].tipo == BROCOLI){
                         juego->huertas[i].cultivos[j].tipo = BROCOLI_CRECIDO; 
-                        juego->huertas[i].cultivos[j].movimiento_plantado = INIT_INT;
+                        juego->huertas[i].cultivos[j].movimiento_plantado = INIT_CONTADOR_CULTIVOS;
                     }
                 }
                 
                 if(juego->huertas[i].cultivos[j].movimiento_plantado % MOVIMIENTOS_LECHUGA == INIT_INT){
                     if(juego->huertas[i].cultivos[j].tipo == LECHUGA){
                         juego->huertas[i].cultivos[j].tipo = LECHUGA_CRECIDA;
-                        juego->huertas[i].cultivos[j].movimiento_plantado = INIT_INT;
+                        juego->huertas[i].cultivos[j].movimiento_plantado = INIT_CONTADOR_CULTIVOS;
                     }
                 }
 
             }
-            
+
             juego->huertas[i].cultivos[j].movimiento_plantado++;  
         }    
         
