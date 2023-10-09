@@ -175,18 +175,30 @@ void movimiento_jugador(juego_t* juego, char accion){
         case ARRIBA:
             if (juego->jugador.posicion.fila > MIN_MOVE_Y) {
                 juego->jugador.posicion.fila--;
+                if(posicion_igual(juego->jugador.posicion, juego->deposito)){
+                    juego->jugador.posicion.fila++;
+                }
             } break;
         case IZQUIERDA:
             if (juego->jugador.posicion.columna > MIN_MOVE_X) {
                 juego->jugador.posicion.columna--;
+                if(posicion_igual(juego->jugador.posicion, juego->deposito)){
+                    juego->jugador.posicion.columna++;
+                }
             } break;
         case ABAJO:
             if (juego->jugador.posicion.fila < MAX_MOVE_Y) {
                 juego->jugador.posicion.fila++;
+                if(posicion_igual(juego->jugador.posicion, juego->deposito)){
+                    juego->jugador.posicion.fila--;
+                }
             } break;
         case DERECHA:
             if (juego->jugador.posicion.columna < MAX_MOVE_X) {
                 juego->jugador.posicion.columna++;
+                if(posicion_igual(juego->jugador.posicion, juego->deposito)){
+                    juego->jugador.posicion.columna--;
+                }
             } break;
         default:
             break;
@@ -234,8 +246,8 @@ void realizar_jugada(juego_t* juego, char accion){
         default:
             break;
         }
-}
 
+}
 
 /*
  * Imprime el juego por pantalla
