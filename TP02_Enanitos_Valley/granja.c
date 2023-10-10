@@ -164,51 +164,55 @@ void crecer_cultivos(juego_t* juego){
             generar_fertilizante(juego);*/
 }
 
-/* mejorar comentario
+/* MEJORAR
+    Pre:  recibe el juego (en forma de puntero para modificarlo)
+    Post: si el jugador, al moverse, se encuentra en el deposito, se le lo deja en la posicion en la que estaba
+            y se le resta un movimiento (para que no se quede en el deposito)
+*/
+void chequear_deposito(juego_t* juego, char accion){
+
+    if(posicion_igual(juego->jugador.posicion, juego->deposito) && accion == ARRIBA){
+        juego->jugador.posicion.fila++;
+        juego->movimientos--;
+    } else if(posicion_igual(juego->jugador.posicion, juego->deposito) && accion == ABAJO){
+        juego->jugador.posicion.fila--;
+        juego->movimientos--;
+    } else if(posicion_igual(juego->jugador.posicion, juego->deposito) && accion == IZQUIERDA){
+        juego->jugador.posicion.columna++;
+        juego->movimientos--;
+    } else if(posicion_igual(juego->jugador.posicion, juego->deposito) && accion == DERECHA){
+        juego->jugador.posicion.columna--;
+        juego->movimientos--;
+    }
+}
+
+
+/* mejorar comentario REFACTORIZALO POR FAVOR
     Pre:  recibe el juego (en forma de puntero para modificarlo) y la accion a realizar (movimiento del jugador)
     Post: valida que el movimiento sea posible y lo realiza, tambien chequea si el jugador esta en una posicion de espinas
             en caso de estarlo le resta monedas (segun la constante MONEDAS_ESPINAS) al jugador
 */
 void movimiento_jugador(juego_t* juego, char accion){
-    switch (accion)
-        {
-        case ARRIBA:
-            if (juego->jugador.posicion.fila > MIN_MOVE_Y) {
-                juego->jugador.posicion.fila--;
-                if(posicion_igual(juego->jugador.posicion, juego->deposito)){
-                    juego->jugador.posicion.fila++;
-                }
-            } break;
-        case IZQUIERDA:
-            if (juego->jugador.posicion.columna > MIN_MOVE_X) {
-                juego->jugador.posicion.columna--;
-                if(posicion_igual(juego->jugador.posicion, juego->deposito)){
-                    juego->jugador.posicion.columna++;
-                }
-            } break;
-        case ABAJO:
-            if (juego->jugador.posicion.fila < MAX_MOVE_Y) {
-                juego->jugador.posicion.fila++;
-                if(posicion_igual(juego->jugador.posicion, juego->deposito)){
-                    juego->jugador.posicion.fila--;
-                }
-            } break;
-        case DERECHA:
-            if (juego->jugador.posicion.columna < MAX_MOVE_X) {
-                juego->jugador.posicion.columna++;
-                if(posicion_igual(juego->jugador.posicion, juego->deposito)){
-                    juego->jugador.posicion.columna--;
-                }
-            } break;
-        default:
-            break;
-        }
 
-        if (jugador_en_espinas(juego->jugador.posicion, juego->objetos))
-            juego->jugador.cant_monedas -= MONEDAS_ESPINAS;
-        
-        if(juego->movimientos != JUEGO_RECIEN_INICIADO)
-            actualizar_juego(juego);
+    if(accion == ARRIBA && juego->jugador.posicion.fila > MIN_MOVE_Y){
+        juego->jugador.posicion.fila--;
+        chequear_deposito(juego, accion);
+    } else if(accion == ABAJO && juego->jugador.posicion.fila < MAX_MOVE_Y){
+        juego->jugador.posicion.fila++;
+        chequear_deposito(juego, accion);
+    } else if(accion == IZQUIERDA && juego->jugador.posicion.columna > MIN_MOVE_X){
+        juego->jugador.posicion.columna--;
+        chequear_deposito(juego, accion);
+    } else if(accion == DERECHA && juego->jugador.posicion.columna < MAX_MOVE_X){
+        juego->jugador.posicion.columna++;
+        chequear_deposito(juego, accion);
+    }
+
+    if (jugador_en_espinas(juego->jugador.posicion, juego->objetos))
+        juego->jugador.cant_monedas -= MONEDAS_ESPINAS;
+    
+    if(juego->movimientos != JUEGO_RECIEN_INICIADO)
+        actualizar_juego(juego);
          
 }
 
@@ -222,19 +226,15 @@ void realizar_jugada(juego_t* juego, char accion){
         {
         case TOMATE:
             comprar_cultivo(juego, TOMATE);
-            juego->movimientos++;
             break;
         case ZANAHORIA:
             comprar_cultivo(juego, ZANAHORIA);
-            juego->movimientos++;
             break;
         case BROCOLI:
             comprar_cultivo(juego, BROCOLI);
-            juego->movimientos++;
             break;
         case LECHUGA:
             comprar_cultivo(juego, LECHUGA); 
-            juego->movimientos++;
             break;
         case ARRIBA:
         case IZQUIERDA:
