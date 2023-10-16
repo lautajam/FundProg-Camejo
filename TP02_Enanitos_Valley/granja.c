@@ -19,6 +19,8 @@
 #define BROCOLI_CRECIDO   'B'
 #define LECHUGA_CRECIDA   'L'
 
+const int MAX_CANASTA_REAL = MAX_CANASTA - 4;
+
 const int MOVIMIENTOS_TOMATE    = 20;
 const int MOVIMIENTOS_ZANAHORIA = 15;
 const int MOVIMIENTOS_BROCOLI   = 10;
@@ -95,7 +97,6 @@ bool jugador_en_espinas(coordenada_t posicion_jugador, objeto_t objetos[MAX_OBJE
     }
     return false;
 }
-
 
 /* MEJORAR
     Pre:  recibe el juego (en forma de puntero para modificarlo)
@@ -186,6 +187,60 @@ void chequear_deposito(juego_t* juego, char accion){
     }
 }
 
+/*
+    * Pre:  recibe el tipo de cultivo
+    * Post: devuelve true si el cultivo está crecido o false si no lo está
+*/
+bool cultivo_crecido(char tipo){
+    return  tipo == TOMATE_CRECIDO || 
+            tipo == ZANAHORIA_CRECIDA || 
+            tipo == BROCOLI_CRECIDO || 
+            tipo == LECHUGA_CRECIDA;
+}
+
+/*
+    * Pre:  recibe el jugador y la lista de huertas
+    * Post: devuelve true si el jugador está en una posición de un cultivo crecido o false si no lo está
+*/
+bool personaje_en_cultivo_crecido(personaje_t jugador, huerta_t huertas[MAX_HUERTA]){
+    for (int i = INIT_INT; i < MAX_HUERTA; i++) {
+        for (int j = INIT_INT; j < MAX_PLANTAS; j++) {
+            if (cultivo_crecido(huertas[i].cultivos[j].tipo) 
+                && posicion_igual(jugador.posicion, huertas[i].cultivos[j].posicion)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/*
+    * Pre:  recibe el tope canasta
+    * Post: devuelve true si la canasta esta llena o false si no lo esta
+*/
+bool canasta_llena(int tope_canasta) {
+    return tope_canasta == MAX_CANASTA_REAL;
+}
+
+/*
+    Pre:  recibira el juego (en forma de puntero para modificarlo)
+    Post: Si el cultivo está crecido y la posicion del jugador es igual a la del cultivo crecido
+          cosechará el cultivo y lo guardará en la canasta, reiniciando el movimiento plantado, el tipo del cultivo
+            y el estado de ocupado del cultivo
+*/
+void cosechar_cultivo(juego_t* juego){
+    for (int i = INIT_INT; i < MAX_HUERTA; i++) {
+        for (int j = INIT_INT; j < MAX_PLANTAS; j++) {
+            if (cultivo_crecido(juego->huertas[i].cultivos[j].tipo) 
+                && posicion_igual(juego->jugador.posicion, juego->huertas[i].cultivos[j].posicion)) {
+                juego->jugador.canasta[juego->jugador.tope_canasta] = juego->huertas[i].cultivos[j].tipo;
+                juego->huertas[i].cultivos[j].movimiento_plantado = INIT_INT;
+                juego->huertas[i].cultivos[j].ocupado = false;
+                juego->huertas[i].cultivos[j].tipo = 'C';
+            }
+        }
+    }
+}
 
 /* mejorar comentario REFACTORIZALO POR FAVOR
     Pre:  recibe el juego (en forma de puntero para modificarlo) y la accion a realizar (movimiento del jugador)
@@ -213,6 +268,11 @@ void movimiento_jugador(juego_t* juego, char accion){
     
     if(juego->movimientos != JUEGO_RECIEN_INICIADO)
         actualizar_juego(juego);
+
+    if(personaje_en_cultivo_crecido(juego->jugador, juego->huertas) && !canasta_llena(juego->jugador.tope_canasta)){
+        cosechar_cultivo(juego);
+        juego->jugador.tope_canasta++;
+    }
          
 }
 
@@ -246,7 +306,6 @@ void realizar_jugada(juego_t* juego, char accion){
         default:
             break;
         }
-
 }
 
 /*
