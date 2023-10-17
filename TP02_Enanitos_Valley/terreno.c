@@ -51,7 +51,6 @@ void cargar_huertas(char terreno[TAMAÑO_TERRENO][TAMAÑO_TERRENO], juego_t jueg
     }
 }
 
-
 /*
     Pre: recibe una matriz (terreno de juego) de tamaño (TAMAÑO_TERRENO x TAMAÑO_TERRENO)
     Post: carga el terreno con los objetos del juego: el jugador y el deposito, el resto lo deja vacio
@@ -71,4 +70,32 @@ void cargar_terreno(char terreno[TAMAÑO_TERRENO][TAMAÑO_TERRENO], juego_t jueg
     }
 
     terreno[juego.jugador.posicion.fila][juego.jugador.posicion.columna] = ESTILO_JUGADOR;   //cargar jugador
+}
+
+/*
+    Pre: recibe el juego de donde va a extraer la información
+    Post: devuelve la interfaz del juego por pantalla, con los datos
+            de la canasta, los movimientos, las monedas, los insecticidas
+            y los fertilizantes
+            Las letras corresponden a las acciones que puede realizar el jugador
+            Y los precios de los cultivos con las letras correspondientes
+*/
+void imprimir_interfaz(juego_t juego){
+
+    printf(" Canasta:");
+    for (int i = 0; i < juego.jugador.tope_canasta; i++) {
+        if (i < juego.jugador.tope_canasta - 1)
+            printf(" %c -", juego.jugador.canasta[i]);
+        else
+            printf(" %c", juego.jugador.canasta[i]);
+        
+    }
+    printf("\n");
+
+    printf(" Movimientos:  %d | Monedas: %d\n", juego.movimientos, juego.jugador.cant_monedas);
+    printf(" Insecticidas: %d | Fertilizantes: %d\n", juego.jugador.cant_insecticidas, 
+                                                        juego.jugador.tiene_fertilizante);
+    printf(" Tomate  (t):  5 monedas | Zanahoria (z): 10 monedas \n");
+    printf(" Brocilo (b): 15 monedas | Lechuga   (l): 20 monedas \n");
+    printf(" Accion w/a/s/d (moverse) o t/z/b/l (comprar): ");
 }

@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "granja.h": "c",
+        "stdio.h": "c"
+    }
+}

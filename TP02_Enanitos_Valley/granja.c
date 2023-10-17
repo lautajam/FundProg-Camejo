@@ -19,7 +19,13 @@
 #define BROCOLI_CRECIDO   'B'
 #define LECHUGA_CRECIDA   'L'
 
+const int MONEDAS_TOMATE_VENTA    = 30;
+const int MONEDAS_ZANAHORIA_VENTA = 50;
+const int MONEDAS_BROCLI_VENTA    = 70;
+const int MONEDAS_LECHUGA_VENTA   = 80;
+
 const int MAX_CANASTA_REAL = MAX_CANASTA - 4;
+const int DISTANCIA_MANHATTAN_DEPOSITO = 2;
 
 const int MOVIMIENTOS_TOMATE    = 20;
 const int MOVIMIENTOS_ZANAHORIA = 15;
@@ -31,6 +37,7 @@ static const int INIT_INT               = 0;
 static const int INIT_CONTADOR_CULTIVOS = 1;
 //static const char INIT_OBJETOS = ' ';
 const char ESPINAS = 'E';
+const char SIN_CULTIVO = ' ';
 
 // Valores De ganar y perder
 const int MONEDAS_PARA_PERDER    = 0;
@@ -223,6 +230,14 @@ bool canasta_llena(int tope_canasta) {
 }
 
 /*
+    * Pre:  recibe el tope canasta
+    * Post: devuelve true si la canasta esta vacia o false si lo está
+*/
+bool canasta_vacia(int tope_canasta) {
+    return tope_canasta == INIT_INT;
+}
+
+/*
     Pre:  recibira el juego (en forma de puntero para modificarlo)
     Post: Si el cultivo está crecido y la posicion del jugador es igual a la del cultivo crecido
           cosechará el cultivo y lo guardará en la canasta, reiniciando el movimiento plantado, el tipo del cultivo
@@ -242,6 +257,60 @@ void cosechar_cultivo(juego_t* juego){
     }
 }
 
+/*
+    Pre:  recibe las coordenadas del jugador y del deposito
+    Post: devuelve la distancia manhattan entre el jugador y el deposito
+*/
+int distancia_vender_cultivo(coordenada_t posicion_jugador, coordenada_t posicion_deposito){
+    return abs(posicion_deposito.fila - posicion_jugador.fila ) + abs(posicion_deposito.columna - posicion_jugador.columna );
+}
+
+/*
+    Pre:  recibe el juego (en forma de puntero para modificarlo)
+    Post: vende los cultivos de la canasta, la vacìa y suma las monedas correspondientes al jugador
+*/
+void vender_cultivo(juego_t* juego){
+    for (int i = INIT_INT; i < juego->jugador.tope_canasta; i++) {
+        switch (juego->jugador.canasta[i])
+        {
+        case TOMATE_CRECIDO:
+            juego->jugador.cant_monedas += MONEDAS_TOMATE_VENTA;
+            break;
+        case ZANAHORIA_CRECIDA:
+            juego->jugador.cant_monedas += MONEDAS_ZANAHORIA_VENTA;
+            break;
+        case BROCOLI_CRECIDO:
+            juego->jugador.cant_monedas += MONEDAS_BROCLI_VENTA;
+            break;
+        case LECHUGA_CRECIDA:
+            juego->jugador.cant_monedas += MONEDAS_LECHUGA_VENTA;
+            break;
+        default:
+            break;
+        }
+        juego->jugador.canasta[i] = SIN_CULTIVO;
+    }
+    juego->jugador.tope_canasta = INIT_INT;
+
+}
+
+/*  MEJORAR
+    Pre:  recibe el juego (en forma de puntero para modificarlo) y la accion realizada
+    Post: si el jugador esta en los limites del terreno y realiza un movimiento hacia el limite
+            se le resta un movimiento para quedar en el lugar y no salirse del terreno
+*/
+void chequear_limite(juego_t* juego, char accion) {
+    if (accion == ARRIBA && juego->jugador.posicion.fila == MIN_MOVE_Y) {
+        juego->movimientos--;
+    } else if (accion == ABAJO && juego->jugador.posicion.fila == MAX_MOVE_Y) {
+        juego->movimientos--;
+    } else if (accion == IZQUIERDA && juego->jugador.posicion.columna == MIN_MOVE_X) {
+        juego->movimientos--;
+    } else if (accion == DERECHA && juego->jugador.posicion.columna == MAX_MOVE_X) {
+        juego->movimientos--;
+    }
+}
+
 /* mejorar comentario REFACTORIZALO POR FAVOR
     Pre:  recibe el juego (en forma de puntero para modificarlo) y la accion a realizar (movimiento del jugador)
     Post: valida que el movimiento sea posible y lo realiza, tambien chequea si el jugador esta en una posicion de espinas
@@ -251,17 +320,17 @@ void movimiento_jugador(juego_t* juego, char accion){
 
     if(accion == ARRIBA && juego->jugador.posicion.fila > MIN_MOVE_Y){
         juego->jugador.posicion.fila--;
-        chequear_deposito(juego, accion);
     } else if(accion == ABAJO && juego->jugador.posicion.fila < MAX_MOVE_Y){
         juego->jugador.posicion.fila++;
-        chequear_deposito(juego, accion);
-    } else if(accion == IZQUIERDA && juego->jugador.posicion.columna > MIN_MOVE_X){
+    } else if(accion == IZQUIERDA && juego->jugador.posicion.columna > MIN_MOVE_X ){
         juego->jugador.posicion.columna--;
-        chequear_deposito(juego, accion);
-    } else if(accion == DERECHA && juego->jugador.posicion.columna < MAX_MOVE_X){
+    } else if(accion == DERECHA && juego->jugador.posicion.columna < MAX_MOVE_X ){
         juego->jugador.posicion.columna++;
-        chequear_deposito(juego, accion);
     }
+
+    chequear_deposito(juego, accion);
+
+    chequear_limite(juego, accion);
 
     if (jugador_en_espinas(juego->jugador.posicion, juego->objetos))
         juego->jugador.cant_monedas -= MONEDAS_ESPINAS;
@@ -273,7 +342,9 @@ void movimiento_jugador(juego_t* juego, char accion){
         cosechar_cultivo(juego);
         juego->jugador.tope_canasta++;
     }
-         
+
+    if(distancia_vender_cultivo(juego->jugador.posicion, juego->deposito) <= DISTANCIA_MANHATTAN_DEPOSITO)
+        vender_cultivo(juego);
 }
 
 /*
@@ -323,6 +394,8 @@ void imprimir_terreno(juego_t juego){
         }
         printf("\n");
     }
+
+    imprimir_interfaz(juego);
 }
 
 /*

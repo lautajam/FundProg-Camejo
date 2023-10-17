@@ -37,10 +37,10 @@ const int MONEDAS_SABIO    = 250;
 const int MONEDAS_FELIZ    = 300;
 
 // Valores de las monedas por cada cultivo
-const int MONEDAS_TOMATE    = 5;
-const int MONEDAS_ZANAHORIA = 10;
-const int MONEDAS_BROCOLI   = 15;
-const int MONEDAS_LECHUGA   = 20;
+const int MONEDAS_TOMATE_COMPRA    = 5;
+const int MONEDAS_ZANAHORIA_COMPRA = 10;
+const int MONEDAS_BROCOLI_COMPRA   = 15;
+const int MONEDAS_LECHUGA_COMPRA   = 20;
 
 // Valores booleanos para los cultivos
 static const bool CULTIVO_OCUPADO    = true;
@@ -335,16 +335,16 @@ int calcular_costo_cultivo(char cultivo){
     int costo_cultivo = INIT_INT;
     switch (cultivo) {
         case TOMATE:
-            costo_cultivo = MONEDAS_TOMATE;
+            costo_cultivo = MONEDAS_TOMATE_COMPRA;
             break;
         case ZANAHORIA:
-            costo_cultivo = MONEDAS_ZANAHORIA;
+            costo_cultivo = MONEDAS_ZANAHORIA_COMPRA;
             break;
         case BROCOLI:
-            costo_cultivo = MONEDAS_BROCOLI;
+            costo_cultivo = MONEDAS_BROCOLI_COMPRA;
             break;
         case LECHUGA:
-            costo_cultivo = MONEDAS_LECHUGA;
+            costo_cultivo = MONEDAS_LECHUGA_COMPRA;
             break;
         default:
             costo_cultivo = INIT_INT;
