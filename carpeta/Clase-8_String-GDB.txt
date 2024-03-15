@@ -1,0 +1,107 @@
+* Strings (cadenas)
+
+Es un tipo de dato uqe puede almacenar varios caracteres >=0
+En C no existe los Strings como tipo de dato nativo
+
+- La forma básica de hacer un String sería hacer un array y dentro de él guardar letra por letra la frase, una letra en cada posicion
+
+#define MAX_VECTOR_SALUDO 10
+
+int main(){
+
+    char saludo[MAX_VECTOR_SALUDO] = 
+    	 	{'H', 'o', 'l', 'a',  '!'};
+
+    int tope_saludo = 4;
+
+    for (int i = 0; i < tope_saludo; i++) {
+        printf("%c", saludo[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+- Se puede mejorar usando el \0 (caracter nulo) como convención pra saber donde termina el String
+
+#include <stdio.h>
+
+#define MAX_VECTOR_SALUDO 10
+
+#define FIN_STRING '\0'
+
+int main(){
+
+    char saludo[MAX_VECTOR_SALUDO] = 
+    		{'H', 'o', 'l', 'a', '!', '\0'};
+
+    int i = 0;
+    while (saludo[i] != FIN_STRING) {
+        printf("%c", saludo[i]);
+        i++;
+    }
+    
+    printf("\n");
+
+    return 0;
+}
+
+
+- Así se imprime un String:
+// Pre: -
+// Post: imprime por pantalla el String (vector de caracteres) pasado por parámetro
+void imprimir_string(char vector[MAX_VECTOR_SALUDO]) {
+    int i = 0;
+    while (vector[i] != FIN_STRING) {
+        printf("%c", vector[i]);
+        i++;
+    }
+    printf("\n");
+}
+
+
+- Así se devuelve el largo del String:
+// Pre: -
+// Post: devuelve el largo del String (vector de caracteres) pasado por parámetro
+int largo_string(char vector[MAX_VECTOR_SALUDO]){
+    int largo = 0;
+    while (vector[largo] != FIN_STRING) {
+        largo++;
+    }
+    return largo;
+}
+
+(NO es necesario tener un tope para el String, ya que, al tener el \0 como último caracter SIEMPRE, con solo recorrerlo hasta ese caracter es más que suficiente)
+
+- C, tiene una forma nativa de imprimir los String, si el String es un "NULL terminated String" (un String terminado en el caracter nulo '\0') se puede usar:
+
+#define MAX_VECTOR_SALUDO 10
+#define FIN_STRING '\0'
+
+char saludo[MAX_VECTOR_SALUDO] = 
+		{'H', 'o', 'l', 'a', '!', '\0'};
+		
+scanf("%s\n", saludo)
+
+- Diferencias entre vector de caracteres y String
+
+	Un String es un vector de caracteres especial, que termina en un '\0' y no precisa de tope (sirve para formar palabras, frase, etc)
+	Un vector de caracteres puede o no ser un String, puede o no terminar en '\0' y siempre precisa tope
+
+- Para facilitar los desarrollos que utilizan Strings, se creó la biblioteca 
+ #include <string.h>
+
+- Algunas de las funcionalidades más usadas es:
+	
+	º Para el largo del String:
+		int largo = strlen(string);
+
+	º Para comparar dos Strings:
+		int iguales = strcmp(string1, string2);
+	     // Si son iguales: iguales = 0
+	     // Si son diferentes: iguales != 0
+	  
+	º Para "actualizar" un String:
+		strcpy(string1, "String2Texto");
+	     // Guarda en el 1ero lo que hay luego de la coma
+	     

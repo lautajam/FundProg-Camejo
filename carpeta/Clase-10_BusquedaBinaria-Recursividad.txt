@@ -1,0 +1,180 @@
+* Búsqueda binaria
+
+Ya vimos la busqueda lineal que, en el peor de los casos (que el elemento no esté) tiene que hacer N pasos para chequearlo (N = cantidad de elementos = longitud del vector).
+La busqueda binaria, en cambio, en el peor de los casos (que el elemento no exista), tiene que hacer log2(N) pasos (N = cantidad de elementos = longitud del vector) ¿por qué log2(N)? Porque va partiendo la lista de a mitades.
+
+- La busqueda binaria funciona así:
+
+	Su pongamos que tenemos un vector de numeros (tiene que estar ordenado, por ejemplo se podría utilizar el bubble sort para ordenarlo) de 10 elementos:
+	
+	  0   1    2   3    4      5     6       7         8           9
+	| 2 | 5 | 8 | 9 | 15 | 56 | 89 | 123 | 4567 | 56746 | 
+	
+	Y queremos conocer la posicion del numero 123 (numero_buscado de ahora en más), para esto tomamos el primer indice 0 (indice_izquierda de ahora en más) y el último indice 9 (indicie_derecho de ahora en más) y hacemos esta ecuacion:
+
+	indice_medio = indice_izquierdo + ((indice_derecho - indice_izquierdo) / 2)
+	
+	Con esto conseguimos el indice del medio
+	
+	indice_medio = ( 9 + 0 ) / 2
+	indice_medio = 4.5  // Redondeamos para arriba o para abajo, es indiferente
+	indice_medio = 5
+	
+	Comparamos si el numero que está en el indice que conseguimos es más grande o más pequeño que el numero que queremos buscar
+	
+	numero_indice_medio = 56 < 123 = numero_buscado
+	
+	Como el vector está ordenado sabemos que, sin ningún tipo de duda, el numero_buscado está en la parte superior.
+
+       ¡   0   1    2   3    4      5  ! 6       7         8           9
+       ¡| 2 | 5 | 8 | 9 | 15 | 56  ! | 89 | 123 | 4567 | 56746 | 
+	
+	Lo marcado con ¡! lo descartamos y nos quedamos con lo que queda
+	
+	    6      7         8           9
+        | 89 | 123 | 4567 | 56746 | 
+	
+	Ahora indice_izquierdo pasa a ser 6, indice_derecho se mantiene igual.
+	Repetimos el proceso hasta encontrar el numero_buscado.
+	
+	indice_medio = ( 9 + 6 ) / 2 
+	indice_medio = 7.5   // Redondeamos igual que antes
+	indice_medio = 8
+	
+	numero_indice_medio = 4567 > 123 = numero_buscado
+	// Descartamos todo lo superior al indice = 8 e inclusive indice = 8
+	
+	    6      7  
+        | 89 | 123 |
+	
+	indice_medio = ( 7 + 6 ) / 2 
+	indice_medio = 6.5   // Redondeamos igual que antes
+	indice_medio = 7
+	
+	numero_indice_medio = 123 = numero_buscado
+	
+	De esta forma encontramos el numero buscado en 3 iteraciones, con una busqeuda lineal nos hubiese llevado 8 iteraciones (habría que haber buscado elemento a elemento).
+	
+- Su código es:
+
+- BUSQUEDA BINARIA:
+
+	#define MAX_NUMEROS 10
+
+	// Pre: 0 <= tope_vector <= MAX_NUMEROS, vector en orden ascendente
+	// Post: Devuelve la posicion exacta de vector[] donde se encuentra
+	// 		numero_buscado,  en caso de que numero_buscado no se 
+	//		encuentre en vector[], devuelve -1
+	int busqueda_binaria (int vector[MAX_NUMEROS], 
+							int tope_vector, int numero_buscado) {
+	    
+	    int indice_izquierdo = 0;
+	    int indice_derecho = tope_vector - 1;
+
+	    for (int i = indice_izquierdo; i < indice_derecho; i++) {
+		int indice_posible = (indice_derecho + indice_izquierdo) / 2;
+		
+		if (vector[indice_posible] == numero_buscado)
+		    return indice_posible;
+		else if (vector[indice_posible] > numero_buscado)
+		    indice_derecho = indice_posible - 1; 
+		else if (vector[indice_posible] < numero_buscado)
+		    indice_izquierdo = indice_posible + 1;
+	    }
+	    return -1;
+	}
+
+* Recursividad
+
+La recursividad es la capacidad de resolver un problema llamandose a si mismo
+
+Tengo un problema A
+
+Para resolver A 
+Tengo que A = A' + a
+
+Para resolver A' 
+Tengo que A' = A'' + a'
+
+- El mejor ejemplo es el factorial:
+
+	El factorial de 5 = 5!
+	
+	5! = 4! (24) * 5 = - 120 -
+	↓   ↑
+	4! = 3! (6) * 4  = 24
+	↓   ↑
+	3! = 2! (2) * 3 = 6
+	↓   ↑
+	2! = 1! (1) * 2 = 2
+	↓   ↑
+	1! = 0! (1) * 1 = 1
+	↓   ↑
+	0! = 1 
+	
+- Podemos decir que tiene 3 partes la recursividad:
+	
+	1) Llamadas recursicas -> achican el problema hasta llegar a un caso base
+	2) Rsolución caso base -> resuelve mi problema
+	3) Proceso
+
+- Ejemplos de naturaleza recursiva:
+
+	Factorial:
+		N! = N * (N - 1)!
+		
+	Fibonacci:
+		N = ( N - 1 ) + ( N - 2 )
+		
+	Busqueda binaria:
+		
+- Técnica para la recursividad:
+
+	1) Pensar en el caso base (la resolución del problema)
+	
+	2) Llamada recursiva (algo tiene que cambiar de los parametros)
+	
+- Un ejemplo de código de recursividad es la funcion de búsqueda binaria:
+
+	#define MAX_NUMEROS 10
+
+	// Pre: El vector debe estar ordenado en orden ascendente (de menor a mayor).
+	//      indice_izquierda es menor o igual que indice_derecha.
+	// Post: Si el número buscado está en el vector, la función devuelve el índice
+	//       en el vector donde se encuentra. Si el número no está en el vector,
+	//       la función devuelve -1.
+	int busqueda_binaria_algoritmo(int vector[MAX_NUMEROS], int numero_buscado, int indice_izquierda, int indice_derecha){
+		
+	    int indice_medio = ( indice_derecha + indice_izquierda ) / 2;
+	    
+	    if (vector[indice_medio] == numero_buscado) // Encontró el número
+		return indice_medio;
+
+	    if (indice_izquierda > indice_derecha) // No está el numero en el vector
+		return -1;
+
+	    if (vector[indice_medio] > numero_buscado)
+		return busqueda_binaria_algoritmo(vector, numero_buscado, indice_izquierda, (indice_medio - 1));
+	    else if (vector[indice_medio] < numero_buscado)
+		return busqueda_binaria_algoritmo(vector, numero_buscado, (indice_medio + 1), indice_derecha);
+	    
+	}
+
+	// Pre: 0 <= tope_vector <= MAX_NUMEROS, vector en orden ascendente
+	// Post: Devuelve la posicion exacta de vector[] donde se encuentra
+	// 		    numero_buscado,  en caso de que numero_buscado no se 
+	//		    encuentre en vector[], devuelve -1
+	int busqueda_binaria(int vector[MAX_NUMEROS], int tope_vector, int numero_buscado){
+
+	    int indice_izquierda = 0;
+	    int indice_derecha   = tope_vector;
+
+	    return busqueda_binaria_algoritmo(vector, numero_buscado, indice_izquierda, indice_derecha);
+	}
+
+- Un posible pregunta de parcial/final:
+
+	¿Si tengo una lista DESORDENADA me conviene más ordenarla y busqueda binaria o hacer busqueda lineal?
+	Rta: Si tengo que buscarla UNA vez, conviene búsqueda lineal, porque ordenar un vector es muy costoso, si tengo que buscar MUCHAS veces, conviene ordenar y buscar. Todo esto depende de qué tan larga sea la lista.
+	
+	

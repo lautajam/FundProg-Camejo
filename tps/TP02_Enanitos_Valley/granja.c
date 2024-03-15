@@ -23,21 +23,44 @@ const int MONEDAS_TOMATE_VENTA    = 30;
 const int MONEDAS_ZANAHORIA_VENTA = 50;
 const int MONEDAS_BROCLI_VENTA    = 70;
 const int MONEDAS_LECHUGA_VENTA   = 80;
+<<<<<<< HEAD
+=======
+
+const int MAX_CANASTA_REAL = MAX_CANASTA - 4;
+const int DISTANCIA_MANHATTAN_DEPOSITO = 2;
+>>>>>>> 33e3a445ac419e45e1081f20e1446ca49f2ef083
 
 const int MAX_CANASTA_REAL = MAX_CANASTA - 4;
 const int DISTANCIA_MANHATTAN_DEPOSITO = 2;
 
-const int MOVIMIENTOS_TOMATE    = 20;
-const int MOVIMIENTOS_ZANAHORIA = 15;
-const int MOVIMIENTOS_BROCOLI   = 10;
-const int MOVIMIENTOS_LECHUGA   = 10;
+const int MOVIMIENTOS_TOMATE_CRECER    = 20;
+const int MOVIMIENTOS_ZANAHORIA_CRECER = 15;
+const int MOVIMIENTOS_BROCOLI_CRECER   = 10;
+const int MOVIMIENTOS_LECHUGA_CRECER   = 10;
+
+const int MOVIMIENTOS_TOMATE_PUDRIR    = 10; 
+const int MOVIMIENTOS_ZANAHORIA_PUDRIR = 10;
+const int MOVIMIENTOS_BROCOLI_PUDRIR   = 10;
+const int MOVIMIENTOS_LECHUGA_PUDRIR   = 5;
+
+const int MOVIMIENTOS_VIDA_TOMATE    = MOVIMIENTOS_TOMATE_CRECER    + MOVIMIENTOS_TOMATE_PUDRIR;
+const int MOVIMIENTOS_VIDA_ZANAHORIA = MOVIMIENTOS_ZANAHORIA_CRECER + MOVIMIENTOS_ZANAHORIA_PUDRIR;
+const int MOVIMIENTOS_VIDA_BROCOLI   = MOVIMIENTOS_BROCOLI_CRECER   + MOVIMIENTOS_BROCOLI_PUDRIR;
+const int MOVIMIENTOS_VIDA_LECHUGA   = MOVIMIENTOS_LECHUGA_CRECER   + MOVIMIENTOS_LECHUGA_PUDRIR;
 
 // Valores iniciales de los atributos
 static const int INIT_INT               = 0;
 static const int INIT_CONTADOR_CULTIVOS = 1;
+<<<<<<< HEAD
+const char ESPINAS              = 'E';
+const char SIN_CULTIVO          = ' ';
+static const char CULTIVO_VACIO = 'C';
+static const bool CULTIVO_DESOCUPADO = false;
+=======
 //static const char INIT_OBJETOS = ' ';
 const char ESPINAS = 'E';
 const char SIN_CULTIVO = ' ';
+>>>>>>> 33e3a445ac419e45e1081f20e1446ca49f2ef083
 
 // Valores De ganar y perder
 const int MONEDAS_PARA_PERDER    = 0;
@@ -47,9 +70,6 @@ const int GANASTE                = 1;
 const int CONTINUA_JUGANDO       = 0;
 const int MONEDAS_ESPINAS        = 5;
 const int JUEGO_RECIEN_INICIADO  = 0;
-
-//static const bool CULTIVO_OCUPADO    = true;
-//static const bool CULTIVO_DESOCUPADO = false;
 
 /*
  * Inicializará el juego, cargando toda la información inicial de las huertas, los obstáculos, las
@@ -105,51 +125,169 @@ bool jugador_en_espinas(coordenada_t posicion_jugador, objeto_t objetos[MAX_OBJE
     return false;
 }
 
-/* MEJORAR
+/*
+    Pre: se le pasa el cultivo (en forma de puntero para modificarlo)
+    Post: si el cultivo es un TOMATE y está para CRECER (ya pasaron los movimientos necesarios), crece:
+            se le cambia el tipo a TOMATE_CRECIDO y se le resta un movimiento plantado
+*/
+void crecer_tomate(cultivo_t* cultivo){
+    if (cultivo->movimiento_plantado == MOVIMIENTOS_TOMATE_CRECER) {
+        if (cultivo->tipo == TOMATE)  {
+            cultivo->tipo = TOMATE_CRECIDO;
+            cultivo->movimiento_plantado--;  
+        }
+    }
+}
+
+/*
+    Pre: se le pasa el cultivo (en forma de puntero para modificarlo)
+    Post: si el cultivo es una ZANAHORIA y está para CRECER (ya pasaron los movimientos necesarios), crece:
+            se le cambia el tipo a ZANAHORIA_CRECIDO y se le resta un movimiento plantado
+*/
+void crecer_zanahoria(cultivo_t* cultivo){
+    if (cultivo->movimiento_plantado == MOVIMIENTOS_ZANAHORIA_CRECER) {
+        if (cultivo->tipo == ZANAHORIA)  {
+            cultivo->tipo = ZANAHORIA_CRECIDA;
+            cultivo->movimiento_plantado--;  
+        }
+    }
+}
+
+/*
+    Pre: se le pasa el cultivo (en forma de puntero para modificarlo)
+    Post: si el cultivo es un BROCOLI y está para CRECER (ya pasaron los movimientos necesarios), crece:
+            se le cambia el tipo a BROCOLI_CRECIDO y se le resta un movimiento plantado
+*/
+void crecer_brocoli(cultivo_t* cultivo){
+    if (cultivo->movimiento_plantado == MOVIMIENTOS_BROCOLI_CRECER) {
+        if (cultivo->tipo == BROCOLI)  {
+            cultivo->tipo = BROCOLI_CRECIDO;
+            cultivo->movimiento_plantado--;  
+        }
+    }
+}
+
+/*
+    Pre: se le pasa el cultivo (en forma de puntero para modificarlo)
+    Post: si el cultivo es una LECHUGA y está para CRECER (ya pasaron los movimientos necesarios), crece:
+            se le cambia el tipo a LECHUGA_CRECIDO y se le resta un movimiento plantado
+*/
+void crecer_lechuga(cultivo_t* cultivo){
+    if (cultivo->movimiento_plantado == MOVIMIENTOS_LECHUGA_CRECER) {
+        if (cultivo->tipo == LECHUGA)  {
+            cultivo->tipo = LECHUGA_CRECIDA;
+            cultivo->movimiento_plantado--;  
+        }
+    }
+}
+
+/*
     Pre:  recibe el juego (en forma de puntero para modificarlo)
-    Post: si los movimientos del jugador son multiplos de 10, 15 o 20, crece los cultivos correspondientes
-            (está mal, tiene que ser 10, 15 y 20 movimientos DESPUES de plantado)
+    Post: se recorren los cultivos verificando si están para crecer, si lo están, crecen, llamando al metodo
+            correspondiente a cada cultivo
 */
 void crecer_cultivos(juego_t* juego){
 
     for (int i = INIT_INT; i < MAX_HUERTA; i++) {
         for (int j = INIT_INT; j < MAX_PLANTAS; j++) {
 
-            if (juego->huertas[i].cultivos[j].movimiento_plantado != INIT_INT) {
+            crecer_tomate(&juego->huertas[i].cultivos[j]);
 
-                if(juego->huertas[i].cultivos[j].movimiento_plantado % MOVIMIENTOS_TOMATE == INIT_INT){
-                    if (juego->huertas[i].cultivos[j].tipo == TOMATE)  {
-                            juego->huertas[i].cultivos[j].tipo = TOMATE_CRECIDO;
-                            juego->huertas[i].cultivos[j].movimiento_plantado = INIT_CONTADOR_CULTIVOS;
-                    }
-                }
+            crecer_zanahoria(&juego->huertas[i].cultivos[j]);
 
-                if(juego->huertas[i].cultivos[j].movimiento_plantado % MOVIMIENTOS_ZANAHORIA == INIT_INT){
-                    if (juego->huertas[i].cultivos[j].tipo == ZANAHORIA)  {
-                            juego->huertas[i].cultivos[j].tipo = ZANAHORIA_CRECIDA;
-                            juego->huertas[i].cultivos[j].movimiento_plantado = INIT_CONTADOR_CULTIVOS;
-                    }
-                }
+            crecer_brocoli(&juego->huertas[i].cultivos[j]);
+            
+            crecer_lechuga(&juego->huertas[i].cultivos[j]);
 
-                if(juego->huertas[i].cultivos[j].movimiento_plantado % MOVIMIENTOS_BROCOLI == INIT_INT){
-                    if(juego->huertas[i].cultivos[j].tipo == BROCOLI){
-                        juego->huertas[i].cultivos[j].tipo = BROCOLI_CRECIDO; 
-                        juego->huertas[i].cultivos[j].movimiento_plantado = INIT_CONTADOR_CULTIVOS;
-                    }
-                }
-                
-                if(juego->huertas[i].cultivos[j].movimiento_plantado % MOVIMIENTOS_LECHUGA == INIT_INT){
-                    if(juego->huertas[i].cultivos[j].tipo == LECHUGA){
-                        juego->huertas[i].cultivos[j].tipo = LECHUGA_CRECIDA;
-                        juego->huertas[i].cultivos[j].movimiento_plantado = INIT_CONTADOR_CULTIVOS;
-                    }
-                }
-
-            }
-
-            juego->huertas[i].cultivos[j].movimiento_plantado++;  
+           juego->huertas[i].cultivos[j].movimiento_plantado++;  
         }    
-        
+    }
+}
+
+/*
+    Pre: se le pasa el cultivo (en forma de puntero para modificarlo)
+    Post: si el cultivo es un TOMATE y está para pudrirse (ya pasaron los movimientos necesarios), se pudre:
+            se le cambia el tipo a CULTIVO_VACIO, se reinicia el contador de movimientos plantados y se le cambia
+            el estado de ocupado a CULTIVO_DESOCUPADO
+*/
+void pudrir_tomate(cultivo_t* cultivo){
+    if (cultivo->movimiento_plantado == MOVIMIENTOS_VIDA_TOMATE) {
+        if (cultivo->tipo == TOMATE_CRECIDO)  {
+            cultivo->tipo = CULTIVO_VACIO;
+            cultivo->movimiento_plantado = INIT_CONTADOR_CULTIVOS;
+            cultivo->ocupado = CULTIVO_DESOCUPADO;
+        }
+    }
+}
+
+/*
+    Pre: se le pasa el cultivo (en forma de puntero para modificarlo)
+    Post: si el cultivo es una ZANAHORIA y está para pudrirse (ya pasaron los movimientos necesarios), se pudre:
+            se le cambia el tipo a CULTIVO_VACIO, se reinicia el contador de movimientos plantados y se le cambia
+            el estado de ocupado a CULTIVO_DESOCUPADO
+*/
+void pudrir_zanahoria(cultivo_t* cultivo){
+    if (cultivo->movimiento_plantado == MOVIMIENTOS_VIDA_ZANAHORIA) {
+        if (cultivo->tipo == ZANAHORIA_CRECIDA)  {
+            cultivo->tipo = CULTIVO_VACIO;
+            cultivo->movimiento_plantado = INIT_CONTADOR_CULTIVOS;
+            cultivo->ocupado = CULTIVO_DESOCUPADO;
+        }
+    }
+}
+
+/*
+    Pre: se le pasa el cultivo (en forma de puntero para modificarlo)
+    Post: si el cultivo es un BROCOLI y está para pudrirse (ya pasaron los movimientos necesarios), se pudre:
+            se le cambia el tipo a CULTIVO_VACIO, se reinicia el contador de movimientos plantados y se le cambia
+            el estado de ocupado a CULTIVO_DESOCUPADO
+*/
+void pudrir_brocoli(cultivo_t* cultivo){
+    if (cultivo->movimiento_plantado == MOVIMIENTOS_VIDA_BROCOLI) {
+        if (cultivo->tipo == BROCOLI_CRECIDO)  {
+            cultivo->tipo = CULTIVO_VACIO;
+            cultivo->movimiento_plantado = INIT_CONTADOR_CULTIVOS;
+            cultivo->ocupado = CULTIVO_DESOCUPADO;
+        }
+    }
+}
+
+/*
+    Pre: se le pasa el cultivo (en forma de puntero para modificarlo)
+    Post: si el cultivo es una LECHUGA y está para pudrirse (ya pasaron los movimientos necesarios), se pudre:
+            se le cambia el tipo a CULTIVO_VACIO, se reinicia el contador de movimientos plantados y se le cambia
+            el estado de ocupado a CULTIVO_DESOCUPADO
+*/
+void pudrir_lechuga(cultivo_t* cultivo){
+    if (cultivo->movimiento_plantado == MOVIMIENTOS_VIDA_LECHUGA) {
+        if (cultivo->tipo == LECHUGA_CRECIDA)  {
+            cultivo->tipo = CULTIVO_VACIO;
+            cultivo->movimiento_plantado = INIT_CONTADOR_CULTIVOS;
+            cultivo->ocupado = CULTIVO_DESOCUPADO;
+        }
+    }
+}
+
+/*
+    Pre:  recibe el juego (en forma de puntero para modificarlo)
+    Post: se recorren los cultivos verificando si están para pudrirse, si lo están, se pudren, llamando al metodo
+            correspondiente a cada cultivo
+*/
+void pudrir_cultivos(juego_t* juego){
+
+    for (int i = INIT_INT; i < MAX_HUERTA; i++) {
+        for (int j = INIT_INT; j < MAX_PLANTAS; j++) {
+
+            pudrir_tomate(&juego->huertas[i].cultivos[j]);
+
+            pudrir_zanahoria(&juego->huertas[i].cultivos[j]);
+
+            pudrir_brocoli(&juego->huertas[i].cultivos[j]);
+            
+            pudrir_lechuga(&juego->huertas[i].cultivos[j]);
+
+
+        }    
     }
 }
 
@@ -162,10 +300,9 @@ void crecer_cultivos(juego_t* juego){
 
         crecer_cultivos(juego);
 
-        /*if(se_pudre(juego))
-            pudrir_cultivos(juego);
+        pudrir_cultivos(juego);
 
-        if (hay_que_plagar(juego))
+        /*if (hay_que_plagar(juego))
             plagar_cultivos(juego);
 
         if(hay_fertilizante(juego))
@@ -177,6 +314,7 @@ void crecer_cultivos(juego_t* juego){
     Post: si el jugador, al moverse, se encuentra en el deposito, se le lo deja en la posicion en la que estaba
             y se le resta un movimiento (para que no se quede en el deposito)
 */
+/*
 void chequear_deposito(juego_t* juego, char accion){
 
     if(posicion_igual(juego->jugador.posicion, juego->deposito) && accion == ARRIBA){
@@ -192,7 +330,8 @@ void chequear_deposito(juego_t* juego, char accion){
         juego->jugador.posicion.columna--;
         juego->movimientos--;
     }
-}
+} 
+*/
 
 /*
     * Pre:  recibe el tipo de cultivo
@@ -328,7 +467,11 @@ void movimiento_jugador(juego_t* juego, char accion){
         juego->jugador.posicion.columna++;
     }
 
+<<<<<<< HEAD
+    //chequear_deposito(juego, accion);
+=======
     chequear_deposito(juego, accion);
+>>>>>>> 33e3a445ac419e45e1081f20e1446ca49f2ef083
 
     chequear_limite(juego, accion);
 

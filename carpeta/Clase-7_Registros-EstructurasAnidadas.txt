@@ -1,0 +1,285 @@
+* Registros / Structs
+
+Una figurita del album del mundial se compone de:
+
+dorsal   -> int
+posicion -> char (A D M d)
+fecha nac
+	anio -> int
+	mes  -> int
+	dia  -> int
+altura  -> float
+peso    -> float
+pais   -> char (A B C U etc)
+
+Para crear un jugador se debería hacer
+
+//Jugador 1
+int dorsal    = 10;
+char posicion = 'M';
+int anio      = 1987;
+int mes       = 10;
+int dia       = 9;
+float altura  = 1.65;
+float peso    = 70.0;
+char pais     = "A";
+
+Para un segundo jugador habría que hacer
+
+//Jugador 2
+int dorsal_2    = 9;
+char posicion_2 = 'd';
+int anio_2      = 1992;
+int mes_2       = 17;
+int dia_"       = 11;
+float altura_2  = 1.82;
+float peso_2    = 90.0;
+char pais_2     = "B";
+
+Esto es un problema ya que tenemos todo desparramado por todos lados
+Para esto sirven los struct, un nuevo tipo de dato (propio), el
+cual se compone de varios otros tipos de datos juntos.
+
+- Sintaxis básica:
+
+struct nombre_strcut {
+	tipo campo1,
+	tipo campo2,
+	tipo campo3,
+	...
+};
+
+- Sintaxis ampliada:
+
+typedef struc nombre_struct {
+	tipo campo1,
+	tipo campo2,
+	tipo campo3,
+	...
+} alias_struct;
+
+Para el alias_struct se suele usar el nombre del struct con un _t al
+final, ya que significa type 
+(alias de nombre_struct = nombre_struct_t)
+
+- Ejemplo con las figuritas:
+
+// Para la fecha de nacimiento usamos un stuct también
+typedef struct fecha_nacimiento {
+	int anio;
+	int mes;
+	int dia;
+} fecha_nacimiento_t;
+
+typedef struct figurita{
+	int dorsal;
+	char posicion;
+	fecha_nacimiento_t fecha_nacimiento;
+	float altura;
+	float peso;
+	char pais;
+} figurita_t;
+
+- Para imprimir este struct:
+
+// Pre:
+// Post: Imprime por pantalla todos los campos de la figurita ingresada
+void imprimir_figurita(figurita_t figurita){
+    printf("========== Dorsal: %i ========== \n", figurita.dorsal);
+    printf("Posicion: %c \n", figurita.posicion);
+    printf("Fecha de nacimiento: %i/%i/%i \n", 
+        figurita.fecha_nacimiento.dia, figurita.fecha_nacimiento.mes, figurita.fecha_nacimiento.anio);
+    printf("Altura: %lg \n", figurita.altura);
+    printf("Peso: %lg \n", figurita.peso);
+    printf("Pais: %c \n", figurita.pais);
+}
+
+- Para cargar los datos al struct (como un constructor) desde el
+	propio codigo
+
+// Pre:  recibe (por referencia) una figurita para modificarla
+// Post: carga los datos (uno por uno) en la figurita
+void cargar_datos_desde_codigo_figurita(figurita_t* figurita){
+	figurita->dorsal   = 10;
+	figurita->posicion = 'd';
+	figurita->fecha_nacimiento.anio = 1987;
+	figurita->fecha_nacimiento.mes  = 4;
+	figurita->fecha_nacimiento.dia  = 9;
+	figurita->altura = 1.70;
+	figurita->peso   = 70.0;
+	figurita->pais   = 'A';
+}
+
+Si pasamos por referencia el struct se puede acceder a el de dos formas
+
+(*figurita.dorsal)
+
+	ó
+	
+figurita->dorsal
+
+- Para que el usuario lo cargue
+
+// Pre:  recibe (por referencia) una figurita para modificarla
+// Post: carga los datos (uno por uno) en la figurita
+void cargar_datos_desde_usuario_figurita(figurita_t* figurita) {
+    printf("Ingrese dorsal (numero entero): ");
+    scanf("%i", &(figurita->dorsal));
+
+    printf("Ingrese posicion (letra: A, D, M, d): ");
+    scanf(" %c", &(figurita->posicion));
+
+    printf("Ingrese fecha de nacimiento (día/mes/anio): ");
+    scanf("%i/%i/%i", 
+    	&(figurita->fecha_nacimiento.dia), 
+    	&(figurita->fecha_nacimiento.mes), 
+    	&(figurita->fecha_nacimiento.anio));
+
+    printf("Ingrese altura (numero con punto '1.95'): ");
+    scanf("%lf", &(figurita->altura));
+
+    printf("Ingrese peso (numero con punto '90.4'): ");
+    scanf("%lf", &(figurita->peso));
+
+    printf("Ingrese pais (letra): ");
+    scanf(" %c", &(figurita->pais));
+}
+
+(LA FLECHA SOLO SIRVE PARA EL STRCUT PASADO POR REFERENCIA)
+
+- El programa de ejemplo sería:
+
+int main(){
+	
+	figurita_t messo;
+	
+	cargar_datos_desde_usuario_figurita(&messo);
+	
+    	imprimir_figurita(messo);
+
+	return 0;
+}
+
+
+* Estructuras anidadas:
+
+Es un tipo de dato dentro de otro tipo de dato, el mejor ejemplo
+en este momento es lo que hicimos con figurita y fecha_nacimiento
+
+typedef struct fecha_nacimiento {
+	int anio;
+	int mes;
+	int dia;
+} fecha_nacimiento_t;
+
+typedef struct figurita{
+	...
+	fecha_nacimiento_t fecha_nacimiento;
+	...
+} figurita_t;
+
+Ahora el tipo de dato "figurita" va a tener, dentro de si, el tipo de
+dato "fecha_nacimiento", y se va acceder así:
+
+figurita.fecha_nacimiento.dia
+figurita.fecha_nacimiento.mes
+figurita.fecha_nacimiento.anio
+
+Pero no solo este tipo de dato, también se pueden vectores y matrices
+Además de poder anidarlas entre si, por ejemplo:
+
+- En un restaurante de empanadas se tiene un struct para cada empanada, con su inicial y si es frita:
+
+typedef struct empanada{
+	char gusto;
+	bool es_frita;
+} empanada_t
+
+Un struct de la persona que va a pedir, con su numero de orden y la lista de empandas a pedir (un vector de tipo empanada):
+
+#define MAX_EMPANADAS 12
+
+typedef struct persona_t{
+	int numero_orden;
+	empanada_t empandas[MAX_EMPANADAS];
+} persona_t
+
+Y un vector con la cantidad de personas de un pedido:
+
+#define MAX_PERSONAS
+
+persona_t personas_para_pedir[MAX_PERSONAS];
+
+La funcion para crear la persona (el "constructor") sería así:
+
+// Pre: 0 <= tope_empanadas <= MAX_EMPANADAS y 1 <= numero_orden <= MAX_PERSONAS
+// Post: devuelve una persona con el número de orden y las empanadas pasadas por parámetro
+persona_t crear_persona(int numero_orden, empanada_t empanadas[MAX_EMPANADAS], int tope_empanadas) {
+    persona_t persona;
+    persona.numero_orden = numero_orden;
+    persona.tope_empanadas = tope_empanadas;
+    for (int i = 0; i < tope_empanadas; i++) {
+        persona.empanadas[i] = empanadas[i];
+    }
+    return persona;
+}
+
+Y el main (para una prueba) sería así:
+
+int main() {
+    persona_t personas_para_pedir[MAX_PERSONAS];
+    int tope_personas_para_pedir = 0;
+
+    empanada_t empanadas_1[MAX_EMPANADAS] = {{'J', true}, {'C', false}, {'P', true}};
+    personas_para_pedir[0] = crear_persona(1, empanadas_1, 3);
+
+    empanada_t empanadas_2[MAX_EMPANADAS] = {{'P', false}, {'P', false}, {'P', true}, {'P', false}};
+    personas_para_pedir[1] = crear_persona(2, empanadas_2, 4);
+
+    empanada_t empanadas_3[MAX_EMPANADAS] = {{'V', true}};
+    personas_para_pedir[2] = crear_persona(3, empanadas_3, 1);
+
+    tope_personas_para_pedir = 3;
+
+    for (int i = 0; i < tope_personas_para_pedir; i++) {
+        printf("Persona %i: ", personas_para_pedir[i].numero_orden);
+        for (int j = 0; j < personas_para_pedir[i].tope_empanadas; j++) {
+            printf("| Empanada %i: Gusto: %c, Frita: %s ", j, 
+                personas_para_pedir[i].empanadas[j].gusto,
+                personas_para_pedir[i].empanadas[j].es_frita ? "Sí" : "No");
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
+
+Véase que no existe funcion para crear empanadas porque excedia el largo de la creacion del apunte, pero sería algo simil a "crear_persona()"
+
+
+- Se puede igualar un strcut a otro del mismo tipo
+
+federico = laura (ambos tipo persona, por ejemplo)
+
+- No se puede comparar
+
+if (federico == laura){
+	...
+}
+
+Cuando un asigna, lo que hace es copiar todo el pedazo de memoria asignado a ese struct
+Cuando uno compara, lo que hace es comparar esos pedazos
+
+¡Structs!
+
+Persona
+    int edad;
+    char genero;
+    float altura;
+    
+[edad|_gener____|_altura_]
+
+Los "__" representan espacios de memoria que no controlamos, por lo tanto pueden tener basura y no podemos determinar como evitar que compare esas porciones
+
+ 
+

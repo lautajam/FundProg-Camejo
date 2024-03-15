@@ -1,0 +1,179 @@
+
+* Vectores y sus topes:
+
+Un vector es una coleccion de espacios de memoria consecutivos
+que sirve para almanecar ordenadamente datos del mismo tipo.
+Este vector siempre va a tener una longitud definida
+
+#define MAX_VECTOR 5
+
+int vecto[MAX_VECTOR]; // Sintaxis de declaración del vector
+
+// También se lo puede inicializar en la declaraicón
+// int vecto[MAX_VECTOR] = {1, 2, 3, 4, 5};
+// Quedaría
+// |1, 2, 3, 4, 5|
+
+Para saber donde está el último elemento guardado se utiliza un tope
+
+#define MAX_MIVECTOR 99
+int MiVector[MAX_MIVECTOR];
+int tope_MiVector = 0; // 0 <=  tope_MiVector <= MAX_MIVECTOR
+
+Si:
+	tope_MiVector = 0 <-- No hay elementos (MiVector = vacio)
+	tope_MiVector = 1 <-- Hay 1 elemento
+	tope_MiVector = 2 <-- Hay 2 elementos
+	...
+	tope_MiVector = 98 <-- Hay 98 elementos
+	tope_MiVector = 99 <-- Hay 99 elementos
+	tope_MiVector = 100 <-- ERROR, el MAX_MIVECTOR es 99
+
+- Busqueda lineal:
+
+#define MAX_ELEMNTOS 10 //ejemplo
+
+const int INIT_INT = 0;
+const int NO_ENCONTRADO = -1; //convenciòn
+
+/*  Pre: 0<= tope <= MAX_ELEMENTOS
+ *  Post:  Devuelve el indice del vector donde se encuentra
+/*		VALOR_BUSCADO. Si no lo encuentra, devuelve NO_ENCONTRADO
+int indice_buscado(int vector[MAX_ELEMENTOS], int tope, int elemento_buscado){
+	int i = INIT_INT;
+	int indice = NO_ENCONTRADO;
+
+	while(indice == NO_ENCONTRADO && i < tope){
+		if(vector[i] == elemento_buscado){
+			indice = i;
+		}
+		
+		i++;
+ 	}
+ 	
+ 	return indice;
+}
+
+- Eliminación desordenada:
+
+/*  Pre:  -
+ *  Post: Iguala el elemento a eliminar al ultimo (el del tope) y baja el tope, para así 
+/* "eliminar" del vector
+void eliminacion_elemento_desordenada(int vector[MAX_ELEMENTOS], int* tope, int indice_elmento){
+    vector[indice_elmento] = vector[*tope - 1];
+    (*tope)--;
+}
+
+
+- Eliminación ordenada:
+
+/*  Pre:  -
+ *  Post: Elimina el elemento a eliminar corriendo los elementos siguientes uno para atràs cada 
+/* uno, manteniendo así el orden del vector
+void eliminacion_elemento_ordenada(int vector[MAX_ELEMENTOS], int* tope, int indice_elmento){
+    for (int i = indice_elmento; i < (*tope - 1); i++) {
+        vector[i] = vector[i + 1];
+    }
+    (*tope)--;
+}
+
+* Matrices:
+
+Es, en sintesis, un vector de vectores, se podria escribir como
+
+#define MAX 3
+
+int vector1[MAX];
+int vector2[MAX];
+int vector3[MAX]:
+
+Esto sería una matriz de 3x3 de enteros, pero es un poco incomodo
+trabajar así, para ese existe
+
+#define FILAS    3
+#define COLUMNAS 3
+
+int matriz[FILAS][COLUMNAS];
+
+// Como quedaría
+// | 1, 2, 3 |
+// | 4, 5, 6 |
+// | 7, 8, 9 |
+
+Todos los elementos son del mismo tipo.
+Se maneja por "coordenadas", por ejemplo, para acceder al elemento
+del centro (en este ejemplo, el 5) deberías hacer:
+
+int matriz[1][1];
+
+Ya que, en coordenadas, quedaría así:
+
+| [0][0], [0][1], [0][2] |
+| [1][0], [1][1], [1][2] |
+| [2][0], [2][1], [2][2] |
+
+Se puede llenar al iniciar, se hace de la siguiente forma:
+
+#define FILA 3
+#define COLUMNA 3
+
+int matriz[FILA][COLUMNA] = {
+	{1, 2, 3}
+	{4, 5, 6}
+	{7, 8, 9}
+}; // Matriz cuadrada de 3x3 con los numeros del 1 al 9
+
+También tiene un tope, uno por fila y otro por columna, por ejemplo
+si tengo
+
+#define FILA 7
+#define COLUMNA 7
+
+int matriz[FILA][COLUMNA] = {
+	{1, 2, 3}
+	{4, 5, 6}
+	{7, 8, 9}
+};
+
+Esta matriz es de 7x7 pero está llena como una de 3x3, entonces
+habría que hacer
+
+int tope_filas = 3;
+int tope_columnas = 3;
+
+Muchas veces tope_filas y tope_columnas van a ser iguales a
+MAX_FILAS y MAX_COLUMNAS
+
+- Para recorrer una matriz:
+
+for(int i = 0; i < FILAS; i++){
+	for(int j = 0; j < COLUMNA; J++){
+		matriz[i][j];
+	}
+}
+
+"i" va a corresponder a las filas, y "j" a la columnas
+
+- Para imprimir una matriz:
+ 
+for(int i = 0; i < tope_filas; i++){
+	for(int j = 0; j < tope_columnas; J++){
+		printf("%i ", matriz[i][j]);
+	}
+	printf("\n"); // se argrega un salto de linea para visual
+}
+
+Para modificar la matriz, se modifica elemento a elemento
+
+- Multiplicar por 2 la matriz (por ejemplo):
+
+for(int i = 0; i < tope_filas; i++){
+	for(int j = 0; j < tope_columnas; J++){
+	     // matriz[i][j] = matriz[i][j] * 2;
+		matriz[i][j] *= 2;
+	}
+	printf("\n"); // se argrega un salto de linea para visual
+}
+
+Las matrices se pasan como referencia automaticamente en las
+funciones/en los métodos

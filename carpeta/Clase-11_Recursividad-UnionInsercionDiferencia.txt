@@ -1,0 +1,31 @@
+* Recursividad V.2:
+
+- Agarramos un problema y le aplicamos la misma solución a un  problema más chico que se acerque al caso base, hasta llegar a él y empezar a resolver los problemas 'superiores' (los problemas más grandes).
+
+ * Operaciones entre vectores:
+ 
+ - Intersección: 
+ 	Teniendo un vector1[MAX_ELEMENTOS1] y un vector2[MAX_ELEMENTOS2] (ordenados), creamos un vector_resultado[MAX_ELEMENTOS] que contenga los elementos de vector1 que coincidan con elementos de vector2 y visceversa.
+ 	Comparamos elemento a elemento, si son iguales los elementos los guardamos, en caso de que sea diferentes hacemos (indice + 1) al vector con el elemento más pequeño.
+ 	
+ - Unión:
+ 	 Teniendo un vector1[MAX_ELEMENTOS1] y un vector2[MAX_ELEMENTOS2] (ordenados), creamos un vector_resultado[MAX_ELEMENTOS1 + MAX_ELEMENTOS2] que contenga los elementos de vector1 y los elementos del vector2 SIN REPETIDS.
+ 	 Comparamos elemento a elemento: si son iguales los elementos lo guardamos 1 sola vez (aumentando los 3 topes); en caso de que sea diferentes, guardamos el elemento más pequeño, hacemos (indice + 1) a ese vector y aumentamos el tope de de vector_resultado.
+ 	 En caso de que uno de los dos se quede sin elementos, pero el otro tenga todavía, hay que recorrer el que haya quedado sin elementos para añadirlos a vector_resultado.
+ 	 	
+- Mezcla:
+	Teniendo un vector1[MAX_ELEMENTOS1] y un vector2[MAX_ELEMENTOS2] (ordenados), creamos un vector_resultado[MAX_ELEMENTOS1 + MAX_ELEMENTOS2] que contenga los elementos de vector1 y los elementos del vector2.
+ 	 Comparamos elemento a elemento: si son iguales los elementos ambos guardamos (aumentando los 3 topes); en caso de que sea diferentes, guardamos el elemento más pequeño, hacemos (indice + 1) a ese vector y aumentamos el tope de de vector_resultado.
+ 	 En caso de que uno de los dos se quede sin elementos, pero el otro tenga todavía, hay que recorrer el que haya quedado sin elementos para añadirlos a vector_resultado.
+ 	 
+- Diferencia:
+	Teniendo un vector1[MAX_ELEMENTOS1] y un vector2[MAX_ELEMENTOS2] (ordenados), creamos un vector_resultado[MAX_ELEMENTOS1 + MAX_ELEMENTOS2] que contenga los elementos de, por ejemplo, SOLO vector1, sin los repetidos entre vector1 y vector2.
+	Comparamos elemento a elemento: si son iguales los elementos ambos aumentamos los topes de vector1 y vector2 SIN guardar nada; en caso de que sea diferentes, SI el elemento más pequeño es el de vector1, hacemos (indice + 1) a ese vector y aumentamos el topre de de vector_resultado, guardando asi el elemento de vector1. Si el elemento de vector2 es más chico que el de vector1, solo haces (indice + 1) de vector2 para comparar otra vez.
+ 	 	En caso de que vector2 se quede sin elementos, pero el vectir1 tenga todavía, hay que recorrer vector1 para añadirlos a vector_resultado. Si el que queda con elementos es vector2, no se hace esto (en este ejemplo).
+ 	 	
+ 	 	
+ 	 	
+ 	 	
+ 	 	
+ 	 	
+ 	 	
